@@ -13,6 +13,7 @@ export { default as FileIcon } from "./file.svg";
 export { default as HelpCircleIcon } from "./help-circle.svg";
 export { default as LinkOutIcon } from "./link-out.svg";
 export { default as LogoShortIcon } from "./logo-short";
+export { default as MigrateIcon } from "./migrate.svg";
 export { default as MintscanIcon } from "./mintscan.svg";
 export { default as PrivacyIcon } from "./privacy.svg";
 export { default as TerminalIcon } from "./terminal.svg";
