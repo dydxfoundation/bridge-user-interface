@@ -8,6 +8,7 @@ import { useIsDydxAddressValid } from "./useIsDydxAddressValid";
 import { useLocaleSeparators } from "./useLocaleSeparators";
 import { useLocalStorage } from "./useLocalStorage";
 import { useMatchingEvmNetwork } from "./useMatchingEvmNetwork";
+import { useMigrateToken } from "./useMigrateToken";
 import { usePollNativeTokenBalance } from "./usePollNativeTokenBalance";
 import { useStringGetter } from "./useStringGetter";
 import { useWalletConnection } from "./useWalletConnection";
@@ -23,6 +24,7 @@ export {
   useLocaleSeparators,
   useLocalStorage,
   useMatchingEvmNetwork,
+  useMigrateToken,
   usePollNativeTokenBalance,
   useStringGetter,
   useWalletConnection,
