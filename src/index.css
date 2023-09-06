@@ -1,0 +1,94 @@
+@import "styles/text.css";
+@import "styles/colors.css";
+@import "styles/animations.css";
+
+:root {
+  color: var(--color-text-1);
+  background-color: var(--color-layer-2);
+  user-select: none;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+body,
+#root {
+  display: contents;
+}
+
+#root:empty {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: url(/grid-loader.svg) no-repeat center / 50px 50px;
+}
+
+* {
+  border: none;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  transform-style: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+button {
+  appearance: none;
+  background: none;
+  cursor: pointer;
+  transition: 0.25s var(--ease-out-expo);
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+[role="button"] {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: inherit;
+}
+
+p a {
+  --link-color: var(--color-accent);
+  font-weight: 500;
+  color: var(--link-color);
+  cursor: pointer;
+}
+
+p a:hover {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+a:visited {
+  color: var(--link-color);
+}
+
+pre,
+code,
+samp,
+kbd {
+  font-family: var(--fontFamily-monospace);
+  font-size: 0.925em;
+}
+
+strong,
+b {
+  font-weight: 700;
+}
