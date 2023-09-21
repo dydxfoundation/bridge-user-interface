@@ -24,6 +24,7 @@ export const MigrateFormPreviewStep = () => {
     needTokenAllowance,
     isTokenApproveLoading,
     tokenApproveError,
+    isBridgePending,
   } = useMigrateToken();
 
   const [hasAcknowledged, setHasAcknowledged] = useState(false);
@@ -77,8 +78,9 @@ export const MigrateFormPreviewStep = () => {
           action={ButtonAction.Primary}
           type={ButtonType.Submit}
           state={{
-            isLoading: isTokenApproveLoading,
-            isDisabled: !needTokenAllowance && !hasAcknowledged,
+            isLoading: isTokenApproveLoading || isBridgePending,
+            isDisabled:
+              (!needTokenAllowance && !hasAcknowledged) || isBridgePending,
           }}
         >
           {needTokenAllowance ? "Approve allowance" : "Confirm migration"}

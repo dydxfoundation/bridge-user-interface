@@ -39,10 +39,8 @@ export const useBridgeTransaction = ({
   });
 
   useEffect(() => {
-    if (isTransactionFinalized) {
-      console.log("finalized tracked update");
+    if (isTransactionFinalized)
       setTransactionStatus(TransactionStatus.Acknowledged);
-    }
   }, [isTransactionFinalized]);
 
   const clearStatus = () => {
@@ -67,14 +65,19 @@ export const useBridgeTransaction = ({
   const {
     data: bridgeData,
     writeAsync: bridgeWrite,
-    error: bridgeError,
+    isLoading: isBridgePending,
   } = useContractWrite(bridgeConfig);
 
   const startBridge = async () => {
     if (!bridgeWrite) return;
-    const result = await bridgeWrite?.();
-    setBridgeTxHash(result.hash);
     setTransactionStatus(TransactionStatus.Pending);
+    try {
+      const result = await bridgeWrite?.();
+      setBridgeTxHash(result.hash);
+    } catch (error) {
+      setTransactionStatus(undefined);
+      throw error;
+    }
   };
 
   const { error: bridgeTxError } = useWaitForTransaction({
@@ -94,7 +97,8 @@ export const useBridgeTransaction = ({
     clearStatus,
 
     startBridge: bridgeWrite ? startBridge : undefined,
-    bridgeError: bridgeError || bridgeTxError,
+    bridgeTxError,
+    isBridgePending,
     bridgeTxHash,
     bridgeTxMinedBlockNumber,
   };

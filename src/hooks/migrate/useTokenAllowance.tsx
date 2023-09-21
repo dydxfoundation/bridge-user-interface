@@ -59,11 +59,11 @@ export const useTokenAllowance = ({
   const {
     data: tokenApproveData,
     write: tokenApproveWrite,
-    isLoading: isTokenApproveWriting,
+    isLoading: isTokenApprovePending,
     error: tokenApproveError,
   } = useContractWrite(tokenApproveConfig);
 
-  const { isLoading: isTokenApprovePending, error: tokenApproveTxError } =
+  const { isLoading: isTokenApproveTxPending, error: tokenApproveTxError } =
     useWaitForTransaction({
       hash: tokenApproveData?.hash,
       enabled: tokenApproveData?.hash !== undefined,
@@ -71,7 +71,7 @@ export const useTokenAllowance = ({
 
   return {
     needTokenAllowance,
-    isTokenApproveLoading: isTokenApproveWriting || isTokenApprovePending,
+    isTokenApproveLoading: isTokenApprovePending || isTokenApproveTxPending,
     tokenApproveError: tokenApproveError || tokenApproveTxError,
     tokenApproveWrite,
   };

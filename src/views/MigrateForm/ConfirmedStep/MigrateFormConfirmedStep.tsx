@@ -30,7 +30,7 @@ export const MigrateFormConfirmedStep = () => {
     resetForm,
     bridgeTxHash,
     transactionStatus,
-    bridgeError,
+    bridgeTxError,
     bridgeTxMinedBlockNumber,
   } = useMigrateToken();
 
@@ -49,11 +49,11 @@ export const MigrateFormConfirmedStep = () => {
             label: (
               <Styled.InlineRow>
                 {transactionStatus !== TransactionStatus.Acknowledged &&
-                  !bridgeError && <Ring withAnimation value={0.25} />}
+                  !bridgeTxError && <Ring withAnimation value={0.25} />}
                 Transaction
                 {transactionStatus === TransactionStatus.Acknowledged ? (
                   <Tag sign={TagSign.Positive}>Finalized</Tag>
-                ) : bridgeError ? (
+                ) : bridgeTxError ? (
                   <Tag sign={TagSign.Negative}>Failed</Tag>
                 ) : (
                   transactionStatus === TransactionStatus.Unfinalized && (
@@ -148,7 +148,7 @@ export const MigrateFormConfirmedStep = () => {
         </Styled.FooterNote>
       ) : (
         <Styled.ButtonRow>
-          {bridgeError ? (
+          {bridgeTxError ? (
             <Styled.SubmitButton
               action={ButtonAction.Primary}
               type={ButtonType.Submit}

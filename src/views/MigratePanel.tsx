@@ -19,7 +19,7 @@ import { MigrateFormPreviewStep } from "./MigrateForm/PreviewStep/MigrateFormPre
 import { MigrateFormConfirmedStep } from "./MigrateForm/ConfirmedStep/MigrateFormConfirmedStep";
 
 export const MigratePanel = () => {
-  const { currentStep, onFormSubmit, transactionStatus, bridgeError } =
+  const { currentStep, onFormSubmit, transactionStatus, bridgeTxError } =
     useMigrateToken();
 
   const { slotIcon, title, subtitle, content } = {
@@ -46,7 +46,7 @@ export const MigratePanel = () => {
       slotIcon:
         transactionStatus === TransactionStatus.Acknowledged ? (
           <Icon iconName={IconName.CheckCircle} />
-        ) : bridgeError ? (
+        ) : bridgeTxError ? (
           <Icon iconName={IconName.CautionCircle} />
         ) : (
           <Ring withAnimation value={0.25} />
@@ -54,7 +54,7 @@ export const MigratePanel = () => {
       title:
         transactionStatus === TransactionStatus.Acknowledged
           ? "Sending Successful"
-          : bridgeError
+          : bridgeTxError
           ? "Migration failed"
           : "Sending in progress...",
       content: <MigrateFormConfirmedStep />,

@@ -2,7 +2,7 @@ import { useContext, createContext, useEffect, useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
-import { MigrateFormSteps } from "@/constants/migrate";
+import { MigrateFormSteps, TransactionStatus } from "@/constants/migrate";
 
 import { calculateCanAccountMigrate } from "@/state/accountCalculators";
 
@@ -71,15 +71,38 @@ const useMigrateTokenContext = () => {
           currentStep === MigrateFormSteps.Preview),
     });
 
-  const { clearStatus, startBridge, bridgeError, ...bridgeTransaction } =
-    useBridgeTransaction({
-      amountBN,
-      destinationAddress,
-      enabled:
-        canInteractWithContracts &&
-        !needTokenAllowance &&
-        currentStep === MigrateFormSteps.Preview,
-    });
+  const {
+    clearStatus,
+    startBridge,
+    bridgeTxError,
+    transactionStatus,
+    ...bridgeTransaction
+  } = useBridgeTransaction({
+    amountBN,
+    destinationAddress,
+    enabled:
+      canInteractWithContracts &&
+      !needTokenAllowance &&
+      currentStep === MigrateFormSteps.Preview,
+  });
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (
+        transactionStatus &&
+        transactionStatus !== TransactionStatus.Acknowledged
+      ) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [transactionStatus]);
 
   const resetForm = (shouldClearInputs?: boolean) => {
     if (shouldClearInputs) {
@@ -118,7 +141,7 @@ const useMigrateTokenContext = () => {
       }
 
       case MigrateFormSteps.Confirmed: {
-        if (bridgeError) {
+        if (bridgeTxError) {
           resetForm();
         } else {
           // todo: switch to pending migrations tab
@@ -147,7 +170,8 @@ const useMigrateTokenContext = () => {
     ...tokenAllowance,
 
     // transaction tracking
-    bridgeError,
+    bridgeTxError,
+    transactionStatus,
     ...bridgeTransaction,
   };
 };
