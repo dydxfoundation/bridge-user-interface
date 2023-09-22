@@ -166,7 +166,7 @@ export const MigrateFormConfirmedStep = () => {
                 type={ButtonType.Submit}
                 disabled
               >
-                Check status
+                Check status (coming soon)
               </Styled.SubmitButton>
             </>
           )}

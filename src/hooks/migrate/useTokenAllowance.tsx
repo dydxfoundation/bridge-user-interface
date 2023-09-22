@@ -1,7 +1,7 @@
+import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
 import {
-  usePrepareContractWrite,
   useContractWrite,
   useContractRead,
   useWaitForTransaction,
@@ -9,34 +9,31 @@ import {
 
 import {
   BRIDGE_CONTRACT_ADDRESS,
-  ETH_TOKEN_ADDRESS,
-  ETH_TOKEN_CONTRACT_ABI,
+  V3_TOKEN_ADDRESS,
+  ERC20_CONTRACT_ABI,
 } from "@/constants/migrate";
 
 import { SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
+
+import { calculateCanAccountMigrate } from "@/state/accountCalculators";
 
 import { MustBigNumber } from "@/lib/numbers";
 
 import { useAccounts } from "../useAccounts";
 import { useAccountBalance } from "../useAccountBalance";
 
-export const useTokenAllowance = ({
-  amountBN,
-  enabled,
-}: {
-  amountBN?: BigNumber;
-  enabled: boolean;
-}) => {
+export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
   const { evmAddress } = useAccounts();
   const { dv3tntBalance } = useAccountBalance();
+  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
   const { data: tokenAllowance } = useContractRead({
-    address: ETH_TOKEN_ADDRESS,
-    abi: ETH_TOKEN_CONTRACT_ABI,
+    address: V3_TOKEN_ADDRESS,
+    abi: ERC20_CONTRACT_ABI,
     functionName: "allowance",
     args: [evmAddress, BRIDGE_CONTRACT_ADDRESS],
     watch: true,
-    enabled,
+    enabled: canAccountMigrate,
     chainId: SEPOLIA_ETH_CHAIN_ID,
   });
 
@@ -44,35 +41,31 @@ export const useTokenAllowance = ({
     amountBN?.shiftedBy(18) ?? 0
   );
 
-  const { config: tokenApproveConfig } = usePrepareContractWrite({
-    address: ETH_TOKEN_ADDRESS,
-    abi: ETH_TOKEN_CONTRACT_ABI,
+  const {
+    data: approveTokenData,
+    writeAsync: approveToken,
+    isLoading: isApproveTokenPending,
+  } = useContractWrite({
+    address: V3_TOKEN_ADDRESS,
+    abi: ERC20_CONTRACT_ABI,
     functionName: "approve",
     args: [
       BRIDGE_CONTRACT_ADDRESS,
       MustBigNumber(dv3tntBalance).shiftedBy(18).toFixed(),
     ],
-    enabled,
     chainId: SEPOLIA_ETH_CHAIN_ID,
   });
 
-  const {
-    data: tokenApproveData,
-    write: tokenApproveWrite,
-    isLoading: isTokenApprovePending,
-    error: tokenApproveError,
-  } = useContractWrite(tokenApproveConfig);
-
-  const { isLoading: isTokenApproveTxPending, error: tokenApproveTxError } =
+  const { isLoading: isApproveTokenTxPending, error: approveTokenTxError } =
     useWaitForTransaction({
-      hash: tokenApproveData?.hash,
-      enabled: tokenApproveData?.hash !== undefined,
+      hash: approveTokenData?.hash,
+      enabled: approveTokenData?.hash !== undefined,
     });
 
   return {
     needTokenAllowance,
-    isTokenApproveLoading: isTokenApprovePending || isTokenApproveTxPending,
-    tokenApproveError: tokenApproveError || tokenApproveTxError,
-    tokenApproveWrite,
+    isApproveTokenLoading: isApproveTokenPending || isApproveTokenTxPending,
+    approveTokenTxError,
+    approveToken,
   };
 };

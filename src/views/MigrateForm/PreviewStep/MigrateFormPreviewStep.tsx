@@ -21,9 +21,11 @@ import { TokensBeforeAfterDiagram } from "../TokensBeforeAfterDiagram";
 export const MigrateFormPreviewStep = () => {
   const {
     resetForm,
+    errorMsg,
     needTokenAllowance,
-    isTokenApproveLoading,
-    tokenApproveError,
+    isAmountValid,
+    isApproveTokenLoading,
+    approveTokenTxError,
     isBridgePending,
   } = useMigrateToken();
 
@@ -55,19 +57,21 @@ export const MigrateFormPreviewStep = () => {
         ]}
       />
 
-      {tokenApproveError && (
+      {(errorMsg || approveTokenTxError) && (
         <AlertMessage type={AlertType.Error}>
-          {tokenApproveError.message}
+          {errorMsg || approveTokenTxError?.message}
         </AlertMessage>
       )}
 
-      <Checkbox
-        checked={hasAcknowledged}
-        onCheckedChange={setHasAcknowledged}
-        id="acknowledge-duration"
-        label="I understand it will take 24-48 hours until my tokens are available on
-          dYdX Chain."
-      />
+      {!needTokenAllowance && (
+        <Checkbox
+          checked={hasAcknowledged}
+          onCheckedChange={setHasAcknowledged}
+          id="acknowledge-duration"
+          label="I understand it will take 24-48 hours until my tokens are available on
+        dYdX Chain."
+        />
+      )}
 
       <Styled.ButtonRow>
         <Styled.EditButton onClick={() => resetForm(false)}>
@@ -78,9 +82,11 @@ export const MigrateFormPreviewStep = () => {
           action={ButtonAction.Primary}
           type={ButtonType.Submit}
           state={{
-            isLoading: isTokenApproveLoading || isBridgePending,
+            isLoading: isApproveTokenLoading || isBridgePending,
             isDisabled:
-              (!needTokenAllowance && !hasAcknowledged) || isBridgePending,
+              (!needTokenAllowance && !hasAcknowledged) ||
+              isBridgePending ||
+              !isAmountValid,
           }}
         >
           {needTokenAllowance ? "Approve allowance" : "Confirm migration"}

@@ -1,24 +1,28 @@
 import { useContext, createContext, useEffect, useState } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
 import { MigrateFormSteps, TransactionStatus } from "@/constants/migrate";
+import { SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
 
 import { calculateCanAccountMigrate } from "@/state/accountCalculators";
 
 import { MustBigNumber } from "@/lib/numbers";
+import { parseWalletError } from "@/lib/wallet";
 
-import { useAccounts } from "./useAccounts";
 import { useAccountBalance } from "./useAccountBalance";
-import { useIsDydxAddressValid } from "./useIsDydxAddressValid";
-import { useTokenAllowance } from "./migrate/useTokenAllowance";
+import { useAccounts } from "./useAccounts";
 import { useBridgeTransaction } from "./migrate/useBridgeTransaction";
+import { useIsDydxAddressValid } from "./useIsDydxAddressValid";
+import { useMatchingEvmNetwork } from "./useMatchingEvmNetwork";
+import { useStringGetter } from "./useStringGetter";
+import { useTokenAllowance } from "./migrate/useTokenAllowance";
 
 const MigrateTokenContext = createContext<
   ReturnType<typeof useMigrateTokenContext> | undefined
 >(undefined);
 
-MigrateTokenContext.displayName = "MigrateStatus";
+MigrateTokenContext.displayName = "MigrateToken";
 
 export const MigrateTokenProvider = ({ ...props }) => (
   <MigrateTokenContext.Provider value={useMigrateTokenContext()} {...props} />
@@ -27,24 +31,30 @@ export const MigrateTokenProvider = ({ ...props }) => (
 export const useMigrateToken = () => useContext(MigrateTokenContext)!;
 
 const useMigrateTokenContext = () => {
-  const { evmAddress, dydxAddress: accountDydxAddress } = useAccounts();
+  const stringGetter = useStringGetter();
+  const { evmAddress, dydxAddress } = useAccounts();
   const { dv3tntBalance } = useAccountBalance();
+  const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } =
+    useMatchingEvmNetwork({
+      chainId: SEPOLIA_ETH_CHAIN_ID,
+    });
 
   // Form state and inputs
   const [currentStep, setCurrentStep] = useState(MigrateFormSteps.Edit);
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<
+    string | React.ReactNode[] | undefined
+  >();
   const [amountBN, setAmountBN] = useState<BigNumber | undefined>();
   const [destinationAddress, setDestinationAddress] = useState<
     string | undefined
-  >(accountDydxAddress as string | undefined);
+  >(dydxAddress as string | undefined);
 
-  const canAccountMigrate = useSelector(
-    calculateCanAccountMigrate,
-    shallowEqual
-  );
+  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
   useEffect(() => {
-    setDestinationAddress(accountDydxAddress);
-  }, [accountDydxAddress]);
+    setDestinationAddress(dydxAddress);
+  }, [dydxAddress]);
 
   useEffect(() => {
     setAmountBN(undefined);
@@ -59,55 +69,23 @@ const useMigrateTokenContext = () => {
 
   const isDestinationAddressValid = useIsDydxAddressValid(destinationAddress);
 
-  const canInteractWithContracts =
+  const canWriteContracts =
     canAccountMigrate && isAmountValid && isDestinationAddressValid;
 
-  const { needTokenAllowance, tokenApproveWrite, ...tokenAllowance } =
-    useTokenAllowance({
+  // Transactions
+  const { needTokenAllowance, approveToken, ...tokenAllowance } =
+    useTokenAllowance({ amountBN });
+
+  const { clearStatus, startBridge, bridgeTxError, ...bridgeTransaction } =
+    useBridgeTransaction({
       amountBN,
-      enabled:
-        canInteractWithContracts &&
-        (currentStep === MigrateFormSteps.Edit ||
-          currentStep === MigrateFormSteps.Preview),
+      destinationAddress,
     });
-
-  const {
-    clearStatus,
-    startBridge,
-    bridgeTxError,
-    transactionStatus,
-    ...bridgeTransaction
-  } = useBridgeTransaction({
-    amountBN,
-    destinationAddress,
-    enabled:
-      canInteractWithContracts &&
-      !needTokenAllowance &&
-      currentStep === MigrateFormSteps.Preview,
-  });
-
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (
-        transactionStatus &&
-        transactionStatus !== TransactionStatus.Acknowledged
-      ) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [transactionStatus]);
 
   const resetForm = (shouldClearInputs?: boolean) => {
     if (shouldClearInputs) {
       setAmountBN(undefined);
-      setDestinationAddress(accountDydxAddress);
+      setDestinationAddress(dydxAddress);
     }
 
     setCurrentStep(MigrateFormSteps.Edit);
@@ -115,9 +93,8 @@ const useMigrateTokenContext = () => {
   };
 
   useEffect(() => {
-    // when wallet is disconnected
-    if (!canAccountMigrate) resetForm();
-  }, [canAccountMigrate]);
+    if (!canAccountMigrate && !isSwitchingNetwork && !isRequesting) resetForm();
+  }, [canAccountMigrate, isSwitchingNetwork, isRequesting]);
 
   const onFormSubmit = async () => {
     switch (currentStep) {
@@ -127,16 +104,29 @@ const useMigrateTokenContext = () => {
         break;
       }
       case MigrateFormSteps.Preview: {
+        if (!canWriteContracts) return;
+        setIsRequesting(true);
+
         try {
+          if (!isMatchingNetwork) await matchNetwork();
+
           if (needTokenAllowance) {
-            tokenApproveWrite?.();
-          } else if (startBridge) {
+            await approveToken();
+          } else {
             await startBridge();
             setCurrentStep(MigrateFormSteps.Confirmed);
           }
         } catch (error) {
-          console.error(error);
+          const { message } = parseWalletError({
+            error,
+            stringGetter,
+          });
+
+          if (message) setErrorMsg(message);
+        } finally {
+          setIsRequesting(false);
         }
+
         break;
       }
 
@@ -157,6 +147,7 @@ const useMigrateTokenContext = () => {
     onFormSubmit,
     resetForm,
     currentStep,
+    errorMsg,
 
     amountBN,
     setAmountBN,
@@ -171,7 +162,6 @@ const useMigrateTokenContext = () => {
 
     // transaction tracking
     bridgeTxError,
-    transactionStatus,
     ...bridgeTransaction,
   };
 };

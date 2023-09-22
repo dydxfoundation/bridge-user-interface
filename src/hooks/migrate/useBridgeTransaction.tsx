@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { fromBech32, toHex } from "@cosmjs/encoding";
 import BigNumber from "bignumber.js";
 
-import {
-  usePrepareContractWrite,
-  useContractWrite,
-  useWaitForTransaction,
-} from "wagmi";
+import { useContractWrite, useWaitForTransaction } from "wagmi";
 
 import {
   BRIDGE_CONTRACT_ABI,
@@ -17,15 +13,14 @@ import {
 import { DydxAddress, SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
 
 import { useTrackTransactionFinalized } from "./useTrackTransactionFinalized";
+import { useIsDydxAddressValid } from "../useIsDydxAddressValid";
 
 export const useBridgeTransaction = ({
   amountBN,
   destinationAddress,
-  enabled,
 }: {
   amountBN?: BigNumber;
   destinationAddress?: string;
-  enabled: boolean;
 }) => {
   const [transactionStatus, setTransactionStatus] =
     useState<TransactionStatus>();
@@ -38,10 +33,31 @@ export const useBridgeTransaction = ({
     bridgeTxMinedBlockNumber,
   });
 
+  const isDestinationAddressValid = useIsDydxAddressValid(destinationAddress);
+
   useEffect(() => {
     if (isTransactionFinalized)
       setTransactionStatus(TransactionStatus.Acknowledged);
   }, [isTransactionFinalized]);
+
+  // Warn user before resfresh / leaving page if transaction has not been acknowledged
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (
+        transactionStatus &&
+        transactionStatus !== TransactionStatus.Acknowledged
+      ) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [transactionStatus]);
 
   const clearStatus = () => {
     setTransactionStatus(undefined);
@@ -49,30 +65,28 @@ export const useBridgeTransaction = ({
     setBridgeTxMinedBlockNumber(undefined);
   };
 
-  const { config: bridgeConfig } = usePrepareContractWrite({
+  const {
+    data: bridgeData,
+    writeAsync: bridge,
+    isLoading: isBridgePending,
+  } = useContractWrite({
     address: BRIDGE_CONTRACT_ADDRESS,
     abi: BRIDGE_CONTRACT_ABI,
     functionName: "bridge",
     args: [
       amountBN?.shiftedBy(18)?.toFixed() ?? "0",
-      enabled ? toHex(fromBech32(destinationAddress as DydxAddress).data) : "",
+      isDestinationAddressValid
+        ? toHex(fromBech32(destinationAddress as DydxAddress).data)
+        : "",
       "", // memo
     ],
-    enabled,
     chainId: SEPOLIA_ETH_CHAIN_ID,
   });
 
-  const {
-    data: bridgeData,
-    writeAsync: bridgeWrite,
-    isLoading: isBridgePending,
-  } = useContractWrite(bridgeConfig);
-
   const startBridge = async () => {
-    if (!bridgeWrite) return;
     setTransactionStatus(TransactionStatus.Pending);
     try {
-      const result = await bridgeWrite?.();
+      const result = await bridge();
       setBridgeTxHash(result.hash);
     } catch (error) {
       setTransactionStatus(undefined);
@@ -96,7 +110,7 @@ export const useBridgeTransaction = ({
     setTransactionStatus,
     clearStatus,
 
-    startBridge: bridgeWrite ? startBridge : undefined,
+    startBridge,
     bridgeTxError,
     isBridgePending,
     bridgeTxHash,

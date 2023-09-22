@@ -39,10 +39,7 @@ export const PreviewMigrateButtonAndReceipt = ({
   const { dv3tntBalance, dv4tntBalance, wethDv3tntBalance } =
     useAccountBalance() || {};
 
-  const canAccountMigrate = useSelector(
-    calculateCanAccountMigrate,
-    shallowEqual
-  );
+  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
   const migrateDetailItems = [
     {

@@ -17,11 +17,11 @@ export enum DestinationAddressOptions {
 
 export const AVG_ETH_BLOCK_TIME_SECONDS = 14;
 
-export const ETH_TOKEN_ADDRESS = "0x6D5Bb505A4f85C10B122cCC36E30F57E2B86A291";
+export const V3_TOKEN_ADDRESS = "0x6D5Bb505A4f85C10B122cCC36E30F57E2B86A291";
 export const BRIDGE_CONTRACT_ADDRESS =
   "0xcca9D5f0a3c58b6f02BD0985fC7F9420EA24C1f0";
 
-export const ETH_TOKEN_CONTRACT_ABI = [
+export const ERC20_CONTRACT_ABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
   {
     anonymous: false,
