@@ -1,28 +1,92 @@
+import { FormEvent } from "react";
 import styled, { AnyStyledComponent } from "styled-components";
 
 import breakpoints from "@/styles/breakpoints";
+import { formMixins } from "@/styles/formMixins";
 import { layoutMixins } from "@/styles/layoutMixins";
+
+import { MigrateFormSteps, TransactionStatus } from "@/constants/migrate";
+
+import { useMigrateToken } from "@/hooks/useMigrateToken";
 
 import { Icon, IconName } from "@/components/Icon";
 import { Panel } from "@/components/Panel";
+import { Ring } from "@/components/Ring";
 import { VerticalSeparator } from "@/components/Separator";
 
+import { MigrateFormEditingStep } from "./MigrateForm/EditingStep/MigrateFormEditingStep";
+import { MigrateFormPreviewStep } from "./MigrateForm/PreviewStep/MigrateFormPreviewStep";
+import { MigrateFormConfirmedStep } from "./MigrateForm/ConfirmedStep/MigrateFormConfirmedStep";
+
 export const MigratePanel = () => {
+  const { currentStep, onFormSubmit, transactionStatus, bridgeTxError } =
+    useMigrateToken();
+
+  const { slotIcon, title, subtitle, content } = {
+    [MigrateFormSteps.Edit]: {
+      slotIcon: <Icon iconName={IconName.Migrate} />,
+      title: "Migrate",
+      subtitle: (
+        <span>
+          from <b>Ethereum</b> to <b>dYdX Chain</b>
+        </span>
+      ),
+      content: <MigrateFormEditingStep />,
+    },
+    [MigrateFormSteps.Preview]: {
+      title: "Confirm migration",
+      subtitle: (
+        <span>
+          to <b>dYdX Chain</b>
+        </span>
+      ),
+      content: <MigrateFormPreviewStep />,
+    },
+    [MigrateFormSteps.Confirmed]: {
+      slotIcon:
+        transactionStatus === TransactionStatus.Acknowledged ? (
+          <Icon iconName={IconName.CheckCircle} />
+        ) : bridgeTxError ? (
+          <Icon iconName={IconName.CautionCircle} />
+        ) : (
+          <Ring withAnimation value={0.25} />
+        ),
+      title:
+        transactionStatus === TransactionStatus.Acknowledged
+          ? "Sending Successful"
+          : bridgeTxError
+          ? "Migration failed"
+          : "Sending in progress...",
+      content: <MigrateFormConfirmedStep />,
+    },
+  }[currentStep];
+
   return (
     <Styled.MigrateCard
       slotHeader={
         <Styled.Header>
           <h3>
-            <Icon iconName={IconName.DYDX} />
-            Migrate
+            {slotIcon}
+            {title}
           </h3>
-          <Styled.VerticalSeparator />
-          <span>
-            from <b>Ethereum</b> to <b>dYdX Chain</b>
-          </span>
+          {subtitle && (
+            <>
+              <Styled.VerticalSeparator />
+              {subtitle}
+            </>
+          )}
         </Styled.Header>
       }
-    ></Styled.MigrateCard>
+    >
+      <Styled.Form
+        onSubmit={(e: FormEvent) => {
+          e.preventDefault();
+          onFormSubmit();
+        }}
+      >
+        {content}
+      </Styled.Form>
+    </Styled.MigrateCard>
   );
 };
 
@@ -71,4 +135,9 @@ Styled.VerticalSeparator = styled(VerticalSeparator)`
   @media ${breakpoints.tablet} {
     display: none;
   }
+`;
+
+Styled.Form = styled.form`
+  ${formMixins.inputsColumn}
+  gap: 1.25rem;
 `;

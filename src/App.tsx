@@ -7,6 +7,7 @@ import { useBreakpoints, useInitializePage } from "@/hooks";
 import { DydxProvider } from "@/hooks/useDydxClient";
 import { DialogAreaProvider, useDialogArea } from "@/hooks/useDialogArea";
 import { LocaleProvider } from "@/hooks/useLocaleSeparators";
+import { MigrateTokenProvider } from "@/hooks/useMigrateToken";
 
 import { config } from "@/lib/wagmi";
 
@@ -54,7 +55,9 @@ const App = () => (
         <DydxProvider>
           <AccountsProvider>
             <DialogAreaProvider>
+              <MigrateTokenProvider>
                 <Content />
+              </MigrateTokenProvider>
             </DialogAreaProvider>
           </AccountsProvider>
         </DydxProvider>
