@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled, { AnyStyledComponent, css } from "styled-components";
 import { WagmiConfig } from "wagmi";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -14,8 +15,13 @@ import { config } from "@/lib/wagmi";
 import { layoutMixins } from "@/styles/layoutMixins";
 import breakpoints from "@/styles/breakpoints";
 
+import { MigrateTabs } from "@/constants/migrate";
+
+import { Tabs } from "@/components/Tabs";
+
 import { HeaderDesktop } from "@/views/HeaderDesktop";
-import { MigratePanel } from "@/views/MigratePanel";
+import { MigratePage } from "@/views/MigratePage";
+import { PendingMigrationsPage } from "@/views/PendingMigrationsPage";
 import { DialogManager } from "@/views/dialogs/DialogManager";
 
 import "@/styles/constants.css";
@@ -31,13 +37,33 @@ const Content = () => {
   const { isNotTablet } = useBreakpoints();
   const isShowingHeader = isNotTablet;
 
+  const [selectedTab, setSelectedTab] = useState(MigrateTabs.Migrate);
+
   return (
     <Styled.Content isShowingHeader={isShowingHeader}>
       {isNotTablet && <HeaderDesktop />}
 
       <Styled.Main>
         <Styled.Container>
-          <MigratePanel />
+          <Styled.Tabs
+            defaultValue={MigrateTabs.Migrate}
+            value={selectedTab}
+            onValueChange={setSelectedTab}
+            items={[
+              {
+                value: MigrateTabs.Migrate,
+                label: "Migrate",
+                forceMount: true,
+                content: <MigratePage />,
+              },
+              {
+                value: MigrateTabs.PendingMigrations,
+                label: "Pending Migrations",
+                forceMount: true,
+                content: <PendingMigrationsPage />,
+              },
+            ]}
+          />
         </Styled.Container>
       </Styled.Main>
 
@@ -113,18 +139,13 @@ Styled.Content = styled.div<{
 `;
 
 Styled.Main = styled.main`
-  ${layoutMixins.contentSectionAttached}
-
   grid-area: Main;
-
-  isolation: isolate;
-
-  position: relative;
+  margin: 0 auto;
+  box-shadow: none;
 `;
 
 Styled.Container = styled.div`
-  ${layoutMixins.horizontallyCentered}
-  padding: 2.5rem;
+  padding: 0 2rem 2rem;
 `;
 
 Styled.DialogArea = styled.aside`
@@ -134,6 +155,11 @@ Styled.DialogArea = styled.aside`
   inset: 0;
   overflow: clip;
   ${layoutMixins.noPointerEvents}
+`;
+
+Styled.Tabs = styled(Tabs)`
+  margin: 1rem 0;
+  font: var(--font-medium-book);
 `;
 
 export default App;

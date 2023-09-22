@@ -3,6 +3,7 @@ import styled, { type AnyStyledComponent } from "styled-components";
 import { Root, Item, Indicator } from "@radix-ui/react-radio-group";
 import { layoutMixins } from "@/styles/layoutMixins";
 import { formMixins } from "@/styles/formMixins";
+import breakpoints from "@/styles/breakpoints";
 
 export type RadioGroupItem = {
   value: string;
@@ -63,7 +64,7 @@ Styled.Root = styled(Root)`
 
 Styled.RadioItem = styled(Item)`
   ${formMixins.inputContainer}
-  ${layoutMixins.column}
+  ${layoutMixins.flexColumn}
 
   align-content: center;
   align-items: start;
@@ -82,13 +83,19 @@ Styled.RadioItem = styled(Item)`
   }
 
   > :nth-child(2) {
-    margin-left: 1.75rem;
+    padding-left: 1.75rem;
+    width: 100%;
+  }
+
+  @media ${breakpoints.tablet} {
+    --input-height: auto;
   }
 `;
 
 Styled.InlineRow = styled.div`
   ${layoutMixins.inlineRow}
   gap: 0.5rem;
+  width: 100%;
 `;
 
 Styled.IndicatorContainer = styled.div`

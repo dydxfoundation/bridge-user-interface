@@ -90,7 +90,7 @@ export const HeaderDesktop = () => {
 
       <VerticalSeparator />
 
-      <Styled.NavigationMenu items={navItems} orientation="horizontal" />
+      <Styled.NavigationMenu items={navItems} />
 
       <div role="separator" />
 
@@ -133,6 +133,7 @@ Styled.Header = styled.header`
     var(--border-width) 1fr var(--border-width) auto;
 
   font-size: 0.9375em;
+  background-color: var(--color-layer-2);
 
   :before {
     backdrop-filter: blur(10px);

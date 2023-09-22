@@ -10,7 +10,11 @@ import {
   TransactionStatus,
 } from "@/constants/migrate";
 
-import { DydxAddress, SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
+import {
+  DydxAddress,
+  EthereumAddress,
+  SEPOLIA_ETH_CHAIN_ID,
+} from "@/constants/wallets";
 
 import { useTrackTransactionFinalized } from "./useTrackTransactionFinalized";
 import { useIsDydxAddressValid } from "../useIsDydxAddressValid";
@@ -24,7 +28,9 @@ export const useBridgeTransaction = ({
 }) => {
   const [transactionStatus, setTransactionStatus] =
     useState<TransactionStatus>();
-  const [bridgeTxHash, setBridgeTxHash] = useState<string | undefined>();
+  const [bridgeTxHash, setBridgeTxHash] = useState<
+    EthereumAddress | undefined
+  >();
   const [bridgeTxMinedBlockNumber, setBridgeTxMinedBlockNumber] = useState<
     bigint | undefined
   >();
@@ -65,11 +71,7 @@ export const useBridgeTransaction = ({
     setBridgeTxMinedBlockNumber(undefined);
   };
 
-  const {
-    data: bridgeData,
-    writeAsync: bridge,
-    isLoading: isBridgePending,
-  } = useContractWrite({
+  const { writeAsync: bridge, isLoading: isBridgePending } = useContractWrite({
     address: BRIDGE_CONTRACT_ADDRESS,
     abi: BRIDGE_CONTRACT_ABI,
     functionName: "bridge",
@@ -95,13 +97,13 @@ export const useBridgeTransaction = ({
   };
 
   const { error: bridgeTxError } = useWaitForTransaction({
-    hash: bridgeData?.hash,
+    hash: bridgeTxHash,
     onSuccess(data) {
       setTransactionStatus(TransactionStatus.Unfinalized);
       setBridgeTxMinedBlockNumber(data.blockNumber);
     },
     enabled:
-      bridgeData?.hash !== undefined &&
+      bridgeTxHash !== undefined &&
       transactionStatus === TransactionStatus.Pending,
   });
 

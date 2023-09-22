@@ -116,7 +116,7 @@ export const NavigationMenu = <
   onSelectItem,
   onSelectGroup,
   items,
-  orientation = "vertical",
+  orientation = "horizontal",
   itemOrientation = "horizontal",
   submenuPlacement = "inline", // orientation === 'horizontal' ? 'viewport' : 'inline',
   dir = "ltr",

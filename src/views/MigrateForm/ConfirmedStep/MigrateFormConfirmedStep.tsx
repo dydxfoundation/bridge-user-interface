@@ -111,12 +111,9 @@ export const MigrateFormConfirmedStep = () => {
             key: "transaction",
             label: (
               <Styled.InlineRow>
-                {transactionStatus === TransactionStatus.Acknowledged && (
-                  <Ring withAnimation value={0.25} />
-                )}
                 Transaction
                 {transactionStatus !== TransactionStatus.Acknowledged && (
-                  <Tag>Not started</Tag>
+                  <Styled.NotStartedTag>Not started</Styled.NotStartedTag>
                 )}
               </Styled.InlineRow>
             ),
@@ -166,7 +163,7 @@ export const MigrateFormConfirmedStep = () => {
                 type={ButtonType.Submit}
                 disabled
               >
-                Check status (coming soon)
+                Check status (WIP)
               </Styled.SubmitButton>
             </>
           )}
@@ -205,9 +202,8 @@ Styled.Output = styled(Output)<{ isNegative?: boolean }>`
     isNegative ? `var(--color-negative)` : `var(--color-positive)`};
 `;
 
-Styled.Tag = styled(Tag)`
-  color: #ffcc48;
-  background-color: #ffcc4816;
+Styled.NotStartedTag = styled(Tag)`
+  color: var(--color-text-1);
 `;
 
 Styled.FooterNote = styled.span`

@@ -1,3 +1,8 @@
+export enum MigrateTabs {
+  Migrate = "Migrate",
+  PendingMigrations = "PendingMigrations",
+}
+
 export enum MigrateFormSteps {
   Edit = "Edit",
   Preview = "Preview",
@@ -14,8 +19,6 @@ export enum DestinationAddressOptions {
   Account = "Account",
   Other = "Other",
 }
-
-export const AVG_ETH_BLOCK_TIME_SECONDS = 14;
 
 export const V3_TOKEN_ADDRESS = "0x6D5Bb505A4f85C10B122cCC36E30F57E2B86A291";
 export const BRIDGE_CONTRACT_ADDRESS =

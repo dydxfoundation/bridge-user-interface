@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import styled, { type AnyStyledComponent } from "styled-components";
 
-import { AVG_ETH_BLOCK_TIME_SECONDS } from "@/constants/migrate";
-
 import { useTrackTransactionFinalized } from "@/hooks";
 
 import { Tag } from "@/components/Tag";
+
+const NUM_EPOCH_BLOCKS = 32;
+const ETH_BLOCK_TIME_SECONDS = 12;
 
 export const FinalizingCountdownTimer = ({
   bridgeTxMinedBlockNumber,
@@ -15,17 +16,22 @@ export const FinalizingCountdownTimer = ({
   const { numBlocksTillFinalized, isTransactionFinalized } =
     useTrackTransactionFinalized({ bridgeTxMinedBlockNumber });
 
+  const getEstimate = (blockDifference: number) =>
+    Math.ceil(blockDifference / NUM_EPOCH_BLOCKS) *
+    NUM_EPOCH_BLOCKS *
+    ETH_BLOCK_TIME_SECONDS;
+
   const [secondsRemaining, setSecondsRemaining] = useState(
-    numBlocksTillFinalized * AVG_ETH_BLOCK_TIME_SECONDS
+    getEstimate(numBlocksTillFinalized)
   );
 
   useEffect(() => {
-    setSecondsRemaining(numBlocksTillFinalized * AVG_ETH_BLOCK_TIME_SECONDS);
+    setSecondsRemaining(getEstimate(numBlocksTillFinalized));
 
-    const intervalId = setInterval(() => {
-      if (secondsRemaining <= 0) return; // prevent negative seconds
-      setSecondsRemaining((secondsRemaining) => secondsRemaining - 1);
-    }, 1000);
+    const intervalId = setInterval(
+      () => setSecondsRemaining((secondsRemaining) => secondsRemaining - 1),
+      1000
+    );
 
     return () => clearInterval(intervalId);
   }, [numBlocksTillFinalized]);
@@ -38,9 +44,9 @@ export const FinalizingCountdownTimer = ({
   return (
     <Styled.Tag>
       Finalizing
-      {!isTransactionFinalized &&
-        secondsRemaining > 0 &&
-        ` ${minutes}:${seconds}`}
+      {!isTransactionFinalized && secondsRemaining > 0
+        ? ` ${minutes}:${seconds}`
+        : "..."}
     </Styled.Tag>
   );
 };

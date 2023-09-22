@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
@@ -27,7 +28,9 @@ export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
   const { dv3tntBalance } = useAccountBalance();
   const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
-  const { data: tokenAllowance } = useContractRead({
+  const [isRefetchingAfterWrite, setIsRefetchingAfterWrite] = useState(false);
+
+  const { data: tokenAllowance, refetch } = useContractRead({
     address: V3_TOKEN_ADDRESS,
     abi: ERC20_CONTRACT_ABI,
     functionName: "allowance",
@@ -62,9 +65,19 @@ export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
       enabled: approveTokenData?.hash !== undefined,
     });
 
+  useEffect(() => {
+    if (!isApproveTokenTxPending) {
+      setIsRefetchingAfterWrite(true);
+      refetch().then(() => setIsRefetchingAfterWrite(false));
+    }
+  }, [isApproveTokenTxPending]);
+
   return {
     needTokenAllowance,
-    isApproveTokenLoading: isApproveTokenPending || isApproveTokenTxPending,
+    isApproveTokenLoading:
+      isApproveTokenPending ||
+      isApproveTokenTxPending ||
+      isRefetchingAfterWrite,
     approveTokenTxError,
     approveToken,
   };

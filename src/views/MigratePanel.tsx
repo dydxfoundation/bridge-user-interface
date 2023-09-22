@@ -93,17 +93,20 @@ export const MigratePanel = () => {
 const Styled: Record<string, AnyStyledComponent> = {};
 
 Styled.MigrateCard = styled(Panel)`
-  max-width: 25rem;
-  width: 100%;
+  width: 26rem;
+  max-width: 100%;
 
   @media ${breakpoints.tablet} {
-    max-width: 100%;
+    width: 100%;
   }
 `;
 
 Styled.Header = styled.div`
   ${layoutMixins.inlineRow}
   gap: 1ch;
+
+  font: var(--font-small-book);
+  color: var(--color-text-0);
 
   h3 {
     ${layoutMixins.inlineRow}
@@ -117,7 +120,6 @@ Styled.Header = styled.div`
 
   span {
     margin-top: 0.2rem;
-    color: var(--color-text-0);
     b {
       font-weight: var(--fontWeight-book);
       color: var(--color-text-1);

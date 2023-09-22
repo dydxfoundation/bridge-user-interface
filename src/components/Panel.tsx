@@ -38,4 +38,5 @@ Styled.Content = styled.div`
   ${layoutMixins.scrollArea}
   ${layoutMixins.stickyArea0}
   --stickyArea0-background: transparent;
+  overflow-x: hidden;
 `;

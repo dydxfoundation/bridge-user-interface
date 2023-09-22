@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePublicClient } from "wagmi";
 
 import { SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
@@ -12,10 +12,11 @@ export const useTrackTransactionFinalized = ({
     bigint | undefined
   >();
 
+  const unwatchRef = useRef<(() => void) | undefined>();
+
   const publicClient = usePublicClient({
     chainId: SEPOLIA_ETH_CHAIN_ID,
   });
-
   const fetchLatestFinalizedBlock = async () => {
     if (!bridgeTxMinedBlockNumber || !publicClient) return;
     const { number } = await publicClient.getBlock({
@@ -24,26 +25,33 @@ export const useTrackTransactionFinalized = ({
 
     setNumBlocksTillFinalized(bridgeTxMinedBlockNumber - number);
   };
-
-  const unwatch = publicClient.watchBlocks({
-    blockTag: "finalized",
-    emitOnBegin: true,
-    poll: true,
-    onBlock: ({ number }) => {
-      if (!bridgeTxMinedBlockNumber) return;
-      setNumBlocksTillFinalized(bridgeTxMinedBlockNumber - number);
-    },
-  });
-
   useEffect(() => {
     // get the latest finalized block number once to set the initial timer,
     // since watchBlocks's doesn't always emits at the start
-    fetchLatestFinalizedBlock();
+    if (bridgeTxMinedBlockNumber) {
+      fetchLatestFinalizedBlock();
+
+      unwatchRef.current = publicClient.watchBlocks({
+        blockTag: "finalized",
+        emitOnBegin: true,
+        poll: true,
+        onBlock: ({ number }) =>
+          setNumBlocksTillFinalized(bridgeTxMinedBlockNumber - number),
+      });
+    }
+
+    // reset / new transaction incoming
+    return () => {
+      unwatchRef.current?.();
+      unwatchRef.current = undefined;
+    };
   }, [bridgeTxMinedBlockNumber]);
 
   useEffect(() => {
-    if (numBlocksTillFinalized !== undefined && numBlocksTillFinalized <= 0)
-      unwatch();
+    if (numBlocksTillFinalized !== undefined && numBlocksTillFinalized <= 0) {
+      unwatchRef.current?.();
+      unwatchRef.current = undefined;
+    }
   }, [numBlocksTillFinalized]);
 
   return {

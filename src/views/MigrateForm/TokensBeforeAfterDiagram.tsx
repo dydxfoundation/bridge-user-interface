@@ -97,6 +97,7 @@ Styled.ValueContainer = styled.div`
 Styled.TokenColumn = styled.div`
   ${layoutMixins.flexColumn}
   align-items: center;
+  justify-content: center;
   gap: 0.2rem;
   height: 6rem;
 
@@ -118,7 +119,7 @@ Styled.Details = styled(Details)`
     content: "";
     background: url("src/icons/arrows-right.svg");
     position: absolute;
-    margin: 5rem 0 0 -2rem;
+    margin: 5rem 0 0 -1rem;
     width: 2rem;
     height: 2rem;
   }
@@ -126,8 +127,7 @@ Styled.Details = styled(Details)`
 
 Styled.TokenIcon = styled.div`
   ${layoutMixins.stack}
-
-  margin: -0.25rem auto 0;
+  margin: 0 auto;
 
   > svg:first-child {
     height: 2rem;
