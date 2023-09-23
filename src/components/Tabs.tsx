@@ -102,7 +102,7 @@ Styled.Header = styled.header`
 
 Styled.List = styled(List)`
   align-self: stretch;
-  ${layoutMixins.row}
+  ${layoutMixins.inlineRow}
 `;
 
 Styled.Trigger = styled(Trigger)`

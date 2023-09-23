@@ -35,7 +35,9 @@ Styled.HelpCard = styled(Panel)`
   height: max-content;
 
   @media ${breakpoints.tablet} {
+    padding-top: 0;
     width: 100%;
+    background-color: var(--color-layer-2);
   }
 `;
 

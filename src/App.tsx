@@ -34,37 +34,35 @@ const Content = () => {
 
   useInitializePage();
 
-  const { isNotTablet } = useBreakpoints();
-  const isShowingHeader = isNotTablet;
+  const { isNotMobile } = useBreakpoints();
+  const isShowingHeader = isNotMobile;
 
   const [selectedTab, setSelectedTab] = useState(MigrateTabs.Migrate);
 
   return (
     <Styled.Content isShowingHeader={isShowingHeader}>
-      {isNotTablet && <HeaderDesktop />}
+      {isNotMobile && <HeaderDesktop />}
 
       <Styled.Main>
-        <Styled.Container>
-          <Styled.Tabs
-            defaultValue={MigrateTabs.Migrate}
-            value={selectedTab}
-            onValueChange={setSelectedTab}
-            items={[
-              {
-                value: MigrateTabs.Migrate,
-                label: "Migrate",
-                forceMount: true,
-                content: <MigratePage />,
-              },
-              {
-                value: MigrateTabs.PendingMigrations,
-                label: "Pending Migrations",
-                forceMount: true,
-                content: <PendingMigrationsPage />,
-              },
-            ]}
-          />
-        </Styled.Container>
+        <Styled.Tabs
+          defaultValue={MigrateTabs.Migrate}
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          items={[
+            {
+              value: MigrateTabs.Migrate,
+              label: "Migrate",
+              forceMount: true,
+              content: <MigratePage />,
+            },
+            {
+              value: MigrateTabs.PendingMigrations,
+              label: "Pending Migrations",
+              forceMount: true,
+              content: <PendingMigrationsPage />,
+            },
+          ]}
+        />
       </Styled.Main>
 
       <Styled.DialogArea ref={setDialogArea}>
@@ -142,10 +140,11 @@ Styled.Main = styled.main`
   grid-area: Main;
   margin: 0 auto;
   box-shadow: none;
-`;
+  padding-top: 2rem;
 
-Styled.Container = styled.div`
-  padding: 0 2rem 2rem;
+  @media ${breakpoints.tablet} {
+    padding-top: 1rem;
+  }
 `;
 
 Styled.DialogArea = styled.aside`
@@ -158,8 +157,13 @@ Styled.DialogArea = styled.aside`
 `;
 
 Styled.Tabs = styled(Tabs)`
-  margin: 1rem 0;
-  font: var(--font-medium-book);
+  header {
+    font: var(--font-medium-book);
+
+    @media ${breakpoints.tablet} {
+      margin: 0 1.5rem;
+    }
+  }
 `;
 
 export default App;

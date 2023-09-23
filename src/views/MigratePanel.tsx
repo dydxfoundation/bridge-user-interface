@@ -97,7 +97,9 @@ Styled.MigrateCard = styled(Panel)`
   max-width: 100%;
 
   @media ${breakpoints.tablet} {
+    padding-top: 0;
     width: 100%;
+    background-color: var(--color-layer-2);
   }
 `;
 
