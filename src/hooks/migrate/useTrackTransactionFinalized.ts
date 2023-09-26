@@ -17,6 +17,7 @@ export const useTrackTransactionFinalized = ({
   const publicClient = usePublicClient({
     chainId: SEPOLIA_ETH_CHAIN_ID,
   });
+
   const fetchLatestFinalizedBlock = async () => {
     if (!bridgeTxMinedBlockNumber || !publicClient) return;
     const { number } = await publicClient.getBlock({

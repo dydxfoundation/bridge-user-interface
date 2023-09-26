@@ -2,7 +2,6 @@ import { useQuery } from "react-query";
 import { DYDX_DENOM } from "@dydxprotocol/v4-client-js";
 
 import { DydxAddress } from "@/constants/wallets";
-import { QUANTUM_MULTIPLIER } from "@/constants/numbers";
 
 import { MustBigNumber } from "@/lib/numbers";
 
@@ -35,9 +34,5 @@ export const usePollNativeTokenBalance = ({
     staleTime: interval,
   });
 
-  const dv4tntBalance = MustBigNumber(data?.amount)
-    .div(QUANTUM_MULTIPLIER)
-    .toString();
-
-  return dv4tntBalance;
+  return MustBigNumber(data?.amount).shiftedBy(-18).toString();
 };

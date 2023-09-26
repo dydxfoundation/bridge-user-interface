@@ -48,10 +48,11 @@ export const MigrateFormConfirmedStep = () => {
             key: "transaction",
             label: (
               <Styled.InlineRow>
-                {transactionStatus !== TransactionStatus.Acknowledged &&
+                {transactionStatus &&
+                  transactionStatus < TransactionStatus.Finalized &&
                   !bridgeTxError && <Ring withAnimation value={0.25} />}
                 Transaction
-                {transactionStatus === TransactionStatus.Acknowledged ? (
+                {transactionStatus >= TransactionStatus.Finalized ? (
                   <Tag sign={TagSign.Positive}>Finalized</Tag>
                 ) : bridgeTxError ? (
                   <Tag sign={TagSign.Negative}>Failed</Tag>
@@ -112,7 +113,7 @@ export const MigrateFormConfirmedStep = () => {
             label: (
               <Styled.InlineRow>
                 Transaction
-                {transactionStatus !== TransactionStatus.Acknowledged && (
+                {transactionStatus < TransactionStatus.Acknowledged && (
                   <Styled.NotStartedTag>Not started</Styled.NotStartedTag>
                 )}
               </Styled.InlineRow>
@@ -139,7 +140,7 @@ export const MigrateFormConfirmedStep = () => {
         ]}
       />
 
-      {transactionStatus !== TransactionStatus.Acknowledged ? (
+      {transactionStatus < TransactionStatus.Finalized ? (
         <Styled.FooterNote>
           Leave this open while the transaction is being finalized.
         </Styled.FooterNote>
@@ -163,7 +164,7 @@ export const MigrateFormConfirmedStep = () => {
                 type={ButtonType.Submit}
                 disabled
               >
-                Check status (WIP)
+                Check status
               </Styled.SubmitButton>
             </>
           )}

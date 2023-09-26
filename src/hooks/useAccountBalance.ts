@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { useBalance } from "wagmi";
 
 import {
@@ -5,14 +6,17 @@ import {
   SEPOLIA_ETH_CHAIN_ID,
 } from "@/constants/wallets";
 
+import { calculateCanAccountMigrate } from "@/state/accountCalculators";
+
 import { useAccounts } from "./useAccounts";
 import { usePollNativeTokenBalance } from "./usePollNativeTokenBalance";
 
 export const useAccountBalance = () => {
-  const { evmAddress, dydxAddress } = useAccounts() || {};
+  const { evmAddress, dydxAddress } = useAccounts();
+  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
   const dv3tntBalanceQuery = useBalance({
-    enabled: evmAddress !== undefined,
+    enabled: canAccountMigrate,
     address: evmAddress,
     chainId: SEPOLIA_ETH_CHAIN_ID,
     token: Dv3TNT_TOKEN_ETH_ADDRESS,

@@ -2,7 +2,12 @@ import { useContext, createContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
-import { MigrateFormSteps, TransactionStatus } from "@/constants/migrate";
+import {
+  MigrateFormSteps,
+  MigrateTabs,
+  TransactionStatus,
+} from "@/constants/migrate";
+
 import { SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
 
 import { calculateCanAccountMigrate } from "@/state/accountCalculators";
@@ -39,6 +44,8 @@ const useMigrateTokenContext = () => {
       chainId: SEPOLIA_ETH_CHAIN_ID,
     });
 
+  const [selectedTab, setSelectedTab] = useState(MigrateTabs.Migrate);
+
   // Form state and inputs
   const [currentStep, setCurrentStep] = useState(MigrateFormSteps.Edit);
   const [isRequesting, setIsRequesting] = useState(false);
@@ -74,13 +81,24 @@ const useMigrateTokenContext = () => {
 
   // Transactions
   const { needTokenAllowance, approveToken, ...tokenAllowance } =
-    useTokenAllowance({ amountBN });
-
-  const { clearStatus, startBridge, bridgeTxError, ...bridgeTransaction } =
-    useBridgeTransaction({
+    useTokenAllowance({
       amountBN,
-      destinationAddress,
+      enabled:
+        canAccountMigrate &&
+        isAmountValid &&
+        currentStep === MigrateFormSteps.Preview,
     });
+
+  const {
+    clearStatus,
+    startBridge,
+    bridgeTxError,
+    transactionStatus,
+    ...bridgeTransaction
+  } = useBridgeTransaction({
+    amountBN,
+    destinationAddress,
+  });
 
   const resetForm = (shouldClearInputs?: boolean) => {
     if (shouldClearInputs) {
@@ -133,8 +151,8 @@ const useMigrateTokenContext = () => {
       case MigrateFormSteps.Confirmed: {
         if (bridgeTxError) {
           resetForm();
-        } else {
-          // todo: switch to pending migrations tab
+        } else if (transactionStatus === TransactionStatus.Acknowledged) {
+          setSelectedTab(MigrateTabs.PendingMigrations);
         }
 
         break;
@@ -143,6 +161,9 @@ const useMigrateTokenContext = () => {
   };
 
   return {
+    selectedTab,
+    setSelectedTab,
+
     // form state and inputs
     onFormSubmit,
     resetForm,
@@ -162,6 +183,7 @@ const useMigrateTokenContext = () => {
 
     // transaction tracking
     bridgeTxError,
+    transactionStatus,
     ...bridgeTransaction,
   };
 };

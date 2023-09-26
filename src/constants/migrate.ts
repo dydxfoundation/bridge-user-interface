@@ -10,9 +10,11 @@ export enum MigrateFormSteps {
 }
 
 export enum TransactionStatus {
-  Pending = "Pending", // ETH transaction kicked off
-  Unfinalized = "Unfinalized", // ETH transaction mined, not finalized
-  Acknowledged = "Acknowledged", // ETH block finalized -> V4 acknowledged bridge transaction
+  NotStarted = 0,
+  Pending = 1, // ETH transaction kicked off
+  Unfinalized = 2, // ETH transaction mined, not finalized
+  Finalized = 3, // ETH block finalized
+  Acknowledged = 4, // V4 acknowledged bridge transaction
 }
 
 export enum DestinationAddressOptions {

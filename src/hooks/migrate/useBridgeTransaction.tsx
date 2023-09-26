@@ -26,8 +26,9 @@ export const useBridgeTransaction = ({
   amountBN?: BigNumber;
   destinationAddress?: string;
 }) => {
-  const [transactionStatus, setTransactionStatus] =
-    useState<TransactionStatus>();
+  const [transactionStatus, setTransactionStatus] = useState<TransactionStatus>(
+    TransactionStatus.NotStarted
+  );
   const [bridgeTxHash, setBridgeTxHash] = useState<
     EthereumAddress | undefined
   >();
@@ -43,7 +44,7 @@ export const useBridgeTransaction = ({
 
   useEffect(() => {
     if (isTransactionFinalized)
-      setTransactionStatus(TransactionStatus.Acknowledged);
+      setTransactionStatus(TransactionStatus.Finalized);
   }, [isTransactionFinalized]);
 
   // Warn user before resfresh / leaving page if transaction has not been acknowledged
@@ -51,7 +52,7 @@ export const useBridgeTransaction = ({
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (
         transactionStatus &&
-        transactionStatus !== TransactionStatus.Acknowledged
+        transactionStatus < TransactionStatus.Finalized
       ) {
         e.preventDefault();
         e.returnValue = "";
@@ -66,7 +67,7 @@ export const useBridgeTransaction = ({
   }, [transactionStatus]);
 
   const clearStatus = () => {
-    setTransactionStatus(undefined);
+    setTransactionStatus(TransactionStatus.NotStarted);
     setBridgeTxHash(undefined);
     setBridgeTxMinedBlockNumber(undefined);
   };
@@ -78,7 +79,7 @@ export const useBridgeTransaction = ({
     args: [
       amountBN?.shiftedBy(18)?.toFixed() ?? "0",
       isDestinationAddressValid
-        ? toHex(fromBech32(destinationAddress as DydxAddress).data)
+        ? `0x${toHex(fromBech32(destinationAddress as DydxAddress).data)}`
         : "",
       "", // memo
     ],
@@ -91,7 +92,7 @@ export const useBridgeTransaction = ({
       const result = await bridge();
       setBridgeTxHash(result.hash);
     } catch (error) {
-      setTransactionStatus(undefined);
+      setTransactionStatus(TransactionStatus.NotStarted);
       throw error;
     }
   };

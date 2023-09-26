@@ -44,7 +44,7 @@ export const MigratePanel = () => {
     },
     [MigrateFormSteps.Confirmed]: {
       slotIcon:
-        transactionStatus === TransactionStatus.Acknowledged ? (
+        transactionStatus >= TransactionStatus.Finalized ? (
           <Icon iconName={IconName.CheckCircle} />
         ) : bridgeTxError ? (
           <Icon iconName={IconName.CautionCircle} />
@@ -52,7 +52,7 @@ export const MigratePanel = () => {
           <Ring withAnimation value={0.25} />
         ),
       title:
-        transactionStatus === TransactionStatus.Acknowledged
+        transactionStatus >= TransactionStatus.Finalized
           ? "Sending Successful"
           : bridgeTxError
           ? "Migration failed"

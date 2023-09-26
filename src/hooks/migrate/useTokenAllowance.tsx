@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
 import {
@@ -16,33 +15,33 @@ import {
 
 import { SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
 
-import { calculateCanAccountMigrate } from "@/state/accountCalculators";
-
 import { MustBigNumber } from "@/lib/numbers";
 
 import { useAccounts } from "../useAccounts";
 import { useAccountBalance } from "../useAccountBalance";
 
-export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
+export const useTokenAllowance = ({
+  amountBN,
+  enabled,
+}: {
+  amountBN?: BigNumber;
+  enabled: boolean;
+}) => {
   const { evmAddress } = useAccounts();
   const { dv3tntBalance } = useAccountBalance();
-  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
   const [isRefetchingAfterWrite, setIsRefetchingAfterWrite] = useState(false);
 
-  const { data: tokenAllowance, refetch } = useContractRead({
+  const { data: needTokenAllowance, refetch } = useContractRead({
     address: V3_TOKEN_ADDRESS,
     abi: ERC20_CONTRACT_ABI,
     functionName: "allowance",
     args: [evmAddress, BRIDGE_CONTRACT_ADDRESS],
-    watch: true,
-    enabled: canAccountMigrate,
     chainId: SEPOLIA_ETH_CHAIN_ID,
+    enabled,
+    select: (allowance) =>
+      MustBigNumber(allowance as string).lt(amountBN?.shiftedBy(18) ?? 0),
   });
-
-  const needTokenAllowance = MustBigNumber(tokenAllowance as string).lt(
-    amountBN?.shiftedBy(18) ?? 0
-  );
 
   const {
     data: approveTokenData,
