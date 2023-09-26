@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
 import {
@@ -7,38 +8,29 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 
-import {
-  BRIDGE_CONTRACT_ADDRESS,
-  V3_TOKEN_ADDRESS,
-  ERC20_CONTRACT_ABI,
-} from "@/constants/migrate";
+import { v3TokenContractAbi } from "@/constants/abi";
 
-import { SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
+import { calculateCanAccountMigrate } from "@/state/accountCalculators";
 
 import { MustBigNumber } from "@/lib/numbers";
 
 import { useAccounts } from "../useAccounts";
 import { useAccountBalance } from "../useAccountBalance";
 
-export const useTokenAllowance = ({
-  amountBN,
-  enabled,
-}: {
-  amountBN?: BigNumber;
-  enabled: boolean;
-}) => {
+export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
   const { evmAddress } = useAccounts();
-  const { dv3tntBalance } = useAccountBalance();
+  const { v3TokenBalance } = useAccountBalance();
+  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
   const [isRefetchingAfterWrite, setIsRefetchingAfterWrite] = useState(false);
 
   const { data: needTokenAllowance, refetch } = useContractRead({
-    address: V3_TOKEN_ADDRESS,
-    abi: ERC20_CONTRACT_ABI,
+    address: import.meta.env.VITE_V3_TOKEN_ADDRESS,
+    abi: v3TokenContractAbi,
     functionName: "allowance",
-    args: [evmAddress, BRIDGE_CONTRACT_ADDRESS],
-    chainId: SEPOLIA_ETH_CHAIN_ID,
-    enabled,
+    args: [evmAddress, import.meta.env.VITE_BRIDGE_CONTRACT_ADDRESS],
+    chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
+    enabled: canAccountMigrate,
     select: (allowance) =>
       MustBigNumber(allowance as string).lt(amountBN?.shiftedBy(18) ?? 0),
   });
@@ -48,14 +40,14 @@ export const useTokenAllowance = ({
     writeAsync: approveToken,
     isLoading: isApproveTokenPending,
   } = useContractWrite({
-    address: V3_TOKEN_ADDRESS,
-    abi: ERC20_CONTRACT_ABI,
+    address: import.meta.env.VITE_V3_TOKEN_ADDRESS,
+    abi: v3TokenContractAbi,
     functionName: "approve",
     args: [
-      BRIDGE_CONTRACT_ADDRESS,
-      MustBigNumber(dv3tntBalance).shiftedBy(18).toFixed(),
+      import.meta.env.VITE_BRIDGE_CONTRACT_ADDRESS,
+      MustBigNumber(v3TokenBalance).shiftedBy(18).toFixed(),
     ],
-    chainId: SEPOLIA_ETH_CHAIN_ID,
+    chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
   });
 
   const { isLoading: isApproveTokenTxPending, error: approveTokenTxError } =

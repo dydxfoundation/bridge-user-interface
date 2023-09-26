@@ -8,8 +8,6 @@ import {
   TransactionStatus,
 } from "@/constants/migrate";
 
-import { SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
-
 import { calculateCanAccountMigrate } from "@/state/accountCalculators";
 
 import { MustBigNumber } from "@/lib/numbers";
@@ -38,11 +36,13 @@ export const useMigrateToken = () => useContext(MigrateTokenContext)!;
 const useMigrateTokenContext = () => {
   const stringGetter = useStringGetter();
   const { evmAddress, dydxAddress } = useAccounts();
-  const { dv3tntBalance } = useAccountBalance();
+  const { v3TokenBalance } = useAccountBalance();
   const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } =
     useMatchingEvmNetwork({
-      chainId: SEPOLIA_ETH_CHAIN_ID,
+      chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
     });
+
+  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
   const [selectedTab, setSelectedTab] = useState(MigrateTabs.Migrate);
 
@@ -57,8 +57,6 @@ const useMigrateTokenContext = () => {
     string | undefined
   >(dydxAddress as string | undefined);
 
-  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
-
   useEffect(() => {
     setDestinationAddress(dydxAddress);
   }, [dydxAddress]);
@@ -69,9 +67,9 @@ const useMigrateTokenContext = () => {
 
   // Validations
   const isAmountValid = Boolean(
-    MustBigNumber(dv3tntBalance).gt(0) &&
+    MustBigNumber(v3TokenBalance).gt(0) &&
       amountBN?.gt(0) &&
-      amountBN?.lte(dv3tntBalance ?? 0)
+      amountBN?.lte(v3TokenBalance ?? 0)
   );
 
   const isDestinationAddressValid = useIsDydxAddressValid(destinationAddress);
@@ -81,13 +79,7 @@ const useMigrateTokenContext = () => {
 
   // Transactions
   const { needTokenAllowance, approveToken, ...tokenAllowance } =
-    useTokenAllowance({
-      amountBN,
-      enabled:
-        canAccountMigrate &&
-        isAmountValid &&
-        currentStep === MigrateFormSteps.Preview,
-    });
+    useTokenAllowance({ amountBN });
 
   const {
     clearStatus,

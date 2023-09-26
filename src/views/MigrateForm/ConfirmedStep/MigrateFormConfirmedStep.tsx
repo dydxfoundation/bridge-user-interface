@@ -77,7 +77,7 @@ export const MigrateFormConfirmedStep = () => {
             value: truncateAddress(evmAddress, "0x"),
           },
           {
-            key: "wethDv3tnt",
+            key: "wethV3Token",
             label: "wethDv3tnt on Ethereum",
             value: (
               <Styled.Output
@@ -89,7 +89,7 @@ export const MigrateFormConfirmedStep = () => {
             ),
           },
           {
-            key: "dv3tnt",
+            key: "v3Token",
             label: "dv3tnt on Ethereum",
             value: (
               <Styled.Output
@@ -162,7 +162,6 @@ export const MigrateFormConfirmedStep = () => {
               <Styled.SubmitButton
                 action={ButtonAction.Primary}
                 type={ButtonType.Submit}
-                disabled
               >
                 Check status
               </Styled.SubmitButton>

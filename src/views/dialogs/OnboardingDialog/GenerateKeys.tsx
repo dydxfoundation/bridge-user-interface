@@ -8,11 +8,7 @@ import { AlertType } from "@/constants/alerts";
 import { ButtonAction } from "@/constants/buttons";
 import { STRING_KEYS } from "@/constants/localization";
 
-import {
-  DydxAddress,
-  SEPOLIA_ETH_CHAIN_ID,
-  SIGN_TYPED_DATA,
-} from "@/constants/wallets";
+import { DydxAddress, SIGN_TYPED_DATA } from "@/constants/wallets";
 
 import {
   useAccounts,
@@ -47,12 +43,11 @@ export const GenerateKeys = ({
   const stringGetter = useStringGetter();
 
   const [shouldRememberMe, setShouldRememberMe] = useState(false);
+  const [error, setError] = useState<string | React.ReactNode[]>();
 
   const { setWalletFromEvmSignature, saveEvmSignature } = useAccounts();
 
-  const [error, setError] = useState<string | React.ReactNode[]>();
-
-  const chainId = SEPOLIA_ETH_CHAIN_ID;
+  const chainId = Number(import.meta.env.VITE_ETH_CHAIN_ID);
 
   // 1. Switch network
   const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } =

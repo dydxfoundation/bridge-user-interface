@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { usePublicClient } from "wagmi";
 
-import { SEPOLIA_ETH_CHAIN_ID } from "@/constants/wallets";
-
 export const useTrackTransactionFinalized = ({
   bridgeTxMinedBlockNumber,
 }: {
@@ -15,7 +13,7 @@ export const useTrackTransactionFinalized = ({
   const unwatchRef = useRef<(() => void) | undefined>();
 
   const publicClient = usePublicClient({
-    chainId: SEPOLIA_ETH_CHAIN_ID,
+    chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
   });
 
   const fetchLatestFinalizedBlock = async () => {
@@ -45,6 +43,7 @@ export const useTrackTransactionFinalized = ({
     return () => {
       unwatchRef.current?.();
       unwatchRef.current = undefined;
+      setNumBlocksTillFinalized(undefined);
     };
   }, [bridgeTxMinedBlockNumber]);
 

@@ -4,17 +4,10 @@ import BigNumber from "bignumber.js";
 
 import { useContractWrite, useWaitForTransaction } from "wagmi";
 
-import {
-  BRIDGE_CONTRACT_ABI,
-  BRIDGE_CONTRACT_ADDRESS,
-  TransactionStatus,
-} from "@/constants/migrate";
+import { bridgeContractAbi } from "@/constants/abi";
+import { TransactionStatus } from "@/constants/migrate";
 
-import {
-  DydxAddress,
-  EthereumAddress,
-  SEPOLIA_ETH_CHAIN_ID,
-} from "@/constants/wallets";
+import { DydxAddress, EthereumAddress } from "@/constants/wallets";
 
 import { useTrackTransactionFinalized } from "./useTrackTransactionFinalized";
 import { useIsDydxAddressValid } from "../useIsDydxAddressValid";
@@ -73,8 +66,8 @@ export const useBridgeTransaction = ({
   };
 
   const { writeAsync: bridge, isLoading: isBridgePending } = useContractWrite({
-    address: BRIDGE_CONTRACT_ADDRESS,
-    abi: BRIDGE_CONTRACT_ABI,
+    address: import.meta.env.VITE_BRIDGE_CONTRACT_ADDRESS,
+    abi: bridgeContractAbi,
     functionName: "bridge",
     args: [
       amountBN?.shiftedBy(18)?.toFixed() ?? "0",
@@ -83,7 +76,7 @@ export const useBridgeTransaction = ({
         : "",
       "", // memo
     ],
-    chainId: SEPOLIA_ETH_CHAIN_ID,
+    chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
   });
 
   const startBridge = async () => {

@@ -372,7 +372,3 @@ export type PrivateInformation = ReturnType<
 
 export type EthereumAddress = `0x${string}`;
 export type DydxAddress = `dydx${string}`;
-
-export const SEPOLIA_ETH_CHAIN_ID = 11155111;
-export const Dv3TNT_TOKEN_ETH_ADDRESS =
-  "0x6d5bb505a4f85c10b122ccc36e30f57e2b86a291";

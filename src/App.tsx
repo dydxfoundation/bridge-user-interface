@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled, { AnyStyledComponent, css } from "styled-components";
 import { WagmiConfig } from "wagmi";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -8,7 +7,7 @@ import { useBreakpoints, useInitializePage } from "@/hooks";
 import { DydxProvider } from "@/hooks/useDydxClient";
 import { DialogAreaProvider, useDialogArea } from "@/hooks/useDialogArea";
 import { LocaleProvider } from "@/hooks/useLocaleSeparators";
-import { MigrateTokenProvider } from "@/hooks/useMigrateToken";
+import { MigrateTokenProvider, useMigrateToken } from "@/hooks/useMigrateToken";
 
 import { config } from "@/lib/wagmi";
 
@@ -37,7 +36,7 @@ const Content = () => {
   const { isNotMobile } = useBreakpoints();
   const isShowingHeader = isNotMobile;
 
-  const [selectedTab, setSelectedTab] = useState(MigrateTabs.Migrate);
+  const { selectedTab, setSelectedTab } = useMigrateToken();
 
   return (
     <Styled.Content isShowingHeader={isShowingHeader}>

@@ -47,8 +47,8 @@ export const AccountMenu = () => {
   const dispatch = useDispatch();
   const onboardingState = useSelector(getOnboardingState);
 
-  const { evmAddress, walletType, dydxAddress } = useAccounts() || {};
-  const { dv4tntBalance } = useAccountBalance() || {};
+  const { evmAddress, walletType, dydxAddress } = useAccounts();
+  const { v4TokenBalance } = useAccountBalance();
 
   const onRecoverKeys = () => {
     dispatch(openDialog({ type: DialogTypes.Onboarding }));
@@ -129,7 +129,7 @@ export const AccountMenu = () => {
               </Styled.Label>
               <Styled.BalanceOutput
                 type={OutputType.Asset}
-                value={dv4tntBalance}
+                value={v4TokenBalance}
               />
             </Styled.Balance>
           </Styled.AccountInfo>

@@ -1,4 +1,4 @@
-import { shallowEqual, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
 import { ButtonAction, ButtonSize, ButtonType } from "@/constants/buttons";
@@ -36,14 +36,14 @@ export const PreviewMigrateButtonAndReceipt = ({
   const stringGetter = useStringGetter();
   const { dydxAddress } = useAccounts() || {};
   const { amountBN, destinationAddress } = useMigrateToken();
-  const { dv3tntBalance, dv4tntBalance, wethDv3tntBalance } =
-    useAccountBalance() || {};
+  const { v3TokenBalance, v4TokenBalance, wethDYDXBalance } =
+    useAccountBalance();
 
   const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
   const migrateDetailItems = [
     {
-      key: "dv3tntBalance",
+      key: "v3TokenBalance",
       label: (
         <span>
           Balance on Ethereum <Tag>dv3tnt</Tag>
@@ -52,37 +52,37 @@ export const PreviewMigrateButtonAndReceipt = ({
       value: (
         <DiffOutput
           type={OutputType.Asset}
-          value={dv3tntBalance}
-          newValue={MustBigNumber(dv3tntBalance)
+          value={v3TokenBalance}
+          newValue={MustBigNumber(v3TokenBalance)
             .minus(amountBN ?? 0)
             .toNumber()}
           sign={NumberSign.Negative}
-          withDiff={Boolean(dv3tntBalance !== undefined && amountBN)}
+          withDiff={Boolean(v3TokenBalance !== undefined && amountBN)}
           roundingMode={BigNumber.ROUND_DOWN}
         />
       ),
     },
     {
-      key: "wethDv3tntBalance",
+      key: "wethDYDXBalance",
       label: (
         <span>
-          Balance on Ethereum <Tag>wethDv3tnt</Tag>
+          Balance on Ethereum <Tag>wethDYDX</Tag>
         </span>
       ),
       value: (
         <DiffOutput
           type={OutputType.Asset}
-          value={wethDv3tntBalance}
-          newValue={amountBN?.plus(wethDv3tntBalance).toNumber() ?? 0}
+          value={wethDYDXBalance}
+          newValue={amountBN?.plus(wethDYDXBalance ?? 0).toNumber() ?? 0}
           sign={NumberSign.Positive}
-          withDiff={Boolean(wethDv3tntBalance !== undefined && amountBN)}
+          withDiff={Boolean(wethDYDXBalance !== undefined && amountBN)}
           roundingMode={BigNumber.ROUND_DOWN}
         />
       ),
     },
     dydxAddress &&
       dydxAddress === destinationAddress && {
-        key: "dv4tntBalance",
+        key: "v4TokenBalance",
         label: (
           <span>
             {stringGetter({ key: STRING_KEYS.BALANCE })} <Tag>dv4tnt</Tag>
@@ -91,10 +91,10 @@ export const PreviewMigrateButtonAndReceipt = ({
         value: (
           <DiffOutput
             type={OutputType.Asset}
-            value={dv4tntBalance}
-            newValue={amountBN?.plus(dv4tntBalance).toNumber() ?? 0}
+            value={v4TokenBalance}
+            newValue={amountBN?.plus(v4TokenBalance).toNumber() ?? 0}
             sign={NumberSign.Positive}
-            withDiff={Boolean(dv4tntBalance !== undefined && amountBN)}
+            withDiff={Boolean(v4TokenBalance !== undefined && amountBN)}
             roundingMode={BigNumber.ROUND_DOWN}
           />
         ),

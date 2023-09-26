@@ -1,11 +1,6 @@
 import { useSelector } from "react-redux";
 import { useBalance } from "wagmi";
 
-import {
-  Dv3TNT_TOKEN_ETH_ADDRESS,
-  SEPOLIA_ETH_CHAIN_ID,
-} from "@/constants/wallets";
-
 import { calculateCanAccountMigrate } from "@/state/accountCalculators";
 
 import { useAccounts } from "./useAccounts";
@@ -15,21 +10,27 @@ export const useAccountBalance = () => {
   const { evmAddress, dydxAddress } = useAccounts();
   const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
-  const dv3tntBalanceQuery = useBalance({
-    enabled: canAccountMigrate,
+  const { data: v3BalanceData } = useBalance({
+    enabled: evmAddress && canAccountMigrate,
     address: evmAddress,
-    chainId: SEPOLIA_ETH_CHAIN_ID,
-    token: Dv3TNT_TOKEN_ETH_ADDRESS,
+    chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
+    token: import.meta.env.VITE_V3_TOKEN_ADDRESS,
     watch: true,
   });
 
-  const { formatted: dv3tntBalance } = dv3tntBalanceQuery.data || {};
-  const wethDv3tntBalance = 0; // Todo: replace with actual data
-  const dv4tntBalance = usePollNativeTokenBalance({ dydxAddress });
+  const { data: wethDYDXBalanceData } = useBalance({
+    enabled: false, // TODO: enable when we switch to mainnet
+    address: evmAddress,
+    token: import.meta.env.VITE_WETH_DYDX_ADDRESS,
+  });
+
+  const { formatted: v3TokenBalance } = v3BalanceData || {};
+  const { formatted: wethDYDXBalance } = wethDYDXBalanceData || {};
+  const v4TokenBalance = usePollNativeTokenBalance({ dydxAddress });
 
   return {
-    dv3tntBalance,
-    wethDv3tntBalance,
-    dv4tntBalance,
+    v3TokenBalance,
+    wethDYDXBalance,
+    v4TokenBalance,
   };
 };

@@ -39,7 +39,7 @@ import { PreviewMigrateButtonAndReceipt } from "./PreviewMigrateButtonAndReceipt
 export const MigrateFormEditingStep = () => {
   const stringGetter = useStringGetter();
   const { dydxAddress: accountDydxAddress } = useAccounts();
-  const { dv3tntBalance } = useAccountBalance();
+  const { v3TokenBalance } = useAccountBalance();
 
   const {
     amountBN,
@@ -54,8 +54,8 @@ export const MigrateFormEditingStep = () => {
     DestinationAddressOptions.Account
   );
 
-  const dv3tntBalanceBN = MustBigNumber(dv3tntBalance);
-  const newDv3tntBalanceBN = dv3tntBalanceBN.minus(amountBN ?? 0);
+  const v3TokenBalanceBN = MustBigNumber(v3TokenBalance);
+  const newV3TokenBalanceBN = v3TokenBalanceBN.minus(amountBN ?? 0);
 
   const onOptionChange = (option: string) => {
     if (option === DestinationAddressOptions.Other) {
@@ -86,11 +86,11 @@ export const MigrateFormEditingStep = () => {
       value: (
         <DiffOutput
           type={OutputType.Asset}
-          value={dv3tntBalance?.toString()}
-          newValue={newDv3tntBalanceBN.toString()}
+          value={v3TokenBalance?.toString()}
+          newValue={newV3TokenBalanceBN.toString()}
           sign={NumberSign.Negative}
-          hasInvalidNewValue={newDv3tntBalanceBN.isNegative()}
-          withDiff={dv3tntBalance !== undefined && amountBN && amountBN.gt(0)}
+          hasInvalidNewValue={newV3TokenBalanceBN.isNegative()}
+          withDiff={v3TokenBalance !== undefined && amountBN && amountBN.gt(0)}
           roundingMode={BigNumber.ROUND_DOWN}
         />
       ),
@@ -137,7 +137,7 @@ export const MigrateFormEditingStep = () => {
             label: stringGetter({ key: STRING_KEYS.MAX }),
             isInputEmpty: !amountBN,
             onClear: () => setAmountBN(undefined),
-            onClick: () => dv3tntBalance && setAmountBN(dv3tntBalanceBN),
+            onClick: () => v3TokenBalance && setAmountBN(v3TokenBalanceBN),
           })}
         />
       </WithDetailsReceipt>
