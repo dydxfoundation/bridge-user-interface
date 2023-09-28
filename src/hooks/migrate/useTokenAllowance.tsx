@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import BigNumber from "bignumber.js";
 
 import {
@@ -9,20 +8,24 @@ import {
 } from "wagmi";
 
 import { v3TokenContractAbi } from "@/constants/abi";
-
-import { calculateCanAccountMigrate } from "@/state/accountCalculators";
+import { TOKEN_DECIMAL_SHIFT } from "@/constants/migrate";
 
 import { MustBigNumber } from "@/lib/numbers";
 
 import { useAccounts } from "../useAccounts";
 import { useAccountBalance } from "../useAccountBalance";
 
-export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
+export const useTokenAllowance = ({
+  amountBN,
+  enabled,
+}: {
+  amountBN?: BigNumber;
+  enabled: boolean;
+}) => {
   const { evmAddress } = useAccounts();
   const { v3TokenBalance } = useAccountBalance();
-  const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
-  const [isRefetchingAfterWrite, setIsRefetchingAfterWrite] = useState(false);
+  const [needsRefetch, setNeedsRefetch] = useState(false);
 
   const { data: needTokenAllowance, refetch } = useContractRead({
     address: import.meta.env.VITE_V3_TOKEN_ADDRESS,
@@ -30,9 +33,11 @@ export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
     functionName: "allowance",
     args: [evmAddress, import.meta.env.VITE_BRIDGE_CONTRACT_ADDRESS],
     chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
-    enabled: canAccountMigrate,
+    enabled,
     select: (allowance) =>
-      MustBigNumber(allowance as string).lt(amountBN?.shiftedBy(18) ?? 0),
+      MustBigNumber(allowance as string).lt(
+        amountBN?.shiftedBy(TOKEN_DECIMAL_SHIFT) ?? 0
+      ),
   });
 
   const {
@@ -45,7 +50,7 @@ export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
     functionName: "approve",
     args: [
       import.meta.env.VITE_BRIDGE_CONTRACT_ADDRESS,
-      MustBigNumber(v3TokenBalance).shiftedBy(18).toFixed(),
+      MustBigNumber(v3TokenBalance).shiftedBy(TOKEN_DECIMAL_SHIFT).toFixed(),
     ],
     chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
   });
@@ -54,21 +59,24 @@ export const useTokenAllowance = ({ amountBN }: { amountBN?: BigNumber }) => {
     useWaitForTransaction({
       hash: approveTokenData?.hash,
       enabled: approveTokenData?.hash !== undefined,
+      timeout: 10_000,
+      onSettled(data) {
+        (data ? refetch() : Promise.resolve()).then(() =>
+          setNeedsRefetch(false)
+        );
+      },
     });
 
   useEffect(() => {
-    if (!isApproveTokenTxPending) {
-      setIsRefetchingAfterWrite(true);
-      refetch().then(() => setIsRefetchingAfterWrite(false));
-    }
+    if (isApproveTokenTxPending) setNeedsRefetch(true);
   }, [isApproveTokenTxPending]);
 
   return {
     needTokenAllowance,
+
     isApproveTokenLoading:
-      isApproveTokenPending ||
-      isApproveTokenTxPending ||
-      isRefetchingAfterWrite,
+      isApproveTokenPending || isApproveTokenTxPending || needsRefetch,
+
     approveTokenTxError,
     approveToken,
   };

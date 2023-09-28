@@ -7,6 +7,8 @@ import breakpoints from "@/styles/breakpoints";
 
 import { ToggleButton } from "@/components/ToggleButton";
 
+import { PendingMigrationsTable } from "./PendingMigrationsTable";
+
 export const PendingMigrationsPage = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -14,24 +16,24 @@ export const PendingMigrationsPage = () => {
     <Styled.Container>
       <Styled.Description>
         <p>
-          This table displays all Pending Migrations, which settle DYDX
-          migrations on dYdX Chain. To view new or updated entries, you'll need
-          to refresh the page. Migrations will appear on this table a few
-          minutes after the corresponding Ethereum tx has been finalized
-          (finalization typically takes 20 minutes).
+          This table lists all ongoing token migrations from Ethereum to the
+          dYdX Chain. It refreshes periodically or upon a manual page reload.
+          New entries will appear a few minutes after their corresponding
+          Ethereum transactions finalize, which typically takes around 20
+          minutes.{!showFullDescription && ".."}
         </p>
         {showFullDescription && (
           <>
             <p>
-              Once a Pending Migration is listed, users can track the dYdX Chain
-              block in which it will settle and be transferred to the dYdX Chain
-              address. Please note that the estimated time shown is only an
-              approximation, as it can vary due to dYdX Chain block time
-              fluctuations.
+              Once a pending migration is listed, you can track the dYdX Chain
+              block where tokens will be transferred. Please note that the
+              estimated time shown is only an approximation, as it can vary due
+              to dYdX Chain block time fluctuations.
             </p>
             <p>
-              Once a Pending Migration has settled, it will be removed from this
-              table upon refreshing the page.
+              Once the migration has settled, it will be removed from this table
+              during the next automatic update or when the page is manually
+              refreshed.
             </p>
           </>
         )}
@@ -42,7 +44,7 @@ export const PendingMigrationsPage = () => {
           {showFullDescription ? "View less" : "View more"}
         </Styled.ViewMoreToggle>
       </Styled.Description>
-      <h3>Coming soon</h3>
+      <PendingMigrationsTable />
     </Styled.Container>
   );
 };
@@ -54,22 +56,22 @@ Styled.Container = styled.section`
   gap: 1rem;
 
   > * {
-    padding: 0 0.75rem;
     width: 49.25rem;
     max-width: 100%;
-
-    @media ${breakpoints.tablet} {
-      padding: 0 2.25rem;
-    }
   }
 `;
 
 Styled.Description = styled.div`
   font: var(--font-base-book);
   color: var(--color-text-0);
+  padding: 0 0.75rem;
 
   p:not(:last-of-type) {
     margin-bottom: 1rem;
+  }
+
+  @media ${breakpoints.tablet} {
+    padding: 0 2.25rem;
   }
 `;
 

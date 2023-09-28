@@ -229,14 +229,6 @@ export const layoutMixins: Record<string, any> = {
     ${() => layoutMixins.scrollSnapItem}
   `,
 
-  // Section containing horizontally-overflowing content that scrolls with the outer scrollArea
-  // Use within contentContainer or contentContainerPage
-  contentSectionAttached: css`
-    ${() => layoutMixins.contentSection}
-    min-width: max-content;
-    /* max-width: none; */
-  `,
-
   // Section that defines its own horizontal scrollArea and does not scroll with the outer scrollArea
   // Use within contentContainer or contentContainerPage
   contentSectionDetached: css`

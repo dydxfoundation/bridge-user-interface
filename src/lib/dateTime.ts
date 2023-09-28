@@ -1,4 +1,4 @@
-import { timeUnits, allTimeUnits } from '@/constants/time';
+import { timeUnits, allTimeUnits } from "@/constants/time";
 
 // Given a literal from Intl.RelativeTimeFormat formatToParts,
 // strip out words/symbols unrelated to time unit
@@ -8,13 +8,13 @@ const isolateTimeUnit = (literal: string) =>
     // TODO: update with other locales
     .replace(
       /(?<fr_ru>^[+])|(?<en_de>^in )|(?<es>^dentro de )|(?<zh>后$)|(?<ja>後$)|(?<ko>후$)|(?<tr>[.]? önce$)|(?<pt>^em )/,
-      ''
+      ""
     )
     // Remove "past" words/symbols (e.g. "ago", negative signs)
     // TODO: update with other locales
     .replace(
       /(?<fr_ru>^[--])|(?<en>[.]? ago$)|(?<es>^hace )|(?<zh_ja>前$)|(?<ko>전$)|(?<tr>[.]? önce$)|(?<de>^vor )|(?<pt>^há )/,
-      ''
+      ""
     );
 
 // Abbreviate time unit from Intl.RelativeTimeFormat { style: "narrow" }
@@ -23,35 +23,32 @@ const toSingleCharacterTimeUnit = (timeUnit: string) =>
   timeUnit
     // Disambiguate ambiguous prefixes
     // TODO: update with other locales
-    .replace(/(?<en> ?mo)/, ' Mo')
+    .replace(/(?<en> ?mo)/, " Mo")
     // Remove articles/"counting" words
     // TODO: update with other locales
-    .replace(/(?<zh>个)|(?<ja>か)|(?<ko>개)/, '')
+    .replace(/(?<zh>个)|(?<ja>か)|(?<ko>개)/, "")
     // Strip leading space and naively take just the 1st character
     // TODO: take the 1st grapheme instead
     .match(/^\s?(.)|/)?.[1];
 
-export const formatRelativeTime = (
-  timestamp: number,
+export const formatRelativeTimeFromMs = (
+  elapsedMs: number,
   {
-    relativeToTimestamp = Date.now(),
     locale,
-    format = 'singleCharacter',
-    largestUnit = 'year',
+    format = "singleCharacter",
+    largestUnit = "year",
     resolution = 2,
     stripRelativeWords = true,
   }: {
-    locale: string;
-    relativeToTimestamp?: number;
-    format?: 'long' | 'short' | 'narrow' | 'singleCharacter';
-    largestUnit: keyof typeof timeUnits;
+    locale: string | undefined;
+    format?: "long" | "short" | "narrow" | "singleCharacter";
+    largestUnit?: keyof typeof timeUnits;
     resolution?: number;
     stripRelativeWords?: boolean;
   }
 ) => {
-  let elapsed = Math.abs(timestamp - relativeToTimestamp);
-  const sign = Math.sign(timestamp - relativeToTimestamp);
-
+  let elapsed = elapsedMs;
+  const sign = Math.sign(elapsed);
   const unitParts = [];
 
   for (const [unit, amount] of Object.entries(timeUnits).slice(
@@ -62,14 +59,17 @@ export const formatRelativeTime = (
         new Intl.RelativeTimeFormat(locale, {
           style: (
             {
-              long: 'long',
-              short: 'short',
-              narrow: 'narrow',
-              singleCharacter: 'narrow',
+              long: "long",
+              short: "short",
+              narrow: "narrow",
+              singleCharacter: "narrow",
             } as const
           )[format],
-          numeric: 'always',
-        }).formatToParts(sign * Math.floor(elapsed / amount), unit as keyof typeof timeUnits)
+          numeric: "always",
+        }).formatToParts(
+          sign * Math.floor(elapsed / amount),
+          unit as keyof typeof timeUnits
+        )
       );
 
       if (--resolution === 0) break;
@@ -82,9 +82,11 @@ export const formatRelativeTime = (
       (parts) =>
         parts
           .map(({ value, type }) =>
-            type === 'literal'
-              ? format === 'singleCharacter'
-                ? toSingleCharacterTimeUnit(stripRelativeWords ? isolateTimeUnit(value) : value)
+            type === "literal"
+              ? format === "singleCharacter"
+                ? toSingleCharacterTimeUnit(
+                    stripRelativeWords ? isolateTimeUnit(value) : value
+                  )
                 : stripRelativeWords
                 ? isolateTimeUnit(value)
                 : value
@@ -93,18 +95,42 @@ export const formatRelativeTime = (
                 Math.abs(Number(value)) */
                 value
           )
-          .join('')
+          .join("")
 
       // ([{ value }, { value: literal }]) => value + literal.replace(/ [^ ]+?$/, '')
     )
-    .join(' ');
+    .join(" ");
 };
+
+export const formatRelativeTime = (
+  timestamp: number,
+  {
+    relativeToTimestamp = Date.now(),
+    locale,
+    format = "singleCharacter",
+    largestUnit = "year",
+    resolution = 2,
+    stripRelativeWords = true,
+  }: {
+    locale: string;
+    relativeToTimestamp?: number;
+    format?: "long" | "short" | "narrow" | "singleCharacter";
+    largestUnit: keyof typeof timeUnits;
+    resolution?: number;
+    stripRelativeWords?: boolean;
+  }
+) =>
+  formatRelativeTimeFromMs(
+    Math.abs(timestamp - relativeToTimestamp),
+    Math.sign(timestamp - relativeToTimestamp),
+    { locale, format, largestUnit, resolution, stripRelativeWords }
+  );
 
 export const formatAbsoluteTime = (
   timestamp: number,
   {
     locale,
-    resolutionUnit = 'second',
+    resolutionUnit = "second",
   }: {
     locale: string;
     resolutionUnit: keyof typeof allTimeUnits;
@@ -112,17 +138,53 @@ export const formatAbsoluteTime = (
 ) =>
   new Intl.DateTimeFormat(
     locale,
-    ({
-      millisecond: { hour: 'numeric', minute: 'numeric', second: 'numeric', fractionalSecondDigits: 3, hour12: false },
-      centisecond: { hour: 'numeric', minute: 'numeric', second: 'numeric', fractionalSecondDigits: 3, hour12: false },
-      decisecond: { hour: 'numeric', minute: 'numeric', second: 'numeric', fractionalSecondDigits: 2, hour12: false },
-      second: { hour: 'numeric', minute: 'numeric', second: 'numeric', fractionalSecondDigits: 1, hour12: false },
-      minute: { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false },
-      hour: { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false },
-      day: { hour: 'numeric', minute: 'numeric' },
-      threeDays: { weekday: 'short', hour: 'numeric' },
-      week: { weekday: 'short', hour: 'numeric' },
-      month: { month: 'numeric', day: 'numeric', hour: 'numeric' },
-      year: { year: 'numeric', month: 'numeric', day: 'numeric' },
-    } as const)[resolutionUnit]
+    (
+      {
+        millisecond: {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          fractionalSecondDigits: 3,
+          hour12: false,
+        },
+        centisecond: {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          fractionalSecondDigits: 3,
+          hour12: false,
+        },
+        decisecond: {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          fractionalSecondDigits: 2,
+          hour12: false,
+        },
+        second: {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          fractionalSecondDigits: 1,
+          hour12: false,
+        },
+        minute: {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: false,
+        },
+        hour: {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: false,
+        },
+        day: { hour: "numeric", minute: "numeric" },
+        threeDays: { weekday: "short", hour: "numeric" },
+        week: { weekday: "short", hour: "numeric" },
+        month: { month: "numeric", day: "numeric", hour: "numeric" },
+        year: { year: "numeric", month: "numeric", day: "numeric" },
+      } as const
+    )[resolutionUnit]
   ).format(timestamp);

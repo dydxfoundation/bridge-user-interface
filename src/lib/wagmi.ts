@@ -10,6 +10,8 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { WalletConnectLegacyConnector } from "wagmi/connectors/walletConnectLegacy";
 
+import { isTruthy } from "./isTruthy";
+
 // Config
 
 export const WAGMI_SUPPORTED_CHAINS: Chain[] = [mainnet, sepolia];
@@ -17,12 +19,13 @@ export const WAGMI_SUPPORTED_CHAINS: Chain[] = [mainnet, sepolia];
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   WAGMI_SUPPORTED_CHAINS,
   [
-    alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY }),
+    import.meta.env.VITE_ALCHEMY_API_KEY &&
+      alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY }),
     jsonRpcProvider({
       rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }),
     }),
     publicProvider(),
-  ]
+  ].filter(isTruthy)
 );
 
 const injectedConnectorOptions = {

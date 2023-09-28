@@ -5,6 +5,7 @@ import BigNumber from "bignumber.js";
 import {
   MigrateFormSteps,
   MigrateTabs,
+  PendingMigrationFilter,
   TransactionStatus,
 } from "@/constants/migrate";
 
@@ -18,6 +19,7 @@ import { useAccounts } from "./useAccounts";
 import { useBridgeTransaction } from "./migrate/useBridgeTransaction";
 import { useIsDydxAddressValid } from "./useIsDydxAddressValid";
 import { useMatchingEvmNetwork } from "./useMatchingEvmNetwork";
+import { usePendingMigrationsData } from "./usePendingMigrationsData";
 import { useStringGetter } from "./useStringGetter";
 import { useTokenAllowance } from "./migrate/useTokenAllowance";
 
@@ -36,7 +38,7 @@ export const useMigrateToken = () => useContext(MigrateTokenContext)!;
 const useMigrateTokenContext = () => {
   const stringGetter = useStringGetter();
   const { evmAddress, dydxAddress } = useAccounts();
-  const { v3TokenBalance } = useAccountBalance();
+  const { v3TokenBalance, refetchBalances } = useAccountBalance();
   const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } =
     useMatchingEvmNetwork({
       chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
@@ -79,7 +81,7 @@ const useMigrateTokenContext = () => {
 
   // Transactions
   const { needTokenAllowance, approveToken, ...tokenAllowance } =
-    useTokenAllowance({ amountBN });
+    useTokenAllowance({ amountBN, enabled: canWriteContracts });
 
   const {
     clearStatus,
@@ -92,14 +94,30 @@ const useMigrateTokenContext = () => {
     destinationAddress,
   });
 
+  const { setAddressSearchFilter, setFilter, refetchPendingMigrations } =
+    usePendingMigrationsData();
+
+  useEffect(() => {
+    // Found current corresponding pending migration
+    if (transactionStatus === TransactionStatus.Acknowledged)
+      refetchPendingMigrations();
+  }, [transactionStatus]);
+
+  useEffect(() => {
+    // Reset statuses when editing or starting new migration
+    if (currentStep === MigrateFormSteps.Edit) {
+      refetchBalances();
+      clearStatus();
+      setErrorMsg(undefined);
+    }
+  }, [currentStep]);
+
   const resetForm = (shouldClearInputs?: boolean) => {
     if (shouldClearInputs) {
       setAmountBN(undefined);
       setDestinationAddress(dydxAddress);
     }
-
     setCurrentStep(MigrateFormSteps.Edit);
-    clearStatus();
   };
 
   useEffect(() => {
@@ -144,6 +162,14 @@ const useMigrateTokenContext = () => {
         if (bridgeTxError) {
           resetForm();
         } else if (transactionStatus === TransactionStatus.Acknowledged) {
+          // Show relevant pending migrations
+          if (destinationAddress !== dydxAddress) {
+            setFilter(PendingMigrationFilter.All);
+            setAddressSearchFilter(destinationAddress ?? "");
+          } else {
+            setFilter(PendingMigrationFilter.Mine);
+          }
+
           setSelectedTab(MigrateTabs.PendingMigrations);
         }
 

@@ -62,24 +62,24 @@ export const PreviewMigrateButtonAndReceipt = ({
         />
       ),
     },
-    {
-      key: "wethDYDXBalance",
-      label: (
-        <span>
-          Balance on Ethereum <Tag>wethDYDX</Tag>
-        </span>
-      ),
-      value: (
-        <DiffOutput
-          type={OutputType.Asset}
-          value={wethDYDXBalance}
-          newValue={amountBN?.plus(wethDYDXBalance ?? 0).toNumber() ?? 0}
-          sign={NumberSign.Positive}
-          withDiff={Boolean(wethDYDXBalance !== undefined && amountBN)}
-          roundingMode={BigNumber.ROUND_DOWN}
-        />
-      ),
-    },
+    // {
+    //   key: "wethDYDXBalance",
+    //   label: (
+    //     <span>
+    //       Balance on Ethereum <Tag>wethDYDX</Tag>
+    //     </span>
+    //   ),
+    //   value: (
+    //     <DiffOutput
+    //       type={OutputType.Asset}
+    //       value={wethDYDXBalance}
+    //       newValue={amountBN?.plus(wethDYDXBalance ?? 0).toNumber() ?? 0}
+    //       sign={NumberSign.Positive}
+    //       withDiff={Boolean(wethDYDXBalance !== undefined && amountBN)}
+    //       roundingMode={BigNumber.ROUND_DOWN}
+    //     />
+    //   ),
+    // },
     dydxAddress &&
       dydxAddress === destinationAddress && {
         key: "v4TokenBalance",

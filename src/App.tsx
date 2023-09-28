@@ -3,6 +3,7 @@ import { WagmiConfig } from "wagmi";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import { AccountsProvider } from "@/hooks/useAccounts";
+import { AccountBalanceProvider } from "@/hooks/useAccountBalance";
 import { useBreakpoints, useInitializePage } from "@/hooks";
 import { DydxProvider } from "@/hooks/useDydxClient";
 import { DialogAreaProvider, useDialogArea } from "@/hooks/useDialogArea";
@@ -77,11 +78,13 @@ const App = () => (
       <LocaleProvider>
         <DydxProvider>
           <AccountsProvider>
-            <DialogAreaProvider>
+            <AccountBalanceProvider>
               <MigrateTokenProvider>
-                <Content />
+                <DialogAreaProvider>
+                  <Content />
+                </DialogAreaProvider>
               </MigrateTokenProvider>
-            </DialogAreaProvider>
+            </AccountBalanceProvider>
           </AccountsProvider>
         </DydxProvider>
       </LocaleProvider>
@@ -156,6 +159,8 @@ Styled.DialogArea = styled.aside`
 `;
 
 Styled.Tabs = styled(Tabs)`
+  margin-bottom: 2rem;
+
   header {
     font: var(--font-medium-book);
 

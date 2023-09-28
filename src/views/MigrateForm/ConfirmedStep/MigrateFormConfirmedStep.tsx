@@ -12,10 +12,10 @@ import { Button } from "@/components/Button";
 import { DetailsReceipt } from "@/components/DetailsReceipt";
 import { IconName } from "@/components/Icon";
 import { Link } from "@/components/Link";
+import { LoadingDots } from "@/components/Loading/LoadingDots";
 import { Output, OutputType, ShowSign } from "@/components/Output";
 import { Ring } from "@/components/Ring";
 import { Tag, TagSign } from "@/components/Tag";
-
 import { truncateAddress } from "@/lib/wallet";
 
 import { TokensBeforeAfterDiagram } from "../TokensBeforeAfterDiagram";
@@ -31,7 +31,7 @@ export const MigrateFormConfirmedStep = () => {
     bridgeTxHash,
     transactionStatus,
     bridgeTxError,
-    bridgeTxMinedBlockNumber,
+    numBlocksTillFinalized,
   } = useMigrateToken();
 
   const { evmAddress } = useAccounts();
@@ -59,7 +59,7 @@ export const MigrateFormConfirmedStep = () => {
                 ) : (
                   transactionStatus === TransactionStatus.Unfinalized && (
                     <FinalizingCountdownTimer
-                      bridgeTxMinedBlockNumber={bridgeTxMinedBlockNumber}
+                      numBlocksTillFinalized={numBlocksTillFinalized}
                     />
                   )
                 )}
@@ -112,10 +112,15 @@ export const MigrateFormConfirmedStep = () => {
             key: "transaction",
             label: (
               <Styled.InlineRow>
-                Transaction
-                {transactionStatus < TransactionStatus.Acknowledged && (
-                  <Styled.NotStartedTag>Not started</Styled.NotStartedTag>
+                {transactionStatus === TransactionStatus.Finalized && (
+                  <Ring withAnimation value={0.25} />
                 )}
+                Transaction
+                <Styled.StartedTag>
+                  {transactionStatus < TransactionStatus.Acknowledged
+                    ? "Not started"
+                    : "Started"}
+                </Styled.StartedTag>
               </Styled.InlineRow>
             ),
             value: "Estimated 24-48 hours",
@@ -140,33 +145,34 @@ export const MigrateFormConfirmedStep = () => {
         ]}
       />
 
-      {transactionStatus < TransactionStatus.Finalized ? (
+      {bridgeTxError ? (
+        <Styled.ButtonRow>
+          <Styled.SubmitButton
+            action={ButtonAction.Primary}
+            type={ButtonType.Submit}
+          >
+            Retry migration
+          </Styled.SubmitButton>
+        </Styled.ButtonRow>
+      ) : transactionStatus < TransactionStatus.Acknowledged ? (
         <Styled.FooterNote>
-          Leave this open while the transaction is being finalized.
+          {transactionStatus < TransactionStatus.Finalized ? (
+            "Leave this open while the transaction is being finalized."
+          ) : (
+            <LoadingDots size={3} />
+          )}
         </Styled.FooterNote>
       ) : (
         <Styled.ButtonRow>
-          {bridgeTxError ? (
-            <Styled.SubmitButton
-              action={ButtonAction.Primary}
-              type={ButtonType.Submit}
-            >
-              Retry migration
-            </Styled.SubmitButton>
-          ) : (
-            <>
-              <Styled.ResetButton onClick={() => resetForm(true)}>
-                New migration
-              </Styled.ResetButton>
-
-              <Styled.SubmitButton
-                action={ButtonAction.Primary}
-                type={ButtonType.Submit}
-              >
-                Check status
-              </Styled.SubmitButton>
-            </>
-          )}
+          <Styled.ResetButton onClick={() => resetForm(true)}>
+            New migration
+          </Styled.ResetButton>
+          <Styled.SubmitButton
+            action={ButtonAction.Primary}
+            type={ButtonType.Submit}
+          >
+            Check status
+          </Styled.SubmitButton>
         </Styled.ButtonRow>
       )}
     </>
@@ -202,12 +208,16 @@ Styled.Output = styled(Output)<{ isNegative?: boolean }>`
     isNegative ? `var(--color-negative)` : `var(--color-positive)`};
 `;
 
-Styled.NotStartedTag = styled(Tag)`
+Styled.StartedTag = styled(Tag)`
   color: var(--color-text-1);
 `;
 
 Styled.FooterNote = styled.span`
   font: var(--font-small-book);
   color: var(--color-text-0);
+  text-align: center;
+`;
+
+Styled.LoadingDotsContainer = styled.div`
   text-align: center;
 `;

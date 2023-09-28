@@ -9,7 +9,7 @@ import { useLocaleSeparators } from "./useLocaleSeparators";
 import { useLocalStorage } from "./useLocalStorage";
 import { useMatchingEvmNetwork } from "./useMatchingEvmNetwork";
 import { useMigrateToken } from "./useMigrateToken";
-import { usePollNativeTokenBalance } from "./usePollNativeTokenBalance";
+import { usePendingMigrationsData } from "./usePendingMigrationsData";
 import { useStringGetter } from "./useStringGetter";
 import { useTrackTransactionFinalized } from "./migrate/useTrackTransactionFinalized";
 import { useWalletConnection } from "./useWalletConnection";
@@ -26,7 +26,7 @@ export {
   useLocalStorage,
   useMatchingEvmNetwork,
   useMigrateToken,
-  usePollNativeTokenBalance,
+  usePendingMigrationsData,
   useStringGetter,
   useTrackTransactionFinalized,
   useWalletConnection,

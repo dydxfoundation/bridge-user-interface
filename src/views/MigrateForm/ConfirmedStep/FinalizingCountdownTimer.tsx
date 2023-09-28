@@ -1,21 +1,16 @@
 import { useState, useEffect } from "react";
 import styled, { type AnyStyledComponent } from "styled-components";
 
-import { useTrackTransactionFinalized } from "@/hooks";
-
 import { Tag } from "@/components/Tag";
 
 const NUM_EPOCH_BLOCKS = 32;
 const ETH_BLOCK_TIME_SECONDS = 12;
 
 export const FinalizingCountdownTimer = ({
-  bridgeTxMinedBlockNumber,
+  numBlocksTillFinalized,
 }: {
-  bridgeTxMinedBlockNumber?: bigint;
+  numBlocksTillFinalized: number;
 }) => {
-  const { numBlocksTillFinalized, isTransactionFinalized } =
-    useTrackTransactionFinalized({ bridgeTxMinedBlockNumber });
-
   const getEstimate = (blockDifference: number) =>
     Math.ceil(blockDifference / NUM_EPOCH_BLOCKS) *
     NUM_EPOCH_BLOCKS *
@@ -44,9 +39,7 @@ export const FinalizingCountdownTimer = ({
   return (
     <Styled.Tag>
       Finalizing
-      {!isTransactionFinalized && secondsRemaining > 0
-        ? ` ${minutes}:${seconds}`
-        : "..."}
+      {secondsRemaining > 0 ? ` ${minutes}:${seconds}` : "..."}
     </Styled.Tag>
   );
 };

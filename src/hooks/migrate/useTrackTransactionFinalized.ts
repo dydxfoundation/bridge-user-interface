@@ -24,6 +24,7 @@ export const useTrackTransactionFinalized = ({
 
     setNumBlocksTillFinalized(bridgeTxMinedBlockNumber - number);
   };
+  
   useEffect(() => {
     // get the latest finalized block number once to set the initial timer,
     // since watchBlocks's doesn't always emits at the start
