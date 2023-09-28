@@ -95,6 +95,7 @@ const Styled: Record<string, AnyStyledComponent> = {};
 Styled.MigrateCard = styled(Panel)`
   width: 26rem;
   max-width: 100%;
+  height: fit-content;
 
   @media ${breakpoints.tablet} {
     padding-top: 0;

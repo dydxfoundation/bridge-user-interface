@@ -19,6 +19,7 @@
     "@dydxprotocol/v4-client-js": "^0.38.1",
     "@dydxprotocol/v4-localization": "^0.1.5",
     "@ethersproject/providers": "^5.7.2",
+    "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-collapsible": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
@@ -58,6 +59,8 @@
     "wagmi": "^1.4.1"
   },
   "devDependencies": {
+    "@react-types/shared": "^3.20.0",
+    "@react-types/table": "^3.8.1",
     "@types/crypto-js": "^4.1.2",
     "@types/lodash": "^4.14.197",
     "@types/luxon": "^3.3.2",
@@ -74,8 +77,6 @@
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "@react-types/shared": "^3.20.0",
-    "@react-types/table": "^3.8.1",
     "typescript": "^5.0.2",
     "url-polyfill": "^1.1.12",
     "util": "^0.12.5",
