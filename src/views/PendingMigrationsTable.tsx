@@ -40,12 +40,10 @@ export enum PendingMigrationsTableColumnKey {
 const getPendingMigrationsTableColumnDef = ({
   key,
   latestBlockHeight,
-  currentTimestamp,
   stringGetter,
 }: {
   key: PendingMigrationsTableColumnKey;
   latestBlockHeight?: number;
-  currentTimestamp: number;
   stringGetter: StringGetterFunction;
 }): ColumnDef<PendingMigrationData> =>
   ((
