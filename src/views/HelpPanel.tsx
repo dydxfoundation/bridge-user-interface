@@ -117,6 +117,8 @@ Styled.HelpCard = styled(Panel)`
   padding: 0;
   gap: 0;
 
+  text-align: start;
+
   @media ${breakpoints.tablet} {
     padding-top: 0;
     width: 100%;
