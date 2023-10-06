@@ -351,24 +351,20 @@ import { type onboarding } from "@dydxprotocol/v4-client-js";
 export const COSMOS_DERIVATION_PATH = "m/44'/118'/0'/0/0";
 
 /**
- * @description typed data to sign for v4 onboarding
+ * @description typed data to sign for dydx chain onboarding
  */
 export const SIGN_TYPED_DATA = {
   primaryType: "dYdX",
   domain: {
-    name: "dYdX V4",
+    name: "dYdX Chain",
   },
   types: {
     dYdX: [{ name: "action", type: "string" }],
   },
   message: {
-    action: "dYdX V4 Onboarding",
+    action: "dYdX Chain Onboarding",
   },
 } as const;
-
-export type PrivateInformation = ReturnType<
-  typeof onboarding.deriveHDKeyFromEthereumSignature
->;
 
 export type EthereumAddress = `0x${string}`;
 export type DydxAddress = `dydx${string}`;
