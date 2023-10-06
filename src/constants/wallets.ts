@@ -301,7 +301,7 @@ export const wallets: Record<WalletType, WalletConfig> = {
       "4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0",
   },
   [WalletType.WalletConnect2]: {
-    type: WalletType.WalletConnect,
+    type: WalletType.WalletConnect2,
     stringKey: STRING_KEYS.WALLET_CONNECT_2,
     icon: WalletConnectIcon,
     connectionTypes: [WalletConnectionType.WalletConnect2],
@@ -351,7 +351,7 @@ import { type onboarding } from "@dydxprotocol/v4-client-js";
 export const COSMOS_DERIVATION_PATH = "m/44'/118'/0'/0/0";
 
 /**
- * @description typed data to sign for dydx chain onboarding
+ * @description typed data to sign for dYdX Chain onboarding
  */
 export const SIGN_TYPED_DATA = {
   primaryType: "dYdX",
