@@ -28,7 +28,7 @@ export const TokensBeforeAfterDiagram = () => {
               <AssetIcon symbol="ETH" />
             </Styled.TokenIcon>
             <Output value={undefined} type={OutputType.Asset} />
-            <Tag>DYDX</Tag>
+            <Tag>ethDYDX</Tag>
             <span>
               {stringGetter({
                 key: STRING_KEYS.ON_CHAIN,

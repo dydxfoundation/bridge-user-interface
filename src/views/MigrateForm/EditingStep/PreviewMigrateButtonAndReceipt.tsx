@@ -57,7 +57,7 @@ export const PreviewMigrateButtonAndReceipt = ({
   const migrateDetailItems = [
     {
       key: "v3TokenBalance",
-      label: getLabel({ chain: "Ethereum", asset: "DYDX" }),
+      label: getLabel({ chain: "Ethereum", asset: "ethDYDX" }),
       value: (
         <DiffOutput
           type={OutputType.Asset}

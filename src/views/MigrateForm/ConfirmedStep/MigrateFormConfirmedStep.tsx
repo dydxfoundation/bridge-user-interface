@@ -123,7 +123,7 @@ export const MigrateFormConfirmedStep = () => {
           {
             key: "v3Token",
             label: getAssetOnChainLabel({
-              asset: "DYDX",
+              asset: "ethDYDX",
               chain: "Ethereum",
             }),
             value: (

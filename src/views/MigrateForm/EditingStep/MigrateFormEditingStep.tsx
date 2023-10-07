@@ -20,7 +20,6 @@ import {
   useMigrateToken,
 } from "@/hooks";
 
-import { AlertMessage } from "@/components/AlertMessage";
 import { DiffOutput } from "@/components/DiffOutput";
 import { FormInput } from "@/components/FormInput";
 import { Icon, IconName } from "@/components/Icon";
@@ -86,7 +85,7 @@ export const MigrateFormEditingStep = () => {
               CHAIN: "Ethereum",
             },
           })}
-          <Tag>DYDX</Tag>
+          <Tag>ethDYDX</Tag>
         </Styled.InlineRow>
       ),
       value: (
@@ -173,7 +172,7 @@ export const MigrateFormEditingStep = () => {
               <Styled.InnerFormInput
                 label={
                   <Styled.DestinationInputLabel>
-                    {stringGetter({ key: STRING_KEYS.DYDX_ADDRESS })}
+                    {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
                     <Icon iconName={IconName.Check} />
                   </Styled.DestinationInputLabel>
                 }
@@ -185,7 +184,7 @@ export const MigrateFormEditingStep = () => {
                   message: stringGetter({
                     key: STRING_KEYS.GENERATED_ADDRESS_INFO,
                     params: {
-                      TRADE_URL: import.meta.env.VITE_TRADE_URL || "trading",
+                      TRADE_URL: import.meta.env.VITE_TRADE_URL || "the trading app",
                     },
                   }),
                 }}
@@ -202,7 +201,7 @@ export const MigrateFormEditingStep = () => {
                   params: {
                     ADDRESS: (
                       <strong>
-                        {stringGetter({ key: STRING_KEYS.DYDX_ADDRESS })}
+                        {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
                       </strong>
                     ),
                   },
@@ -218,7 +217,7 @@ export const MigrateFormEditingStep = () => {
                   }
                   label={
                     <Styled.DestinationInputLabel>
-                      {stringGetter({ key: STRING_KEYS.DYDX_ADDRESS })}
+                      {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
                       {isDestinationAddressValid && (
                         <Icon iconName={IconName.Check} />
                       )}
