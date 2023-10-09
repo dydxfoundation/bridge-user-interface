@@ -11,6 +11,7 @@ import { useMatchingEvmNetwork } from './useMatchingEvmNetwork';
 import { useMigrateToken } from './useMigrateToken';
 import { useNow } from './useNow';
 import { usePendingMigrationsData } from './usePendingMigrationsData';
+import { useRestrictions } from './useRestrictions';
 import { useStringGetter } from './useStringGetter';
 import { useTrackTransactionFinalized } from './migrate/useTrackTransactionFinalized';
 import { useWalletConnection } from './useWalletConnection';
@@ -29,6 +30,7 @@ export {
   useMigrateToken,
   useNow,
   usePendingMigrationsData,
+  useRestrictions,
   useStringGetter,
   useTrackTransactionFinalized,
   useWalletConnection,

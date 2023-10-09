@@ -2,6 +2,8 @@ import { useContext, createContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import BigNumber from 'bignumber.js';
 
+import { STRING_KEYS } from '@/constants/localization';
+
 import {
   MigrateFormSteps,
   MigrateTabs,
@@ -22,6 +24,7 @@ import { useMatchingEvmNetwork } from './useMatchingEvmNetwork';
 import { usePendingMigrationsData } from './usePendingMigrationsData';
 import { useStringGetter } from './useStringGetter';
 import { useTokenAllowance } from './migrate/useTokenAllowance';
+import { useRestrictions } from './useRestrictions';
 
 const MigrateTokenContext = createContext<ReturnType<typeof useMigrateTokenContext> | undefined>(
   undefined
@@ -38,7 +41,8 @@ export const useMigrateToken = () => useContext(MigrateTokenContext)!;
 const useMigrateTokenContext = () => {
   const stringGetter = useStringGetter();
   const { evmAddress, dydxAddress } = useAccounts();
-  const { ethDYDXBalance, refetchBalances } = useAccountBalance();
+  const { v3TokenBalance, refetchBalances } = useAccountBalance();
+  const { screenAddresses, restrictUser } = useRestrictions();
   const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } = useMatchingEvmNetwork({
     chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
   });
@@ -125,6 +129,22 @@ const useMigrateTokenContext = () => {
       case MigrateFormSteps.Preview: {
         if (!canWriteContracts) return;
         setIsRequesting(true);
+
+        const screenResults = await screenAddresses({
+          addresses: [evmAddress!, dydxAddress!, destinationAddress!],
+        });
+
+        if (screenResults?.[evmAddress as string] || screenResults?.[dydxAddress as string]) {
+          restrictUser();
+          return;
+        } else if (screenResults?.[destinationAddress!]) {
+          setErrorMsg(
+            stringGetter({
+              key: STRING_KEYS.MIGRATION_BLOCKED_MESSAGE_DESTINATION,
+            })
+          );
+          return;
+        }
 
         try {
           if (!isMatchingNetwork) await matchNetwork();
