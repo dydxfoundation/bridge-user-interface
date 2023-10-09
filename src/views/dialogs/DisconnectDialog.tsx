@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Close } from "@radix-ui/react-dialog";
 
 import { ButtonAction } from "@/constants/buttons";
+import { DialogProps } from "@/constants/dialogs";
 import { STRING_KEYS } from "@/constants/localization";
 
 import { layoutMixins } from "@/styles/layoutMixins";
@@ -14,11 +15,7 @@ import { Dialog } from "@/components/Dialog";
 
 import { closeDialog } from "@/state/dialogs";
 
-type ElementProps = {
-  setIsOpen?: (open: boolean) => void;
-};
-
-export const DisconnectDialog = ({ setIsOpen }: ElementProps) => {
+export const DisconnectDialog = ({ setIsOpen }: DialogProps) => {
   const stringGetter = useStringGetter();
   const dispatch = useDispatch();
 

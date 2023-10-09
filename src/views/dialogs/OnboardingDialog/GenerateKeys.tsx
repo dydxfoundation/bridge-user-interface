@@ -159,9 +159,9 @@ export const GenerateKeys = ({
         {[
           {
             status: EvmDerivedAccountStatus.Deriving,
-            title: stringGetter({ key: STRING_KEYS.GENERATE_COSMOS_WALLET }),
+            title: stringGetter({ key: STRING_KEYS.GENERATE_DYDX_WALLET }),
             description: stringGetter({
-              key: STRING_KEYS.GENERATE_COSMOS_WALLET,
+              key: STRING_KEYS.VERIFY_WALLET_OWNERSHIP,
             }),
           },
           status === EvmDerivedAccountStatus.EnsuringDeterminism && {

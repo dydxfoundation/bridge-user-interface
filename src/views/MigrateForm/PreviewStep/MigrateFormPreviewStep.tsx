@@ -32,7 +32,8 @@ export const MigrateFormPreviewStep = () => {
     isBridgePending,
   } = useMigrateToken();
 
-  const [hasAcknowledged, setHasAcknowledged] = useState(false);
+  const [hasAcknowledgedDuration, setHasAcknowledgedDuration] = useState(false);
+  const [hasAcknowledgedLocked, setHasAcknowledgedLocked] = useState(false);
 
   return (
     <>
@@ -69,7 +70,7 @@ export const MigrateFormPreviewStep = () => {
           {
             key: "dydx_settlement",
             label: stringGetter({ key: STRING_KEYS.DYDX_CHAIN_SETTLEMENT }),
-            tooltip: 'dydx-chain-settlement',
+            tooltip: "dydx-chain-settlement",
             value: (
               <Tag>
                 {stringGetter({
@@ -89,14 +90,24 @@ export const MigrateFormPreviewStep = () => {
       )}
 
       {!needTokenAllowance && (
-        <Checkbox
-          checked={hasAcknowledged}
-          onCheckedChange={setHasAcknowledged}
-          id="acknowledge-duration"
-          label={stringGetter({
-            key: STRING_KEYS.CONFIRM_MIGRATION_DISCLAIMER,
-          })}
-        />
+        <>
+          <Checkbox
+            checked={hasAcknowledgedDuration}
+            onCheckedChange={setHasAcknowledgedDuration}
+            id="acknowledge-duration"
+            label={stringGetter({
+              key: STRING_KEYS.CONFIRM_MIGRATION_DISCLAIMER_1,
+            })}
+          />
+          <Checkbox
+            checked={hasAcknowledgedLocked}
+            onCheckedChange={setHasAcknowledgedLocked}
+            id="acknowledge-locked"
+            label={stringGetter({
+              key: STRING_KEYS.CONFIRM_MIGRATION_DISCLAIMER_2,
+            })}
+          />
+        </>
       )}
 
       <Styled.ButtonRow>
@@ -110,7 +121,8 @@ export const MigrateFormPreviewStep = () => {
           state={{
             isLoading: isApproveTokenLoading || isBridgePending,
             isDisabled:
-              (!needTokenAllowance && !hasAcknowledged) ||
+              (!needTokenAllowance &&
+                !(hasAcknowledgedDuration && hasAcknowledgedLocked)) ||
               isBridgePending ||
               !isAmountValid,
           }}

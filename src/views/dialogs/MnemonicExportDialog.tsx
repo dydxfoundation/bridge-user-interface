@@ -3,6 +3,7 @@ import styled, { AnyStyledComponent, css } from "styled-components";
 
 import { AlertType } from "@/constants/alerts";
 import { ButtonAction, ButtonSize } from "@/constants/buttons";
+import { DialogProps } from "@/constants/dialogs";
 import { STRING_KEYS } from "@/constants/localization";
 import { useAccounts, useStringGetter } from "@/hooks";
 import breakpoints from "@/styles/breakpoints";
@@ -17,16 +18,13 @@ import { TimeoutButton } from "@/components/TimeoutButton";
 import { ToggleButton } from "@/components/ToggleButton";
 import { WithReceipt } from "@/components/WithReceipt";
 
-type ElementProps = {
-  setIsOpen: (open: boolean) => void;
-};
 
 enum MnemonicExportStep {
   AcknowledgeRisk = "AcknowledgeRisk",
   DisplayMnemonic = "DisplayMnemonic",
 }
 
-export const MnemonicExportDialog = ({ setIsOpen }: ElementProps) => {
+export const MnemonicExportDialog = ({ setIsOpen }: DialogProps) => {
   const [hasAcknowledged, setHasAcknowledged] = useState(false);
   const [currentStep, setCurrentStep] = useState(
     MnemonicExportStep.AcknowledgeRisk

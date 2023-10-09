@@ -184,7 +184,8 @@ export const MigrateFormEditingStep = () => {
                   message: stringGetter({
                     key: STRING_KEYS.GENERATED_ADDRESS_INFO,
                     params: {
-                      TRADE_URL: import.meta.env.VITE_TRADE_URL || "the trading app",
+                      TRADE_URL:
+                        import.meta.env.VITE_TRADE_URL || "the trading app",
                     },
                   }),
                 }}

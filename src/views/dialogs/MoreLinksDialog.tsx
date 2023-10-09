@@ -1,5 +1,6 @@
 import styled, { AnyStyledComponent } from "styled-components";
 
+import { DialogProps } from "@/constants/dialogs";
 import { RELEVANT_LINKS } from "@/constants/links";
 import { STRING_KEYS } from "@/constants/localization";
 
@@ -11,11 +12,7 @@ import { NavigationMenu } from "@/components/NavigationMenu";
 
 import { isTruthy } from "@/lib/isTruthy";
 
-type ElementProps = {
-  setIsOpen?: (open: boolean) => void;
-};
-
-export const MoreLinksDialog = ({ setIsOpen }: ElementProps) => {
+export const MoreLinksDialog = ({ setIsOpen }: DialogProps) => {
   const stringGetter = useStringGetter();
 
   const navItems = [

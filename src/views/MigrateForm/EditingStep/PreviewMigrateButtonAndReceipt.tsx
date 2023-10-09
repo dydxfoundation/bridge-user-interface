@@ -37,7 +37,7 @@ export const PreviewMigrateButtonAndReceipt = ({
   isLoading,
 }: ElementProps) => {
   const stringGetter = useStringGetter();
-  const { dydxAddress, evmAddress } = useAccounts() || {};
+  const { dydxAddress, evmAddress } = useAccounts();
   const { amountBN, destinationAddress } = useMigrateToken();
   const { v3TokenBalance, v4TokenBalance, wrappedV3TokenBalance } =
     useAccountBalance();

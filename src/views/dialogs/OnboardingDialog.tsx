@@ -2,6 +2,7 @@ import { type ElementType, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled, { AnyStyledComponent, css } from "styled-components";
 
+import { DialogProps } from "@/constants/dialogs";
 import { STRING_KEYS } from "@/constants/localization";
 import { EvmDerivedAccountStatus, OnboardingSteps } from "@/constants/account";
 import { wallets } from "@/constants/wallets";
@@ -21,11 +22,7 @@ import { AcknowledgeTerms } from "./OnboardingDialog/AcknowledgeTerms";
 import { ChooseWallet } from "./OnboardingDialog/ChooseWallet";
 import { GenerateKeys } from "./OnboardingDialog/GenerateKeys";
 
-type ElementProps = {
-  setIsOpen?: (open: boolean) => void;
-};
-
-export const OnboardingDialog = ({ setIsOpen }: ElementProps) => {
+export const OnboardingDialog = ({ setIsOpen }: DialogProps) => {
   const [derivationStatus, setDerivationStatus] = useState(
     EvmDerivedAccountStatus.NotDerived
   );

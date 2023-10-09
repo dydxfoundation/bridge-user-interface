@@ -72,9 +72,12 @@ const useAccountBalanceContext = () => {
   const { formatted: wrappedV3TokenBalance } = wrappedV3TokenBalanceData || {};
 
   const refetchBalances = () => {
+    if (!evmAddress || !canAccountMigrate) return;
+
     refetchV3TokenBalance();
     refetchWrappedV3TokenBalance();
-    refetchV4TokenBalance();
+
+    if (dydxAddress !== undefined) refetchV4TokenBalance();
   };
 
   return {
