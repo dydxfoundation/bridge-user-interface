@@ -1,33 +1,33 @@
-import { useContext, createContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import BigNumber from "bignumber.js";
+import { useContext, createContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import BigNumber from 'bignumber.js';
 
 import {
   MigrateFormSteps,
   MigrateTabs,
   PendingMigrationFilter,
   TransactionStatus,
-} from "@/constants/migrate";
+} from '@/constants/migrate';
 
-import { calculateCanAccountMigrate } from "@/state/accountCalculators";
+import { calculateCanAccountMigrate } from '@/state/accountCalculators';
 
-import { MustBigNumber } from "@/lib/numbers";
-import { parseWalletError } from "@/lib/wallet";
+import { MustBigNumber } from '@/lib/numbers';
+import { parseWalletError } from '@/lib/wallet';
 
-import { useAccountBalance } from "./useAccountBalance";
-import { useAccounts } from "./useAccounts";
-import { useBridgeTransaction } from "./migrate/useBridgeTransaction";
-import { useIsDydxAddressValid } from "./useIsDydxAddressValid";
-import { useMatchingEvmNetwork } from "./useMatchingEvmNetwork";
-import { usePendingMigrationsData } from "./usePendingMigrationsData";
-import { useStringGetter } from "./useStringGetter";
-import { useTokenAllowance } from "./migrate/useTokenAllowance";
+import { useAccountBalance } from './useAccountBalance';
+import { useAccounts } from './useAccounts';
+import { useBridgeTransaction } from './migrate/useBridgeTransaction';
+import { useIsDydxAddressValid } from './useIsDydxAddressValid';
+import { useMatchingEvmNetwork } from './useMatchingEvmNetwork';
+import { usePendingMigrationsData } from './usePendingMigrationsData';
+import { useStringGetter } from './useStringGetter';
+import { useTokenAllowance } from './migrate/useTokenAllowance';
 
-const MigrateTokenContext = createContext<
-  ReturnType<typeof useMigrateTokenContext> | undefined
->(undefined);
+const MigrateTokenContext = createContext<ReturnType<typeof useMigrateTokenContext> | undefined>(
+  undefined
+);
 
-MigrateTokenContext.displayName = "MigrateToken";
+MigrateTokenContext.displayName = 'MigrateToken';
 
 export const MigrateTokenProvider = ({ ...props }) => (
   <MigrateTokenContext.Provider value={useMigrateTokenContext()} {...props} />
@@ -38,11 +38,10 @@ export const useMigrateToken = () => useContext(MigrateTokenContext)!;
 const useMigrateTokenContext = () => {
   const stringGetter = useStringGetter();
   const { evmAddress, dydxAddress } = useAccounts();
-  const { v3TokenBalance, refetchBalances } = useAccountBalance();
-  const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } =
-    useMatchingEvmNetwork({
-      chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
-    });
+  const { ethDYDXBalance, refetchBalances } = useAccountBalance();
+  const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } = useMatchingEvmNetwork({
+    chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
+  });
 
   const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
@@ -51,13 +50,11 @@ const useMigrateTokenContext = () => {
   // Form state and inputs
   const [currentStep, setCurrentStep] = useState(MigrateFormSteps.Edit);
   const [isRequesting, setIsRequesting] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<
-    string | React.ReactNode[] | undefined
-  >();
+  const [errorMsg, setErrorMsg] = useState<string | React.ReactNode[] | undefined>();
   const [amountBN, setAmountBN] = useState<BigNumber | undefined>();
-  const [destinationAddress, setDestinationAddress] = useState<
-    string | undefined
-  >(dydxAddress as string | undefined);
+  const [destinationAddress, setDestinationAddress] = useState<string | undefined>(
+    dydxAddress as string | undefined
+  );
 
   useEffect(() => {
     setDestinationAddress(dydxAddress);
@@ -69,42 +66,32 @@ const useMigrateTokenContext = () => {
 
   // Validations
   const isAmountValid = Boolean(
-    MustBigNumber(v3TokenBalance).gt(0) &&
-      amountBN?.gt(0) &&
-      amountBN?.lte(v3TokenBalance ?? 0)
+    MustBigNumber(ethDYDXBalance).gt(0) && amountBN?.gt(0) && amountBN?.lte(ethDYDXBalance ?? 0)
   );
 
   const isDestinationAddressValid = useIsDydxAddressValid(destinationAddress);
 
-  const canWriteContracts =
-    canAccountMigrate && isAmountValid && isDestinationAddressValid;
+  const canWriteContracts = canAccountMigrate && isAmountValid && isDestinationAddressValid;
 
   // Transactions
-  const { needTokenAllowance, approveToken, ...tokenAllowance } =
-    useTokenAllowance({
-      amountBN,
-      enabled: canWriteContracts,
-      watch: currentStep === MigrateFormSteps.Preview,
-    });
-
-  const {
-    clearStatus,
-    startBridge,
-    bridgeTxError,
-    transactionStatus,
-    ...bridgeTransaction
-  } = useBridgeTransaction({
+  const { needTokenAllowance, approveToken, ...tokenAllowance } = useTokenAllowance({
     amountBN,
-    destinationAddress,
+    enabled: canWriteContracts,
+    watch: currentStep === MigrateFormSteps.Preview,
   });
+
+  const { clearStatus, startBridge, bridgeTxError, transactionStatus, ...bridgeTransaction } =
+    useBridgeTransaction({
+      amountBN,
+      destinationAddress,
+    });
 
   const { setAddressSearchFilter, setFilter, refetchPendingMigrations } =
     usePendingMigrationsData();
 
   useEffect(() => {
     // Found current corresponding pending migration
-    if (transactionStatus === TransactionStatus.Acknowledged)
-      refetchPendingMigrations();
+    if (transactionStatus === TransactionStatus.Acknowledged) refetchPendingMigrations();
   }, [transactionStatus]);
 
   useEffect(() => {
@@ -169,7 +156,7 @@ const useMigrateTokenContext = () => {
           // Show relevant pending migrations
           if (destinationAddress !== dydxAddress) {
             setFilter(PendingMigrationFilter.All);
-            setAddressSearchFilter(destinationAddress ?? "");
+            setAddressSearchFilter(destinationAddress ?? '');
           } else {
             setFilter(PendingMigrationFilter.Mine);
           }

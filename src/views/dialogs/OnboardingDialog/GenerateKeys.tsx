@@ -1,34 +1,29 @@
-import { useState } from "react";
-import { useSignTypedData } from "wagmi";
-import styled, { type AnyStyledComponent, css } from "styled-components";
-import { AES } from "crypto-js";
+import { useState } from 'react';
+import { useSignTypedData } from 'wagmi';
+import styled, { type AnyStyledComponent, css } from 'styled-components';
+import { AES } from 'crypto-js';
 
-import { EvmDerivedAccountStatus } from "@/constants/account";
-import { AlertType } from "@/constants/alerts";
-import { ButtonAction } from "@/constants/buttons";
-import { STRING_KEYS } from "@/constants/localization";
+import { EvmDerivedAccountStatus } from '@/constants/account';
+import { AlertType } from '@/constants/alerts';
+import { ButtonAction } from '@/constants/buttons';
+import { STRING_KEYS } from '@/constants/localization';
 
-import { DydxAddress, SIGN_TYPED_DATA } from "@/constants/wallets";
+import { DydxAddress, SIGN_TYPED_DATA } from '@/constants/wallets';
 
-import {
-  useAccounts,
-  useDydxClient,
-  useStringGetter,
-  useMatchingEvmNetwork,
-} from "@/hooks";
+import { useAccounts, useDydxClient, useStringGetter, useMatchingEvmNetwork } from '@/hooks';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { AlertMessage } from "@/components/AlertMessage";
-import { Button } from "@/components/Button";
-import { Icon, IconName } from "@/components/Icon";
-import { LoadingSpinner } from "@/components/Loading/LoadingSpinner";
-import { Switch } from "@/components/Switch";
-import { WithReceipt } from "@/components/WithReceipt";
-import { WithTooltip } from "@/components/WithTooltip";
+import { AlertMessage } from '@/components/AlertMessage';
+import { Button } from '@/components/Button';
+import { Icon, IconName } from '@/components/Icon';
+import { LoadingSpinner } from '@/components/Loading/LoadingSpinner';
+import { Switch } from '@/components/Switch';
+import { WithReceipt } from '@/components/WithReceipt';
+import { WithTooltip } from '@/components/WithTooltip';
 
-import { isTruthy } from "@/lib/isTruthy";
-import { parseWalletError } from "@/lib/wallet";
+import { isTruthy } from '@/lib/isTruthy';
+import { parseWalletError } from '@/lib/wallet';
 
 type ElementProps = {
   status: EvmDerivedAccountStatus;
@@ -51,8 +46,9 @@ export const GenerateKeys = ({
   const chainId = Number(import.meta.env.VITE_ETH_CHAIN_ID);
 
   // 1. Switch network
-  const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } =
-    useMatchingEvmNetwork({ chainId });
+  const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } = useMatchingEvmNetwork({
+    chainId,
+  });
 
   const switchNetwork = async () => {
     setError(undefined);
@@ -132,10 +128,7 @@ export const GenerateKeys = ({
 
       // 3: Remember me (encrypt and store signature)
       if (shouldRememberMe && staticEncryptionKey) {
-        const encryptedSignature = AES.encrypt(
-          signature,
-          staticEncryptionKey
-        ).toString();
+        const encryptedSignature = AES.encrypt(signature, staticEncryptionKey).toString();
 
         saveEvmSignature(encryptedSignature);
       }
@@ -176,10 +169,7 @@ export const GenerateKeys = ({
         ]
           .filter(isTruthy)
           .map((step) => (
-            <Styled.StatusCard
-              key={step.status}
-              active={status === step.status}
-            >
+            <Styled.StatusCard key={step.status} active={status === step.status}>
               {status < step.status ? (
                 <LoadingSpinner disabled />
               ) : status === step.status ? (
@@ -233,9 +223,7 @@ export const GenerateKeys = ({
           {!isMatchingNetwork ? (
             <Button
               action={ButtonAction.Primary}
-              onClick={() =>
-                switchNetwork().then(deriveKeys).then(onKeysDerived)
-              }
+              onClick={() => switchNetwork().then(deriveKeys).then(onKeysDerived)}
               state={{ isLoading: isSwitchingNetwork }}
             >
               {stringGetter({ key: STRING_KEYS.SWITCH_NETWORK })}

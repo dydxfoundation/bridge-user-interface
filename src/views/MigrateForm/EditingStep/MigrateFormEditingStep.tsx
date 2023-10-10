@@ -1,44 +1,39 @@
-import { useState } from "react";
-import styled, { type AnyStyledComponent } from "styled-components";
-import type { NumberFormatValues } from "react-number-format";
-import type { SyntheticInputEvent } from "react-number-format/types/types";
-import BigNumber from "bignumber.js";
+import { useState } from 'react';
+import styled, { type AnyStyledComponent } from 'styled-components';
+import type { NumberFormatValues } from 'react-number-format';
+import type { SyntheticInputEvent } from 'react-number-format/types/types';
+import BigNumber from 'bignumber.js';
 
-import { AlertType } from "@/constants/alerts";
-import { ButtonShape, ButtonSize } from "@/constants/buttons";
-import { STRING_KEYS } from "@/constants/localization";
-import { DestinationAddressOptions } from "@/constants/migrate";
-import { NumberSign, TOKEN_DECIMALS } from "@/constants/numbers";
+import { AlertType } from '@/constants/alerts';
+import { ButtonShape, ButtonSize } from '@/constants/buttons';
+import { STRING_KEYS } from '@/constants/localization';
+import { DestinationAddressOptions } from '@/constants/migrate';
+import { NumberSign, TOKEN_DECIMALS } from '@/constants/numbers';
 
-import { formMixins } from "@/styles/formMixins";
-import { layoutMixins } from "@/styles/layoutMixins";
+import { formMixins } from '@/styles/formMixins';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import {
-  useAccounts,
-  useStringGetter,
-  useAccountBalance,
-  useMigrateToken,
-} from "@/hooks";
+import { useAccounts, useStringGetter, useAccountBalance, useMigrateToken } from '@/hooks';
 
-import { DiffOutput } from "@/components/DiffOutput";
-import { FormInput } from "@/components/FormInput";
-import { Icon, IconName } from "@/components/Icon";
-import { InputType } from "@/components/Input";
-import { OutputType } from "@/components/Output";
-import { RadioGroup } from "@/components/RadioGroup";
-import { Tag } from "@/components/Tag";
-import { ToggleButton } from "@/components/ToggleButton";
-import { WithDetailsReceipt } from "@/components/WithDetailsReceipt";
+import { DiffOutput } from '@/components/DiffOutput';
+import { FormInput } from '@/components/FormInput';
+import { Icon, IconName } from '@/components/Icon';
+import { InputType } from '@/components/Input';
+import { OutputType } from '@/components/Output';
+import { RadioGroup } from '@/components/RadioGroup';
+import { Tag } from '@/components/Tag';
+import { ToggleButton } from '@/components/ToggleButton';
+import { WithDetailsReceipt } from '@/components/WithDetailsReceipt';
 
-import { MustBigNumber } from "@/lib/numbers";
-import { truncateAddress } from "@/lib/wallet";
+import { MustBigNumber } from '@/lib/numbers';
+import { truncateAddress } from '@/lib/wallet';
 
-import { PreviewMigrateButtonAndReceipt } from "./PreviewMigrateButtonAndReceipt";
+import { PreviewMigrateButtonAndReceipt } from './PreviewMigrateButtonAndReceipt';
 
 export const MigrateFormEditingStep = () => {
   const stringGetter = useStringGetter();
   const { dydxAddress: accountDydxAddress } = useAccounts();
-  const { v3TokenBalance } = useAccountBalance();
+  const { ethDYDXBalance } = useAccountBalance();
 
   const {
     amountBN,
@@ -53,12 +48,12 @@ export const MigrateFormEditingStep = () => {
     DestinationAddressOptions.Account
   );
 
-  const v3TokenBalanceBN = MustBigNumber(v3TokenBalance);
-  const newV3TokenBalanceBN = v3TokenBalanceBN.minus(amountBN ?? 0);
+  const ethDYDXBalanceBN = MustBigNumber(ethDYDXBalance);
+  const newEthDYDXBalanceBN = ethDYDXBalanceBN.minus(amountBN ?? 0);
 
   const onOptionChange = (option: string) => {
     if (option === DestinationAddressOptions.Other) {
-      setDestinationAddress("");
+      setDestinationAddress('');
     } else if (accountDydxAddress) {
       setDestinationAddress(accountDydxAddress);
     }
@@ -76,13 +71,13 @@ export const MigrateFormEditingStep = () => {
 
   const amountDetailItems = [
     {
-      key: "amount",
+      key: 'amount',
       label: (
         <Styled.InlineRow>
           {stringGetter({
             key: STRING_KEYS.AVAILABLE_ON_CHAIN,
             params: {
-              CHAIN: "Ethereum",
+              CHAIN: 'Ethereum',
             },
           })}
           <Tag>ethDYDX</Tag>
@@ -91,11 +86,11 @@ export const MigrateFormEditingStep = () => {
       value: (
         <DiffOutput
           type={OutputType.Asset}
-          value={v3TokenBalance?.toString()}
-          newValue={newV3TokenBalanceBN.toString()}
+          value={ethDYDXBalance?.toString()}
+          newValue={newEthDYDXBalanceBN.toString()}
           sign={NumberSign.Negative}
-          hasInvalidNewValue={newV3TokenBalanceBN.isNegative()}
-          withDiff={v3TokenBalance !== undefined && amountBN && amountBN.gt(0)}
+          hasInvalidNewValue={newEthDYDXBalanceBN.isNegative()}
+          withDiff={ethDYDXBalance !== undefined && amountBN && amountBN.gt(0)}
           roundingMode={BigNumber.ROUND_DOWN}
         />
       ),
@@ -116,9 +111,7 @@ export const MigrateFormEditingStep = () => {
     <Styled.FormInputToggleButton
       size={ButtonSize.XSmall}
       isPressed={!isInputEmpty}
-      onPressedChange={(isPressed: boolean) =>
-        (isPressed ? onClick : onClear)()
-      }
+      onPressedChange={(isPressed: boolean) => (isPressed ? onClick : onClear)()}
       shape={isInputEmpty ? ButtonShape.Rectangle : ButtonShape.Circle}
     >
       {isInputEmpty ? label : <Icon iconName={IconName.Close} />}
@@ -132,9 +125,7 @@ export const MigrateFormEditingStep = () => {
           id="amount"
           label={stringGetter({ key: STRING_KEYS.AMOUNT })}
           type={InputType.Number}
-          onChange={({ floatValue }: NumberFormatValues) =>
-            setAmountBN(MustBigNumber(floatValue))
-          }
+          onChange={({ floatValue }: NumberFormatValues) => setAmountBN(MustBigNumber(floatValue))}
           value={amountBN?.toFixed(
             Math.min(TOKEN_DECIMALS, amountBN?.dp() ?? 0),
             BigNumber.ROUND_DOWN
@@ -143,7 +134,7 @@ export const MigrateFormEditingStep = () => {
             label: stringGetter({ key: STRING_KEYS.MAX }),
             isInputEmpty: !amountBN,
             onClear: () => setAmountBN(undefined),
-            onClick: () => v3TokenBalance && setAmountBN(v3TokenBalanceBN),
+            onClick: () => ethDYDXBalance && setAmountBN(ethDYDXBalanceBN),
           })}
         />
       </WithDetailsReceipt>
@@ -184,8 +175,7 @@ export const MigrateFormEditingStep = () => {
                   message: stringGetter({
                     key: STRING_KEYS.GENERATED_ADDRESS_INFO,
                     params: {
-                      TRADE_URL:
-                        import.meta.env.VITE_TRADE_URL || "the trading app",
+                      TRADE_URL: import.meta.env.VITE_TRADE_URL || 'the trading app',
                     },
                   }),
                 }}
@@ -201,9 +191,7 @@ export const MigrateFormEditingStep = () => {
                   key: STRING_KEYS.SEND_TO_ANOTHER_ADDRESS,
                   params: {
                     ADDRESS: (
-                      <strong>
-                        {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
-                      </strong>
+                      <strong>{stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}</strong>
                     ),
                   },
                 })}
@@ -213,15 +201,11 @@ export const MigrateFormEditingStep = () => {
               <Styled.AdressInputContainer>
                 <Styled.InnerFormInput
                   id="destination"
-                  onInput={(e: SyntheticInputEvent) =>
-                    setDestinationAddress(e.target?.value)
-                  }
+                  onInput={(e: SyntheticInputEvent) => setDestinationAddress(e.target?.value)}
                   label={
                     <Styled.DestinationInputLabel>
                       {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
-                      {isDestinationAddressValid && (
-                        <Icon iconName={IconName.Check} />
-                      )}
+                      {isDestinationAddressValid && <Icon iconName={IconName.Check} />}
                     </Styled.DestinationInputLabel>
                   }
                   type={InputType.Text}
@@ -230,7 +214,7 @@ export const MigrateFormEditingStep = () => {
                   slotRight={renderFormInputButton({
                     label: stringGetter({ key: STRING_KEYS.PASTE }),
                     isInputEmpty: !destinationAddress,
-                    onClear: () => setDestinationAddress(""),
+                    onClear: () => setDestinationAddress(''),
                     onClick: onPasteAddress,
                   })}
                   validationConfig={
@@ -253,9 +237,7 @@ export const MigrateFormEditingStep = () => {
       />
 
       <Styled.Footer>
-        <PreviewMigrateButtonAndReceipt
-          isDisabled={!isAmountValid || !isDestinationAddressValid}
-        />
+        <PreviewMigrateButtonAndReceipt isDisabled={!isAmountValid || !isDestinationAddressValid} />
       </Styled.Footer>
     </>
   );

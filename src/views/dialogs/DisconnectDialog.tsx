@@ -1,19 +1,19 @@
-import styled, { AnyStyledComponent } from "styled-components";
-import { useDispatch } from "react-redux";
-import { Close } from "@radix-ui/react-dialog";
+import styled, { AnyStyledComponent } from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { Close } from '@radix-ui/react-dialog';
 
-import { ButtonAction } from "@/constants/buttons";
-import { DialogProps } from "@/constants/dialogs";
-import { STRING_KEYS } from "@/constants/localization";
+import { ButtonAction } from '@/constants/buttons';
+import { DialogProps } from '@/constants/dialogs';
+import { STRING_KEYS } from '@/constants/localization';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { useAccounts, useStringGetter } from "@/hooks";
+import { useAccounts, useStringGetter } from '@/hooks';
 
-import { Button } from "@/components/Button";
-import { Dialog } from "@/components/Dialog";
+import { Button } from '@/components/Button';
+import { Dialog } from '@/components/Dialog';
 
-import { closeDialog } from "@/state/dialogs";
+import { closeDialog } from '@/state/dialogs';
 
 export const DisconnectDialog = ({ setIsOpen }: DialogProps) => {
   const stringGetter = useStringGetter();
@@ -36,9 +36,7 @@ export const DisconnectDialog = ({ setIsOpen }: DialogProps) => {
             </Button>
           </Close>
           <Close asChild>
-            <Button onClick={onCancel}>
-              {stringGetter({ key: STRING_KEYS.CANCEL })}
-            </Button>
+            <Button onClick={onCancel}>{stringGetter({ key: STRING_KEYS.CANCEL })}</Button>
           </Close>
         </Styled.ButtonRow>
       </Styled.Content>

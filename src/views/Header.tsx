@@ -1,31 +1,31 @@
-import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
-import styled, { type AnyStyledComponent } from "styled-components";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import styled, { type AnyStyledComponent } from 'styled-components';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 
-import { ButtonShape } from "@/constants/buttons";
-import { STRING_KEYS } from "@/constants/localization";
-import { DialogTypes } from "@/constants/dialogs";
-import { RELEVANT_LINKS } from "@/constants/links";
-import { LogoShortIcon } from "@/icons";
+import { ButtonShape } from '@/constants/buttons';
+import { STRING_KEYS } from '@/constants/localization';
+import { DialogTypes } from '@/constants/dialogs';
+import { RELEVANT_LINKS } from '@/constants/links';
+import { LogoShortIcon } from '@/icons';
 
-import { headerMixins } from "@/styles/headerMixins";
-import { layoutMixins } from "@/styles/layoutMixins";
-import breakpoints from "@/styles/breakpoints";
+import { headerMixins } from '@/styles/headerMixins';
+import { layoutMixins } from '@/styles/layoutMixins';
+import breakpoints from '@/styles/breakpoints';
 
-import { useBreakpoints, useStringGetter } from "@/hooks";
+import { useBreakpoints, useStringGetter } from '@/hooks';
 
-import { Icon } from "@/components/Icon";
-import { IconButton } from "@/components/IconButton";
-import { NavigationMenu } from "@/components/NavigationMenu";
-import { VerticalSeparator } from "@/components/Separator";
+import { Icon } from '@/components/Icon';
+import { IconButton } from '@/components/IconButton';
+import { NavigationMenu } from '@/components/NavigationMenu';
+import { VerticalSeparator } from '@/components/Separator';
 
-import { AccountMenu } from "@/views/menus/AccountMenu";
-import { LanguageSelector } from "@/views/menus/LanguageSelector";
+import { AccountMenu } from '@/views/menus/AccountMenu';
+import { LanguageSelector } from '@/views/menus/LanguageSelector';
 
-import { openDialog } from "@/state/dialogs";
+import { openDialog } from '@/state/dialogs';
 
-import { isTruthy } from "@/lib/isTruthy";
+import { isTruthy } from '@/lib/isTruthy';
 
 export const Header = () => {
   const stringGetter = useStringGetter();
@@ -34,27 +34,25 @@ export const Header = () => {
 
   const navItems = [
     {
-      group: "navigation",
+      group: 'navigation',
       items: [
         import.meta.env.VITE_TRADE_URL && {
-          value: "TRADE",
+          value: 'TRADE',
           label: stringGetter({ key: STRING_KEYS.TRADE }),
           href: import.meta.env.VITE_TRADE_URL,
         },
         {
-          value: "MIGRATE",
+          value: 'MIGRATE',
           label: stringGetter({ key: STRING_KEYS.MIGRATE }),
           active: true,
-          href: "/",
+          href: '/',
         },
         {
-          value: "MORE",
+          value: 'MORE',
           label: stringGetter({ key: STRING_KEYS.MORE }),
           subitems: RELEVANT_LINKS.map((linkItem) => ({
             value: linkItem.value,
-            slotBefore: linkItem.iconName ? (
-              <Icon iconName={linkItem.iconName} />
-            ) : undefined,
+            slotBefore: linkItem.iconName ? <Icon iconName={linkItem.iconName} /> : undefined,
             label: stringGetter({ key: linkItem.labelStringKey }),
             href: linkItem.href,
           })),
@@ -86,9 +84,7 @@ export const Header = () => {
           <Styled.MoreLinksButton
             shape={ButtonShape.Square}
             slotIcon={<DotsHorizontalIcon />}
-            onClick={() =>
-              dispatch(openDialog({ type: DialogTypes.MoreLinks }))
-            }
+            onClick={() => dispatch(openDialog({ type: DialogTypes.MoreLinks }))}
           />
         )}
         <VerticalSeparator />
@@ -102,9 +98,7 @@ const Styled: Record<string, AnyStyledComponent> = {};
 
 Styled.Header = styled.header`
   --logo-width: 3.5rem;
-  --navBefore-width: calc(
-    calc(var(--sidebar-width) - var(--logo-width) - var(--border-width)) / 2
-  );
+  --navBefore-width: calc(calc(var(--sidebar-width) - var(--logo-width) - var(--border-width)) / 2);
   --trigger-height: 2.25rem;
 
   ${layoutMixins.container}
@@ -118,7 +112,7 @@ Styled.Header = styled.header`
   align-items: stretch;
   grid-auto-flow: column;
   grid-template:
-    "Logo . NavBefore . Nav . NavAfter" 100%
+    'Logo . NavBefore . Nav . NavAfter' 100%
     / var(--logo-width) var(--border-width) var(--navBefore-width)
     var(--border-width) 1fr var(--border-width) auto;
 

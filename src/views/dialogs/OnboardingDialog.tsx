@@ -1,31 +1,29 @@
-import { type ElementType, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import styled, { AnyStyledComponent, css } from "styled-components";
+import { type ElementType, useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import styled, { AnyStyledComponent, css } from 'styled-components';
 
-import { DialogProps } from "@/constants/dialogs";
-import { STRING_KEYS } from "@/constants/localization";
-import { EvmDerivedAccountStatus, OnboardingSteps } from "@/constants/account";
-import { wallets } from "@/constants/wallets";
+import { DialogProps } from '@/constants/dialogs';
+import { STRING_KEYS } from '@/constants/localization';
+import { EvmDerivedAccountStatus, OnboardingSteps } from '@/constants/account';
+import { wallets } from '@/constants/wallets';
 
-import { useAccounts, useBreakpoints, useStringGetter } from "@/hooks";
+import { useAccounts, useBreakpoints, useStringGetter } from '@/hooks';
 
-import breakpoints from "@/styles/breakpoints";
-import { layoutMixins } from "@/styles/layoutMixins";
+import breakpoints from '@/styles/breakpoints';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { calculateOnboardingStep } from "@/state/accountCalculators";
+import { calculateOnboardingStep } from '@/state/accountCalculators';
 
-import { Dialog, DialogPlacement } from "@/components/Dialog";
-import { Icon, IconName } from "@/components/Icon";
-import { Ring } from "@/components/Ring";
+import { Dialog, DialogPlacement } from '@/components/Dialog';
+import { Icon, IconName } from '@/components/Icon';
+import { Ring } from '@/components/Ring';
 
-import { AcknowledgeTerms } from "./OnboardingDialog/AcknowledgeTerms";
-import { ChooseWallet } from "./OnboardingDialog/ChooseWallet";
-import { GenerateKeys } from "./OnboardingDialog/GenerateKeys";
+import { AcknowledgeTerms } from './OnboardingDialog/AcknowledgeTerms';
+import { ChooseWallet } from './OnboardingDialog/ChooseWallet';
+import { GenerateKeys } from './OnboardingDialog/GenerateKeys';
 
 export const OnboardingDialog = ({ setIsOpen }: DialogProps) => {
-  const [derivationStatus, setDerivationStatus] = useState(
-    EvmDerivedAccountStatus.NotDerived
-  );
+  const [derivationStatus, setDerivationStatus] = useState(EvmDerivedAccountStatus.NotDerived);
 
   const stringGetter = useStringGetter();
   const { isMobile } = useBreakpoints();
@@ -46,7 +44,7 @@ export const OnboardingDialog = ({ setIsOpen }: DialogProps) => {
         {
           [OnboardingSteps.ChooseWallet]: {
             title: stringGetter({ key: STRING_KEYS.CONNECT_YOUR_WALLET }),
-            description: "Select your wallet from these supported options.",
+            description: 'Select your wallet from these supported options.',
             children: (
               <Styled.Content>
                 <ChooseWallet />
@@ -56,19 +54,13 @@ export const OnboardingDialog = ({ setIsOpen }: DialogProps) => {
           [OnboardingSteps.KeyDerivation]: {
             slotIcon: {
               [EvmDerivedAccountStatus.NotDerived]: walletType && (
-                <Icon
-                  iconComponent={wallets[walletType]?.icon as ElementType}
-                />
+                <Icon iconComponent={wallets[walletType]?.icon as ElementType} />
               ),
-              [EvmDerivedAccountStatus.Deriving]: (
-                <Styled.Ring withAnimation value={0.25} />
-              ),
+              [EvmDerivedAccountStatus.Deriving]: <Styled.Ring withAnimation value={0.25} />,
               [EvmDerivedAccountStatus.EnsuringDeterminism]: (
                 <Styled.Ring withAnimation value={0.25} />
               ),
-              [EvmDerivedAccountStatus.Derived]: (
-                <Icon iconName={IconName.CheckCircle} />
-              ),
+              [EvmDerivedAccountStatus.Derived]: <Icon iconName={IconName.CheckCircle} />,
             }[derivationStatus],
             title: stringGetter({ key: STRING_KEYS.SIGN_MESSAGE }),
             description: stringGetter({
@@ -76,13 +68,10 @@ export const OnboardingDialog = ({ setIsOpen }: DialogProps) => {
             }),
             children: (
               <Styled.Content>
-                <GenerateKeys
-                  status={derivationStatus}
-                  setStatus={setDerivationStatus}
-                />
+                <GenerateKeys status={derivationStatus} setStatus={setDerivationStatus} />
               </Styled.Content>
             ),
-            width: "23rem",
+            width: '23rem',
           },
           [OnboardingSteps.AcknowledgeTerms]: {
             title: stringGetter({ key: STRING_KEYS.ACKNOWLEDGE_TERMS }),
@@ -91,12 +80,10 @@ export const OnboardingDialog = ({ setIsOpen }: DialogProps) => {
                 <AcknowledgeTerms />
               </Styled.Content>
             ),
-            width: "20rem",
+            width: '20rem',
           },
         }[currentOnboardingStep])}
-      placement={
-        isMobile ? DialogPlacement.FullScreen : DialogPlacement.Default
-      }
+      placement={isMobile ? DialogPlacement.FullScreen : DialogPlacement.Default}
     />
   );
 };

@@ -1,45 +1,25 @@
-import {
-  useCallback,
-  useContext,
-  createContext,
-  useEffect,
-  useState,
-  useMemo,
-} from "react";
+import { useCallback, useContext, createContext, useEffect, useState, useMemo } from 'react';
 
-import { useDispatch } from "react-redux";
-import { AES, enc } from "crypto-js";
+import { useDispatch } from 'react-redux';
+import { AES, enc } from 'crypto-js';
 
-import { DYDX_DENOM, LocalWallet } from "@dydxprotocol/v4-client-js";
+import { LocalWallet } from '@dydxprotocol/v4-client-js';
 
-import {
-  OnboardingGuard,
-  OnboardingState,
-  type EvmDerivedAddresses,
-} from "@/constants/account";
+import { OnboardingGuard, OnboardingState, type EvmDerivedAddresses } from '@/constants/account';
 
-import {
-  LocalStorageKey,
-  LOCAL_STORAGE_VERSIONS,
-} from "@/constants/localStorage";
+import { LocalStorageKey, LOCAL_STORAGE_VERSIONS } from '@/constants/localStorage';
 
-import {
-  DydxAddress,
-  EthereumAddress,
-  PrivateInformation,
-} from "@/constants/wallets";
+import { DydxAddress, EthereumAddress, PrivateInformation } from '@/constants/wallets';
 
-import { setOnboardingState, setOnboardingGuard } from "@/state/account";
+import { setOnboardingState, setOnboardingGuard } from '@/state/account';
 
-import { useLocalStorage } from "./useLocalStorage";
-import { useWalletConnection } from "./useWalletConnection";
-import { useDydxClient } from "./useDydxClient";
+import { useLocalStorage } from './useLocalStorage';
+import { useWalletConnection } from './useWalletConnection';
+import { useDydxClient } from './useDydxClient';
 
-const AccountsContext = createContext<
-  ReturnType<typeof useAccountsContext> | undefined
->(undefined);
+const AccountsContext = createContext<ReturnType<typeof useAccountsContext> | undefined>(undefined);
 
-AccountsContext.displayName = "Accounts";
+AccountsContext.displayName = 'Accounts';
 
 export const AccountsProvider = ({ ...props }) => (
   <AccountsContext.Provider value={useAccountsContext()} {...props} />
@@ -86,10 +66,7 @@ const useAccountsContext = () => {
 
   useEffect(() => {
     // Clear data stored with deprecated LocalStorageKey
-    if (
-      evmDerivedAddresses.version !==
-      LOCAL_STORAGE_VERSIONS[LocalStorageKey.EvmDerivedAddresses]
-    )
+    if (evmDerivedAddresses.version !== LOCAL_STORAGE_VERSIONS[LocalStorageKey.EvmDerivedAddresses])
       saveEvmDerivedAddresses({});
   }, []);
 
@@ -131,8 +108,8 @@ const useAccountsContext = () => {
   const decryptSignature = (encryptedSignature: string | undefined) => {
     const staticEncryptionKey = import.meta.env.VITE_PK_ENCRYPTION_KEY;
 
-    if (!staticEncryptionKey) throw new Error("No decryption key found");
-    if (!encryptedSignature) throw new Error("No signature found");
+    if (!staticEncryptionKey) throw new Error('No decryption key found');
+    if (!encryptedSignature) throw new Error('No signature found');
 
     const decrypted = AES.decrypt(encryptedSignature, staticEncryptionKey);
     const signature = decrypted.toString(enc.Utf8);
@@ -141,28 +118,20 @@ const useAccountsContext = () => {
 
   // dYdXClient Onboarding & Account Helpers
   const { compositeClient, getWalletFromEvmSignature } = useDydxClient();
-  // dYdX subaccounts
 
   const { getAccountBalance, getSubaccounts } = useMemo(
     () => ({
       getAccountBalance: async ({
         dydxAddress,
-        denom = DYDX_DENOM,
+        denom = import.meta.env.VITE_DYDX_DENOM,
       }: {
         dydxAddress: DydxAddress;
         denom?: string;
-      }) =>
-        await compositeClient?.validatorClient.get.getAccountBalance(
-          dydxAddress,
-          denom
-        ),
+      }) => await compositeClient?.validatorClient.get.getAccountBalance(dydxAddress, denom),
 
       getSubaccounts: async ({ dydxAddress }: { dydxAddress: DydxAddress }) => {
         try {
-          const response =
-            await compositeClient?.indexerClient.account.getSubaccounts(
-              dydxAddress
-            );
+          const response = await compositeClient?.indexerClient.account.getSubaccounts(dydxAddress);
           return response.subaccounts;
         } catch (error) {
           // 404 is expected if the user has no subaccounts
@@ -181,10 +150,7 @@ const useAccountsContext = () => {
   const [localDydxWallet, setLocalDydxWallet] = useState<LocalWallet>();
   const [hdKey, setHdKey] = useState<PrivateInformation>();
 
-  const dydxAccounts = useMemo(
-    () => localDydxWallet?.accounts,
-    [localDydxWallet]
-  );
+  const dydxAccounts = useMemo(() => localDydxWallet?.accounts, [localDydxWallet]);
 
   const dydxAddress = useMemo(
     () => localDydxWallet?.address as DydxAddress | undefined,
@@ -192,10 +158,9 @@ const useAccountsContext = () => {
   );
 
   const setWalletFromEvmSignature = async (signature: string) => {
-    const { wallet, mnemonic, privateKey, publicKey } =
-      await getWalletFromEvmSignature({
-        signature,
-      });
+    const { wallet, mnemonic, privateKey, publicKey } = await getWalletFromEvmSignature({
+      signature,
+    });
     setLocalDydxWallet(wallet);
     setHdKey({ mnemonic, privateKey, publicKey });
   };
@@ -216,9 +181,7 @@ const useAccountsContext = () => {
 
           if (evmDerivedAccount?.encryptedSignature) {
             try {
-              const signature = decryptSignature(
-                evmDerivedAccount.encryptedSignature
-              );
+              const signature = decryptSignature(evmDerivedAccount.encryptedSignature);
 
               await setWalletFromEvmSignature(signature);
               dispatch(setOnboardingState(OnboardingState.AccountConnected));

@@ -1,8 +1,8 @@
-import styled, { type AnyStyledComponent } from "styled-components";
+import styled, { type AnyStyledComponent } from 'styled-components';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { Details, type DetailsItem } from "@/components/Details";
+import { Details, type DetailsItem } from '@/components/Details';
 
 type ElementProps = {
   header?: React.ReactNode;

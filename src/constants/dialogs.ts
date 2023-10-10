@@ -1,8 +1,8 @@
 export enum DialogTypes {
-  DisconnectWallet = "DisconnectWallet",
-  Onboarding = "Onboarding",
-  MnemonicExport = "MnemonicExport",
-  MoreLinks = "MoreLinks",
+  DisconnectWallet = 'DisconnectWallet',
+  Onboarding = 'Onboarding',
+  MnemonicExport = 'MnemonicExport',
+  MoreLinks = 'MoreLinks',
 }
 
 export type DialogProps = {

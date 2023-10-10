@@ -26,10 +26,7 @@ export const WithReceipt = ({
   const receipt = <Styled.SlotReceipt>{slotReceipt}</Styled.SlotReceipt>;
 
   return (
-    <Styled.WithReceipt
-      className={className}
-      hideReceipt={hideReceipt}
-    >
+    <Styled.WithReceipt className={className} hideReceipt={hideReceipt}>
       {side === 'top' && receipt}
       {children}
       {side === 'bottom' && receipt}

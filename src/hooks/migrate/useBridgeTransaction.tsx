@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { fromBech32, toHex } from "@cosmjs/encoding";
-import { useContractWrite, useWaitForTransaction } from "wagmi";
-import BigNumber from "bignumber.js";
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { fromBech32, toHex } from '@cosmjs/encoding';
+import { useContractWrite, useWaitForTransaction } from 'wagmi';
+import BigNumber from 'bignumber.js';
 
-import { bridgeContractAbi } from "@/constants/abi";
-import { TOKEN_DECIMAL_SHIFT, TransactionStatus } from "@/constants/migrate";
-import { DydxAddress, EthereumAddress } from "@/constants/wallets";
+import { bridgeContractAbi } from '@/constants/abi';
+import { TOKEN_DECIMAL_SHIFT, TransactionStatus } from '@/constants/migrate';
+import { DydxAddress, EthereumAddress } from '@/constants/wallets';
 
-import { useTrackTransactionFinalized } from "./useTrackTransactionFinalized";
-import { useIsDydxAddressValid } from "../useIsDydxAddressValid";
-import { useDydxClient } from "../useDydxClient";
+import { useTrackTransactionFinalized } from './useTrackTransactionFinalized';
+import { useIsDydxAddressValid } from '../useIsDydxAddressValid';
+import { useDydxClient } from '../useDydxClient';
 
 export const useBridgeTransaction = ({
   amountBN,
@@ -22,41 +22,32 @@ export const useBridgeTransaction = ({
   const [transactionStatus, setTransactionStatus] = useState<TransactionStatus>(
     TransactionStatus.NotStarted
   );
-  const [bridgeTxHash, setBridgeTxHash] = useState<
-    EthereumAddress | undefined
-  >();
-  const [bridgeTxMinedBlockNumber, setBridgeTxMinedBlockNumber] = useState<
-    bigint | undefined
-  >();
+  const [bridgeTxHash, setBridgeTxHash] = useState<EthereumAddress | undefined>();
+  const [bridgeTxMinedBlockNumber, setBridgeTxMinedBlockNumber] = useState<bigint | undefined>();
 
-  const { isTransactionFinalized, numBlocksTillFinalized } =
-    useTrackTransactionFinalized({
-      bridgeTxMinedBlockNumber,
-    });
+  const { isTransactionFinalized, numBlocksTillFinalized } = useTrackTransactionFinalized({
+    bridgeTxMinedBlockNumber,
+  });
 
   const isDestinationAddressValid = useIsDydxAddressValid(destinationAddress);
 
   useEffect(() => {
-    if (isTransactionFinalized)
-      setTransactionStatus(TransactionStatus.Finalized);
+    if (isTransactionFinalized) setTransactionStatus(TransactionStatus.Finalized);
   }, [isTransactionFinalized]);
 
   // Warn user before resfresh / leaving page if transaction has not been acknowledged
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (
-        transactionStatus &&
-        transactionStatus < TransactionStatus.Finalized
-      ) {
+      if (transactionStatus && transactionStatus < TransactionStatus.Finalized) {
         e.preventDefault();
-        e.returnValue = "";
+        e.returnValue = '';
       }
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [transactionStatus]);
 
@@ -69,13 +60,13 @@ export const useBridgeTransaction = ({
   const { writeAsync: bridge, isLoading: isBridgePending } = useContractWrite({
     address: import.meta.env.VITE_BRIDGE_CONTRACT_ADDRESS,
     abi: bridgeContractAbi,
-    functionName: "bridge",
+    functionName: 'bridge',
     args: [
-      amountBN?.shiftedBy(TOKEN_DECIMAL_SHIFT)?.toFixed() ?? "0",
+      amountBN?.shiftedBy(TOKEN_DECIMAL_SHIFT)?.toFixed() ?? '0',
       isDestinationAddressValid
         ? `0x${toHex(fromBech32(destinationAddress as DydxAddress).data)}`
-        : "",
-      "", // memo
+        : '',
+      '', // memo
     ],
     chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
   });
@@ -92,9 +83,7 @@ export const useBridgeTransaction = ({
   };
 
   const { error: bridgeTxError } = useWaitForTransaction({
-    enabled:
-      bridgeTxHash !== undefined &&
-      transactionStatus === TransactionStatus.Pending,
+    enabled: bridgeTxHash !== undefined && transactionStatus === TransactionStatus.Pending,
     hash: bridgeTxHash,
     onSuccess({ blockNumber }) {
       setTransactionStatus(TransactionStatus.Unfinalized);
@@ -114,7 +103,7 @@ export const useBridgeTransaction = ({
       bridgeTxMinedBlockNumber !== undefined &&
       isDestinationAddressValid,
     queryKey: [
-      "pollIsCurrentTransactionAcknowledged",
+      'pollIsCurrentTransactionAcknowledged',
       {
         dydxAddress: destinationAddress,
         ethBlockHeight: Number(bridgeTxMinedBlockNumber),
@@ -128,12 +117,10 @@ export const useBridgeTransaction = ({
       (data?.messages ?? []).some(
         (migration) =>
           migration.message?.event?.address === destinationAddress &&
-          Number(migration.message?.event?.ethBlockHeight) ===
-            Number(bridgeTxMinedBlockNumber)
+          Number(migration.message?.event?.ethBlockHeight) === Number(bridgeTxMinedBlockNumber)
       ),
     onSuccess: (isAcknowledged) => {
-      if (isAcknowledged)
-        setTransactionStatus(TransactionStatus.Acknowledged);
+      if (isAcknowledged) setTransactionStatus(TransactionStatus.Acknowledged);
     },
     refetchInterval: 5_000,
     staleTime: 5_000,

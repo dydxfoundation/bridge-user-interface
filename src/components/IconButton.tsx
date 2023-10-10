@@ -1,14 +1,11 @@
-import { forwardRef, type ElementType } from "react";
-import styled, { css, type AnyStyledComponent } from "styled-components";
+import { forwardRef, type ElementType } from 'react';
+import styled, { css, type AnyStyledComponent } from 'styled-components';
 
-import { ButtonShape, ButtonSize } from "@/constants/buttons";
+import { ButtonShape, ButtonSize } from '@/constants/buttons';
 
-import { Button, type ButtonProps } from "@/components/Button";
-import { Icon, IconName } from "@/components/Icon";
-import {
-  ToggleButton,
-  type ToggleButtonProps,
-} from "@/components/ToggleButton";
+import { Button, type ButtonProps } from '@/components/Button';
+import { Icon, IconName } from '@/components/Icon';
+import { ToggleButton, type ToggleButtonProps } from '@/components/ToggleButton';
 
 type ElementProps = {
   isToggle?: boolean;
@@ -19,10 +16,7 @@ type ElementProps = {
 
 export type IconButtonProps = ElementProps & ButtonProps & ToggleButtonProps;
 
-export const IconButton = forwardRef<
-  HTMLButtonElement | HTMLAnchorElement,
-  IconButtonProps
->(
+export const IconButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, IconButtonProps>(
   (
     {
       size = ButtonSize.XSmall,
@@ -52,11 +46,7 @@ export const IconButton = forwardRef<
         onPressedChange={onPressedChange ?? onClick}
         {...otherProps}
       >
-        {slotIcon ? (
-          slotIcon
-        ) : (
-          <Icon iconName={iconName} iconComponent={iconComponent} />
-        )}
+        {slotIcon ? slotIcon : <Icon iconName={iconName} iconComponent={iconComponent} />}
       </Styled.IconToggleButton>
     ) : (
       <Styled.IconButton
@@ -68,11 +58,7 @@ export const IconButton = forwardRef<
         onClick={onClick}
         {...otherProps}
       >
-        {slotIcon ? (
-          slotIcon
-        ) : (
-          <Icon iconName={iconName} iconComponent={iconComponent} />
-        )}
+        {slotIcon ? slotIcon : <Icon iconName={iconName} iconComponent={iconComponent} />}
       </Styled.IconButton>
     );
   }

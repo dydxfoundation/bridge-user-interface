@@ -1,9 +1,9 @@
-import { forwardRef } from "react";
-import styled, { type AnyStyledComponent } from "styled-components";
+import { forwardRef } from 'react';
+import styled, { type AnyStyledComponent } from 'styled-components';
 
-import { Icon, IconName } from "@/components/Icon";
+import { Icon, IconName } from '@/components/Icon';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
 type ElementProps = {
   children: React.ReactNode;
@@ -18,14 +18,7 @@ type StyleProps = {
 
 export const Link = forwardRef<HTMLAnchorElement, ElementProps & StyleProps>(
   (
-    {
-      children,
-      className,
-      href,
-      onClick,
-      withIcon = false,
-      ...props
-    }: ElementProps & StyleProps,
+    { children, className, href, onClick, withIcon = false, ...props }: ElementProps & StyleProps,
     ref
   ) => (
     <Styled.A

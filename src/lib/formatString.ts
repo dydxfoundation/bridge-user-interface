@@ -2,7 +2,10 @@
 import React from 'react';
 const placeholderRegex = /(\{[\d|\w]+\})/;
 
-const formatString = (str: string, params: { [key: string]: string | React.ReactNode } = {}): string | Array<string | React.ReactNode> => {
+const formatString = (
+  str: string,
+  params: { [key: string]: string | React.ReactNode } = {}
+): string | Array<string | React.ReactNode> => {
   let hasObject = false;
   const res = (str || '')
     .split(placeholderRegex)

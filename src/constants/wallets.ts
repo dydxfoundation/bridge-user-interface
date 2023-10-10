@@ -1,6 +1,6 @@
-import type { ExternalProvider } from "@ethersproject/providers";
+import type { ExternalProvider } from '@ethersproject/providers';
 
-import { STRING_KEYS } from "@/constants/localization";
+import { STRING_KEYS } from '@/constants/localization';
 
 import {
   BitkeepIcon,
@@ -17,18 +17,18 @@ import {
   TokenPocketIcon,
   TrustWalletIcon,
   WalletConnectIcon,
-} from "@/icons";
+} from '@/icons';
 
-import { isMetaMask } from "@/lib/wallet/providers";
+import { isMetaMask } from '@/lib/wallet/providers';
 
 // Wallet connection types
 
 export enum WalletConnectionType {
-  CoinbaseWalletSdk = "coinbaseWalletSdk",
-  CosmosSigner = "CosmosSigner",
-  InjectedEip1193 = "injectedEip1193",
-  WalletConnect1 = "walletConnect1",
-  WalletConnect2 = "walletConnect2",
+  CoinbaseWalletSdk = 'coinbaseWalletSdk',
+  CosmosSigner = 'CosmosSigner',
+  InjectedEip1193 = 'injectedEip1193',
+  WalletConnect1 = 'walletConnect1',
+  WalletConnect2 = 'walletConnect2',
 }
 
 export enum WalletErrorType {
@@ -48,51 +48,48 @@ type WalletConnectionTypeConfig = {
   wagmiConnectorId?: string;
 };
 
-export const walletConnectionTypes: Record<
-  WalletConnectionType,
-  WalletConnectionTypeConfig
-> = {
+export const walletConnectionTypes: Record<WalletConnectionType, WalletConnectionTypeConfig> = {
   [WalletConnectionType.CoinbaseWalletSdk]: {
-    name: "Coinbase Wallet SDK",
-    wagmiConnectorId: "coinbaseWallet",
+    name: 'Coinbase Wallet SDK',
+    wagmiConnectorId: 'coinbaseWallet',
   },
   [WalletConnectionType.InjectedEip1193]: {
-    name: "injected EIP-1193 provider",
-    wagmiConnectorId: "injected",
+    name: 'injected EIP-1193 provider',
+    wagmiConnectorId: 'injected',
   },
   [WalletConnectionType.WalletConnect1]: {
-    name: "WalletConnect 1.0",
-    wagmiConnectorId: "walletConnectLegacy",
+    name: 'WalletConnect 1.0',
+    wagmiConnectorId: 'walletConnectLegacy',
   },
   [WalletConnectionType.WalletConnect2]: {
-    name: "WalletConnect 2.0",
-    wagmiConnectorId: "walletConnect",
+    name: 'WalletConnect 2.0',
+    wagmiConnectorId: 'walletConnect',
   },
   [WalletConnectionType.CosmosSigner]: {
-    name: "CosmosSigner",
+    name: 'CosmosSigner',
   },
 };
 
 // Wallets
 
 export enum WalletType {
-  BitKeep = "BITKEEP",
-  BitPie = "BITPIE",
-  CloverWallet = "CLOVER_WALLET",
-  CoinbaseWallet = "COINBASE_WALLET",
-  Coin98 = "COIN98",
-  HuobiWallet = "HUOBI_WALLET",
-  ImToken = "IMTOKEN",
+  BitKeep = 'BITKEEP',
+  BitPie = 'BITPIE',
+  CloverWallet = 'CLOVER_WALLET',
+  CoinbaseWallet = 'COINBASE_WALLET',
+  Coin98 = 'COIN98',
+  HuobiWallet = 'HUOBI_WALLET',
+  ImToken = 'IMTOKEN',
   // Ledger = 'LEDGER',
-  MathWallet = "MATH_WALLET",
-  MetaMask = "METAMASK",
-  Rainbow = "RAINBOW_WALLET",
-  TokenPocket = "TOKEN_POCKET",
-  TrustWallet = "TRUST_WALLET",
-  WalletConnect = "WALLETCONNECT",
-  WalletConnect2 = "WALLETCONNECT_2",
+  MathWallet = 'MATH_WALLET',
+  MetaMask = 'METAMASK',
+  Rainbow = 'RAINBOW_WALLET',
+  TokenPocket = 'TOKEN_POCKET',
+  TrustWallet = 'TRUST_WALLET',
+  WalletConnect = 'WALLETCONNECT',
+  WalletConnect2 = 'WALLETCONNECT_2',
   // TestWallet = 'TEST_WALLET',
-  OtherWallet = "OTHER_WALLET",
+  OtherWallet = 'OTHER_WALLET',
 }
 
 export const DISPLAYED_WALLETS: WalletType[] = [
@@ -152,29 +149,22 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: (provider) => provider.isBitKeep, // isBitKeepChrome, isBitEthereum
-    walletconnect1Name: "bitkeep",
-    walletconnect2Id:
-      "38f5d18bd8522c244bdd70cb4a68e0e718865155811c043f052fb9f1c51de662",
+    walletconnect1Name: 'bitkeep',
+    walletconnect2Id: '38f5d18bd8522c244bdd70cb4a68e0e718865155811c043f052fb9f1c51de662',
   },
   [WalletType.BitPie]: {
     type: WalletType.BitPie,
     stringKey: STRING_KEYS.BITPIE,
     icon: BitpieIcon,
-    connectionTypes: [
-      WalletConnectionType.InjectedEip1193,
-      WalletConnectionType.WalletConnect1,
-    ],
+    connectionTypes: [WalletConnectionType.InjectedEip1193, WalletConnectionType.WalletConnect1],
     matchesInjectedEip1193: (provider) => provider.isBitpie,
-    walletconnect1Name: "bitpie",
+    walletconnect1Name: 'bitpie',
   },
   [WalletType.CloverWallet]: {
     type: WalletType.CloverWallet,
     stringKey: STRING_KEYS.CLOVER_WALLET,
     icon: CloverWalletIcon,
-    connectionTypes: [
-      WalletConnectionType.InjectedEip1193,
-      WalletConnectionType.WalletConnect1,
-    ],
+    connectionTypes: [WalletConnectionType.InjectedEip1193, WalletConnectionType.WalletConnect1],
     matchesInjectedEip1193: (provider) => provider.isClover,
     // walletconnect1Name: 'clover',
   },
@@ -188,7 +178,7 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: (provider) => provider.isCoinbaseWallet, // provider.selectedProvider?.isCoinbaseWallet,
-    walletconnect1Name: "coinbase",
+    walletconnect1Name: 'coinbase',
   },
   [WalletType.Coin98]: {
     type: WalletType.Coin98,
@@ -200,9 +190,8 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: (provider) => provider.isCoin98,
-    walletconnect1Name: "coin98",
-    walletconnect2Id:
-      "2a3c89040ac3b723a1972a33a125b1db11e258a6975d3a61252cd64e6ea5ea01",
+    walletconnect1Name: 'coin98',
+    walletconnect2Id: '2a3c89040ac3b723a1972a33a125b1db11e258a6975d3a61252cd64e6ea5ea01',
   },
   [WalletType.HuobiWallet]: {
     type: WalletType.HuobiWallet,
@@ -214,8 +203,7 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: (provider) => provider.isHbWallet,
-    walletconnect2Id:
-      "797c615e2c556b610c048eb35535f212c0dd58de5d03e763120e90a7d1350a77",
+    walletconnect2Id: '797c615e2c556b610c048eb35535f212c0dd58de5d03e763120e90a7d1350a77',
   },
   [WalletType.ImToken]: {
     type: WalletType.ImToken,
@@ -227,22 +215,17 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: (provider) => provider.isImToken,
-    walletconnect1Name: "imtoken",
-    walletconnect2Id:
-      "ef333840daf915aafdc4a004525502d6d49d77bd9c65e0642dbaefb3c2893bef",
+    walletconnect1Name: 'imtoken',
+    walletconnect2Id: 'ef333840daf915aafdc4a004525502d6d49d77bd9c65e0642dbaefb3c2893bef',
   },
   [WalletType.MathWallet]: {
     type: WalletType.MathWallet,
     stringKey: STRING_KEYS.MATH_WALLET,
     icon: MathWalletIcon,
-    connectionTypes: [
-      WalletConnectionType.InjectedEip1193,
-      WalletConnectionType.WalletConnect1,
-    ],
+    connectionTypes: [WalletConnectionType.InjectedEip1193, WalletConnectionType.WalletConnect1],
     matchesInjectedEip1193: (provider) => provider.isMathWallet,
-    walletconnect1Name: "math",
-    walletconnect2Id:
-      "7674bb4e353bf52886768a3ddc2a4562ce2f4191c80831291218ebd90f5f5e26",
+    walletconnect1Name: 'math',
+    walletconnect2Id: '7674bb4e353bf52886768a3ddc2a4562ce2f4191c80831291218ebd90f5f5e26',
   },
   [WalletType.MetaMask]: {
     type: WalletType.MetaMask,
@@ -254,9 +237,8 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: isMetaMask,
-    walletconnect1Name: "metamask",
-    walletconnect2Id:
-      "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96",
+    walletconnect1Name: 'metamask',
+    walletconnect2Id: 'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
   },
   [WalletType.Rainbow]: {
     type: WalletType.Rainbow,
@@ -268,9 +250,8 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: (provider) => provider.isRainbowWallet,
-    walletconnect1Name: "rainbow",
-    walletconnect2Id:
-      "1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369",
+    walletconnect1Name: 'rainbow',
+    walletconnect2Id: '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369',
   },
   [WalletType.TokenPocket]: {
     type: WalletType.TokenPocket,
@@ -282,9 +263,8 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: (provider) => provider.isTokenPocket,
-    walletconnect1Name: "tokenpocket",
-    walletconnect2Id:
-      "20459438007b75f4f4acb98bf29aa3b800550309646d375da5fd4aac6c2a2c66",
+    walletconnect1Name: 'tokenpocket',
+    walletconnect2Id: '20459438007b75f4f4acb98bf29aa3b800550309646d375da5fd4aac6c2a2c66',
   },
   [WalletType.TrustWallet]: {
     type: WalletType.TrustWallet,
@@ -296,9 +276,8 @@ export const wallets: Record<WalletType, WalletConfig> = {
       WalletConnectionType.WalletConnect1,
     ],
     matchesInjectedEip1193: (provider) => provider.isTrust,
-    walletconnect1Name: "trust",
-    walletconnect2Id:
-      "4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0",
+    walletconnect1Name: 'trust',
+    walletconnect2Id: '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
   },
   [WalletType.WalletConnect2]: {
     type: WalletType.WalletConnect2,
@@ -319,13 +298,12 @@ export type InjectedEthereumProvider = ExternalProvider;
 
 export type InjectedWeb3Provider = ExternalProvider;
 
-export type InjectedCoinbaseWalletExtensionProvider =
-  InjectedEthereumProvider & {
-    isMetaMask: true;
-    overrideIsMetaMask: true;
-    providerMap: Map<"MetaMask" | "CoinbaseWallet", ExternalProvider>;
-    providers: ExternalProvider[];
-  };
+export type InjectedCoinbaseWalletExtensionProvider = InjectedEthereumProvider & {
+  isMetaMask: true;
+  overrideIsMetaMask: true;
+  providerMap: Map<'MetaMask' | 'CoinbaseWallet', ExternalProvider>;
+  providers: ExternalProvider[];
+};
 
 export type WithInjectedEthereumProvider = {
   ethereum: InjectedEthereumProvider;
@@ -346,7 +324,7 @@ export type WalletConnection = {
 
 // dYdX Chain wallets
 
-import { type onboarding } from "@dydxprotocol/v4-client-js";
+import { type onboarding } from '@dydxprotocol/v4-client-js';
 
 export const COSMOS_DERIVATION_PATH = "m/44'/118'/0'/0/0";
 
@@ -354,21 +332,19 @@ export const COSMOS_DERIVATION_PATH = "m/44'/118'/0'/0/0";
  * @description typed data to sign for dYdX Chain onboarding
  */
 export const SIGN_TYPED_DATA = {
-  primaryType: "dYdX",
+  primaryType: 'dYdX',
   domain: {
-    name: "dYdX Chain",
+    name: 'dYdX Chain',
   },
   types: {
-    dYdX: [{ name: "action", type: "string" }],
+    dYdX: [{ name: 'action', type: 'string' }],
   },
   message: {
-    action: "dYdX Chain Onboarding",
+    action: 'dYdX Chain Onboarding',
   },
 } as const;
 
-export type PrivateInformation = ReturnType<
-  typeof onboarding.deriveHDKeyFromEthereumSignature
->;
+export type PrivateInformation = ReturnType<typeof onboarding.deriveHDKeyFromEthereumSignature>;
 
 export type EthereumAddress = `0x${string}`;
 export type DydxAddress = `dydx${string}`;

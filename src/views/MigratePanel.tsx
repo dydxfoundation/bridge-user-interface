@@ -1,29 +1,28 @@
-import { FormEvent } from "react";
-import styled, { AnyStyledComponent } from "styled-components";
+import { FormEvent } from 'react';
+import styled, { AnyStyledComponent } from 'styled-components';
 
-import breakpoints from "@/styles/breakpoints";
-import { formMixins } from "@/styles/formMixins";
-import { layoutMixins } from "@/styles/layoutMixins";
+import breakpoints from '@/styles/breakpoints';
+import { formMixins } from '@/styles/formMixins';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { STRING_KEYS } from "@/constants/localization";
-import { MigrateFormSteps, TransactionStatus } from "@/constants/migrate";
+import { STRING_KEYS } from '@/constants/localization';
+import { MigrateFormSteps, TransactionStatus } from '@/constants/migrate';
 
-import { useStringGetter, useMigrateToken } from "@/hooks";
+import { useStringGetter, useMigrateToken } from '@/hooks';
 
-import { Icon, IconName } from "@/components/Icon";
-import { Panel } from "@/components/Panel";
-import { Ring } from "@/components/Ring";
-import { VerticalSeparator } from "@/components/Separator";
+import { Icon, IconName } from '@/components/Icon';
+import { Panel } from '@/components/Panel';
+import { Ring } from '@/components/Ring';
+import { VerticalSeparator } from '@/components/Separator';
 
-import { MigrateFormEditingStep } from "./MigrateForm/EditingStep/MigrateFormEditingStep";
-import { MigrateFormPreviewStep } from "./MigrateForm/PreviewStep/MigrateFormPreviewStep";
-import { MigrateFormConfirmedStep } from "./MigrateForm/ConfirmedStep/MigrateFormConfirmedStep";
+import { MigrateFormEditingStep } from './MigrateForm/EditingStep/MigrateFormEditingStep';
+import { MigrateFormPreviewStep } from './MigrateForm/PreviewStep/MigrateFormPreviewStep';
+import { MigrateFormConfirmedStep } from './MigrateForm/ConfirmedStep/MigrateFormConfirmedStep';
 
 export const MigratePanel = () => {
   const stringGetter = useStringGetter();
 
-  const { currentStep, onFormSubmit, transactionStatus, bridgeTxError } =
-    useMigrateToken();
+  const { currentStep, onFormSubmit, transactionStatus, bridgeTxError } = useMigrateToken();
 
   const { slotIcon, title, subtitle, content } = {
     [MigrateFormSteps.Edit]: {

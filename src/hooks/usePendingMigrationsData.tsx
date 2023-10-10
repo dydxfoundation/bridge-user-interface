@@ -1,18 +1,18 @@
-import { useMemo, useState } from "react";
-import { useQuery } from "react-query";
+import { useMemo, useState } from 'react';
+import { useQuery } from 'react-query';
 
 import {
   PendingMigrationData,
   PendingMigrationFilter,
   TOKEN_DECIMAL_SHIFT,
-} from "@/constants/migrate";
+} from '@/constants/migrate';
 
-import { DydxAddress } from "@/constants/wallets";
+import { DydxAddress } from '@/constants/wallets';
 
-import { MustBigNumber } from "@/lib/numbers";
+import { MustBigNumber } from '@/lib/numbers';
 
-import { useAccounts } from "./useAccounts";
-import { useDydxClient } from "./useDydxClient";
+import { useAccounts } from './useAccounts';
+import { useDydxClient } from './useDydxClient';
 
 const PENDING_MIGRATIONS_POLLING_INTERVAL = 600_000;
 
@@ -27,26 +27,23 @@ export const usePendingMigrationsData = ({
   const [filter, setFilter] = useState(
     dydxAddress ? PendingMigrationFilter.Mine : PendingMigrationFilter.All
   );
-  const [addressSearchFilter, setAddressSearchFilter] = useState<string>("");
+  const [addressSearchFilter, setAddressSearchFilter] = useState<string>('');
 
-  const { data: pendingMigrations, refetch: refetchPendingMigrations } =
-    useQuery({
-      enabled: !!compositeClient,
-      queryKey: ["pollPendingMigrations"],
-      queryFn: async () =>
-        await compositeClient?.validatorClient.get.getDelayedCompleteBridgeMessages(),
-      select: (data) =>
-        (data?.messages ?? []).map(({ blockHeight, message }) => ({
-          blockHeight: blockHeight.toNumber(),
-          id: message?.event?.id,
-          address: message?.event?.address as DydxAddress,
-          amount: MustBigNumber(message?.event?.coin?.amount).shiftedBy(
-            TOKEN_DECIMAL_SHIFT * -1
-          ),
-        })) as PendingMigrationData[],
-      refetchInterval: interval,
-      staleTime: interval,
-    });
+  const { data: pendingMigrations, refetch: refetchPendingMigrations } = useQuery({
+    enabled: !!compositeClient,
+    queryKey: ['pollPendingMigrations'],
+    queryFn: async () =>
+      await compositeClient?.validatorClient.get.getDelayedCompleteBridgeMessages(),
+    select: (data) =>
+      (data?.messages ?? []).map(({ blockHeight, message }) => ({
+        blockHeight: blockHeight.toNumber(),
+        id: message?.event?.id,
+        address: message?.event?.address as DydxAddress,
+        amount: MustBigNumber(message?.event?.coin?.amount).shiftedBy(TOKEN_DECIMAL_SHIFT * -1),
+      })) as PendingMigrationData[],
+    refetchInterval: interval,
+    staleTime: interval,
+  });
 
   const filteredPendingMigrations = useMemo(
     () =>
@@ -62,9 +59,8 @@ export const usePendingMigrationsData = ({
 
   const { data: latestBlockHeight } = useQuery({
     enabled: !!compositeClient && Boolean(pendingMigrations?.length),
-    queryKey: ["pollLatestBlockHeight"],
-    queryFn: async () =>
-      await compositeClient?.validatorClient.get.latestBlockHeight(),
+    queryKey: ['pollLatestBlockHeight'],
+    queryFn: async () => await compositeClient?.validatorClient.get.latestBlockHeight(),
     refetchInterval: interval,
     staleTime: interval,
   });

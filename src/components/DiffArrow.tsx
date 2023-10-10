@@ -57,5 +57,5 @@ Styled.DiffArrowContainer = styled.span<DiffArrowProps>`
       left: css`
         transform: scaleX(-1);
       `,
-    }[direction || 'right'])}
+    })[direction || 'right']}
 `;

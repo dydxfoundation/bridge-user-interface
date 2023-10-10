@@ -1,11 +1,7 @@
-import { forwardRef, Ref, useEffect, useRef, useState } from "react";
-import { NavLink, matchPath, useLocation } from "react-router-dom";
+import { forwardRef, Ref, useEffect, useRef, useState } from 'react';
+import { NavLink, matchPath, useLocation } from 'react-router-dom';
 
-import styled, {
-  css,
-  keyframes,
-  type AnyStyledComponent,
-} from "styled-components";
+import styled, { css, keyframes, type AnyStyledComponent } from 'styled-components';
 
 import {
   Root,
@@ -16,35 +12,32 @@ import {
   Link,
   Sub,
   Viewport,
-} from "@radix-ui/react-navigation-menu";
+} from '@radix-ui/react-navigation-menu';
 
-import { TriangleDownIcon } from "@radix-ui/react-icons";
+import { TriangleDownIcon } from '@radix-ui/react-icons';
 
-import { MenuConfig, MenuItem } from "@/constants/menus";
+import { MenuConfig, MenuItem } from '@/constants/menus';
 
-import { popoverMixins } from "@/styles/popoverMixins";
-import { layoutMixins } from "@/styles/layoutMixins";
+import { popoverMixins } from '@/styles/popoverMixins';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { isTruthy } from "@/lib/isTruthy";
-import { isExternalLink } from "@/lib/isExternalLink";
+import { isTruthy } from '@/lib/isTruthy';
+import { isExternalLink } from '@/lib/isExternalLink';
 
-import { Tag } from "./Tag";
-import { Icon, IconName } from "./Icon";
+import { Tag } from './Tag';
+import { Icon, IconName } from './Icon';
 
-type ElementProps<
-  MenuItemValue extends string,
-  MenuGroupValue extends string
-> = {
+type ElementProps<MenuItemValue extends string, MenuGroupValue extends string> = {
   items: MenuConfig<MenuItemValue, MenuGroupValue>;
   onSelectItem?: (value: MenuItemValue) => void;
   onSelectGroup?: (value: MenuGroupValue) => void;
 };
 
 type StyleProps = {
-  orientation?: "vertical" | "horizontal";
-  itemOrientation?: "vertical" | "horizontal";
-  submenuPlacement?: "inline" | "viewport";
-  dir?: "ltr" | "rtl";
+  orientation?: 'vertical' | 'horizontal';
+  itemOrientation?: 'vertical' | 'horizontal';
+  submenuPlacement?: 'inline' | 'viewport';
+  dir?: 'ltr' | 'rtl';
   className?: string;
 };
 
@@ -56,9 +49,7 @@ const NavItem = forwardRef(
       label,
       tag,
       href,
-      slotAfter = isExternalLink(href) ? (
-        <Icon iconName={IconName.LinkOut} />
-      ) : undefined,
+      slotAfter = isExternalLink(href) ? <Icon iconName={IconName.LinkOut} /> : undefined,
       onSelect,
       subitems,
       active,
@@ -75,7 +66,7 @@ const NavItem = forwardRef(
           {label}
           {tag && (
             <>
-              {" "}
+              {' '}
               <Tag>{tag}</Tag>
             </>
           )}
@@ -90,7 +81,7 @@ const NavItem = forwardRef(
         onSelect={() => onSelect?.(value)}
         active={!!matchPath(href, location.pathname) || active}
         asChild
-        target={isExternalLink(href) ? "_blank" : undefined}
+        target={isExternalLink(href) ? '_blank' : undefined}
       >
         <NavLink to={href} ref={ref as Ref<HTMLAnchorElement>} {...props}>
           {children}
@@ -112,17 +103,14 @@ const NavItem = forwardRef(
 
 type TriggerRef = HTMLAnchorElement | HTMLDivElement | HTMLButtonElement | null;
 
-export const NavigationMenu = <
-  MenuItemValue extends string,
-  MenuGroupValue extends string
->({
+export const NavigationMenu = <MenuItemValue extends string, MenuGroupValue extends string>({
   onSelectItem,
   onSelectGroup,
   items,
-  orientation = "horizontal",
-  itemOrientation = "horizontal",
-  submenuPlacement = "inline", // orientation === 'horizontal' ? 'viewport' : 'inline',
-  dir = "ltr",
+  orientation = 'horizontal',
+  itemOrientation = 'horizontal',
+  submenuPlacement = 'inline', // orientation === 'horizontal' ? 'viewport' : 'inline',
+  dir = 'ltr',
   className,
 }: ElementProps<MenuItemValue, MenuGroupValue> & StyleProps) => {
   // Disable click (close) in the first 500ms after hover (open)
@@ -134,10 +122,9 @@ export const NavigationMenu = <
     const observer = new MutationObserver((mutationsList) => {
       for (const mutation of mutationsList) {
         if (
-          mutation.type === "attributes" &&
-          mutation.attributeName === "data-state" &&
-          (mutation.target as unknown as HTMLOrSVGElement).dataset.state ===
-            "open" &&
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'data-state' &&
+          (mutation.target as unknown as HTMLOrSVGElement).dataset.state === 'open' &&
           mutation.target !== document.activeElement
         ) {
           setClickIsDisabled(true);
@@ -170,30 +157,16 @@ export const NavigationMenu = <
           }
         }}
       >
-        <Styled.NavItem
-          onSelect={onSelectGroup}
-          orientation={itemOrientation}
-          {...item}
-        />
+        <Styled.NavItem onSelect={onSelectGroup} orientation={itemOrientation} {...item} />
       </Styled.SubMenuTrigger>
 
       <Styled.Content data-placement={submenuPlacement}>
         <Styled.Sub data-placement={submenuPlacement}>
           <Styled.List
-            data-orientation={
-              depth > 0
-                ? "menu"
-                : orientation === "vertical"
-                ? "vertical"
-                : "menu"
-            }
+            data-orientation={depth > 0 ? 'menu' : orientation === 'vertical' ? 'vertical' : 'menu'}
           >
             {item?.subitems?.map((subitem) => (
-              <Styled.ListItem
-                key={subitem.value}
-                value={subitem.value}
-                data-item={subitem.value}
-              >
+              <Styled.ListItem key={subitem.value} value={subitem.value} data-item={subitem.value}>
                 {subitem?.subitems ? (
                   renderSubitems({ item: subitem, depth: depth + 1 })
                 ) : (
@@ -223,19 +196,11 @@ export const NavigationMenu = <
 
           <Styled.List data-orientation={orientation}>
             {group.items.map((item) => (
-              <Styled.ListItem
-                key={item.value}
-                value={item.value}
-                data-item={item.value}
-              >
+              <Styled.ListItem key={item.value} value={item.value} data-item={item.value}>
                 {item.subitems ? (
                   renderSubitems({ item, depth: 0 })
                 ) : (
-                  <Styled.NavItem
-                    onSelect={onSelectItem}
-                    orientation={itemOrientation}
-                    {...item}
-                  />
+                  <Styled.NavItem onSelect={onSelectItem} orientation={itemOrientation} {...item} />
                 )}
               </Styled.ListItem>
             ))}
@@ -243,9 +208,7 @@ export const NavigationMenu = <
         </Styled.Group>
       ))}
 
-      {submenuPlacement === "viewport" && (
-        <Styled.Viewport data-orientation={orientation} />
-      )}
+      {submenuPlacement === 'viewport' && <Styled.Viewport data-orientation={orientation} />}
     </Styled.Root>
   );
 };
@@ -272,21 +235,18 @@ Styled.Root = styled(Root)`
 
   position: relative;
 
-  &[data-orientation="horizontal"] {
+  &[data-orientation='horizontal'] {
     ${layoutMixins.row}
     align-items: stretch;
 
-    margin: calc(
-        (var(--navigationMenu-height) - var(--navigationMenu-item-height)) / 2
-      )
-      0;
+    margin: calc((var(--navigationMenu-height) - var(--navigationMenu-item-height)) / 2) 0;
     height: max-content;
   }
-  &[data-orientation="vertical"] {
+  &[data-orientation='vertical'] {
     ${layoutMixins.column}
   }
 
-  div[style="position: relative;"] {
+  div[style='position: relative;'] {
     display: grid;
   }
 `;
@@ -308,7 +268,7 @@ Styled.Viewport = styled(Viewport)`
 
   position: absolute;
 
-  &[data-orientation="horizontal"] {
+  &[data-orientation='horizontal'] {
     top: calc(100% + var(--submenu-side-offset));
     left: 0;
     right: 0;
@@ -319,7 +279,7 @@ Styled.Viewport = styled(Viewport)`
     z-index: 2;
   }
 
-  &[data-orientation="vertical"] {
+  &[data-orientation='vertical'] {
     left: 100%;
   }
 `;
@@ -328,7 +288,7 @@ Styled.Content = styled(Content)`
   ${popoverMixins.popoverAnimation}
   transform-origin: center top;
 
-  &[data-placement="inline"] {
+  &[data-placement='inline'] {
     max-height: 100vh;
 
     ${Styled.List}[data-orientation="horizontal"] & {
@@ -353,10 +313,10 @@ Styled.Content = styled(Content)`
     }
   }
 
-  &[data-placement="viewport"] {
+  &[data-placement='viewport'] {
     position: absolute;
 
-    &[data-motion="from-start"] {
+    &[data-motion='from-start'] {
       animation: ${keyframes`
         from {
           filter: blur(3px);
@@ -364,7 +324,7 @@ Styled.Content = styled(Content)`
         }
       `} var(--ease-out-circ) 0.2s;
     }
-    &[data-motion="from-end"] {
+    &[data-motion='from-end'] {
       animation: ${keyframes`
         from {
           filter: blur(3px);
@@ -372,7 +332,7 @@ Styled.Content = styled(Content)`
         }
       `} var(--ease-out-circ) 0.2s;
     }
-    &[data-motion="to-start"] {
+    &[data-motion='to-start'] {
       animation: ${keyframes`
         to {
           filter: blur(3px);
@@ -380,7 +340,7 @@ Styled.Content = styled(Content)`
         }
       `} var(--ease-out-circ) 0.2s;
     }
-    &[data-motion="to-end"] {
+    &[data-motion='to-end'] {
       animation: ${keyframes`
         to {
           filter: blur(3px);
@@ -392,7 +352,7 @@ Styled.Content = styled(Content)`
 `;
 
 Styled.Sub = styled(Sub)`
-  &[data-placement="inline"] {
+  &[data-placement='inline'] {
     ${popoverMixins.popover}
     --popover-width: max-content;
     overflow: visible;
@@ -431,13 +391,13 @@ Styled.GroupHeader = styled.header`
 Styled.List = styled(List)`
   align-self: center;
 
-  &[data-orientation="horizontal"] {
+  &[data-orientation='horizontal'] {
     ${layoutMixins.row}
     gap: 0.5rem;
     align-items: start;
   }
 
-  &[data-orientation="vertical"] {
+  &[data-orientation='vertical'] {
     ${layoutMixins.flexColumn}
     gap: 0.25rem;
   }
@@ -456,7 +416,7 @@ Styled.SubMenuTrigger = styled(Trigger)`
   border-radius: var(--navigationMenu-item-radius);
   outline-offset: -2px;
 
-  &[data-state="open"] {
+  &[data-state='open'] {
     div {
       background-color: var(--navigationMenu-item-checked-backgroundColor);
       color: var(--navigationMenu-item-checked-textColor);
@@ -468,7 +428,7 @@ Styled.SubMenuTrigger = styled(Trigger)`
   }
 `;
 
-Styled.NavItem = styled(NavItem)<{ orientation: "horizontal" | "vertical" }>`
+Styled.NavItem = styled(NavItem)<{ orientation: 'horizontal' | 'vertical' }>`
   ${({ subitems }) =>
     subitems?.length
       ? css`
@@ -478,9 +438,7 @@ Styled.NavItem = styled(NavItem)<{ orientation: "horizontal" | "vertical" }>`
         `
       : css`
           &:hover:not(.active) {
-            background-color: var(
-              --navigationMenu-item-highlighted-backgroundColor
-            );
+            background-color: var(--navigationMenu-item-highlighted-backgroundColor);
             color: var(--navigationMenu-item-highlighted-textColor);
           }
         `}
@@ -488,12 +446,8 @@ Styled.NavItem = styled(NavItem)<{ orientation: "horizontal" | "vertical" }>`
   ${popoverMixins.item}
   --item-checked-backgroundColor: var(--navigationMenu-item-checked-backgroundColor);
   --item-checked-textColor: var(--navigationMenu-item-checked-textColor);
-  --item-highlighted-backgroundColor: var(
-    --navigationMenu-item-highlighted-backgroundColor
-  );
-  --item-highlighted-textColor: var(
-    --navigationMenu-item-highlighted-textColor
-  );
+  --item-highlighted-backgroundColor: var(--navigationMenu-item-highlighted-backgroundColor);
+  --item-highlighted-textColor: var(--navigationMenu-item-highlighted-textColor);
   --item-radius: var(--navigationMenu-item-radius);
   --item-padding: var(--navigationMenu-item-padding);
 
@@ -513,7 +467,7 @@ Styled.NavItem = styled(NavItem)<{ orientation: "horizontal" | "vertical" }>`
         justify-items: center;
         align-content: center;
       `,
-    }[orientation])}
+    })[orientation]}
   gap: 0.7rem 0.5rem;
 
   > span {
@@ -533,7 +487,7 @@ Styled.NavItem = styled(NavItem)<{ orientation: "horizontal" | "vertical" }>`
   ${Styled.List}[data-orientation="menu"] > ${Styled.ListItem}:first-child > & {
     border-top-left-radius: var(--popover-radius);
 
-    &:not([data-state="open"]) {
+    &:not([data-state='open']) {
       border-top-right-radius: var(--popover-radius);
     }
   }
@@ -541,7 +495,7 @@ Styled.NavItem = styled(NavItem)<{ orientation: "horizontal" | "vertical" }>`
   ${Styled.List}[data-orientation="menu"] > ${Styled.ListItem}:last-child > & {
     border-bottom-left-radius: var(--popover-radius);
 
-    &:not([data-state="open"]) {
+    &:not([data-state='open']) {
       border-bottom-right-radius: var(--popover-radius);
     }
   }

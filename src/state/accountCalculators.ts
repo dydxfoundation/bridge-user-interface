@@ -1,18 +1,12 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
-import { OnboardingState, OnboardingSteps } from "@/constants/account";
+import { OnboardingState, OnboardingSteps } from '@/constants/account';
 
-import {
-  getOnboardingGuards,
-  getOnboardingState,
-} from "@/state/accountSelectors";
+import { getOnboardingGuards, getOnboardingState } from '@/state/accountSelectors';
 
 export const calculateOnboardingStep = createSelector(
   [getOnboardingState, getOnboardingGuards],
-  (
-    onboardingState: OnboardingState,
-    onboardingGuards: ReturnType<typeof getOnboardingGuards>
-  ) => {
+  (onboardingState: OnboardingState, onboardingGuards: ReturnType<typeof getOnboardingGuards>) => {
     const { hasAcknowledgedTerms } = onboardingGuards;
 
     return {

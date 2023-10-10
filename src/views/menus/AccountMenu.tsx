@@ -1,44 +1,34 @@
-import styled, { type AnyStyledComponent } from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import styled, { type AnyStyledComponent } from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { OnboardingState } from "@/constants/account";
+import { OnboardingState } from '@/constants/account';
 
-import {
-  ButtonAction,
-  ButtonShape,
-  ButtonSize,
-  ButtonType,
-} from "@/constants/buttons";
+import { ButtonAction, ButtonShape, ButtonSize, ButtonType } from '@/constants/buttons';
 
-import { DialogTypes } from "@/constants/dialogs";
-import { STRING_KEYS } from "@/constants/localization";
-import { wallets, WalletType } from "@/constants/wallets";
+import { DialogTypes } from '@/constants/dialogs';
+import { STRING_KEYS } from '@/constants/localization';
+import { wallets, WalletType } from '@/constants/wallets';
 
-import { layoutMixins } from "@/styles/layoutMixins";
-import { headerMixins } from "@/styles/headerMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
+import { headerMixins } from '@/styles/headerMixins';
 
-import {
-  useAccountBalance,
-  useAccounts,
-  useBreakpoints,
-  useStringGetter,
-} from "@/hooks";
+import { useAccountBalance, useAccounts, useBreakpoints, useStringGetter } from '@/hooks';
 
-import { OnboardingTriggerButton } from "@/views/dialogs/OnboardingTriggerButton";
+import { OnboardingTriggerButton } from '@/views/dialogs/OnboardingTriggerButton';
 
-import { AssetIcon } from "@/components/AssetIcon";
-import { CopyButton } from "@/components/CopyButton";
-import { DropdownMenu } from "@/components/DropdownMenu";
-import { Icon, IconName } from "@/components/Icon";
-import { IconButton } from "@/components/IconButton";
-import { Output, OutputType } from "@/components/Output";
+import { AssetIcon } from '@/components/AssetIcon';
+import { CopyButton } from '@/components/CopyButton';
+import { DropdownMenu } from '@/components/DropdownMenu';
+import { Icon, IconName } from '@/components/Icon';
+import { IconButton } from '@/components/IconButton';
+import { Output, OutputType } from '@/components/Output';
 
-import { openDialog } from "@/state/dialogs";
+import { openDialog } from '@/state/dialogs';
 
-import { getOnboardingState } from "@/state/accountSelectors";
+import { getOnboardingState } from '@/state/accountSelectors';
 
-import { isTruthy } from "@/lib/isTruthy";
-import { truncateAddress } from "@/lib/wallet";
+import { isTruthy } from '@/lib/isTruthy';
+import { truncateAddress } from '@/lib/wallet';
 
 export const AccountMenu = () => {
   const stringGetter = useStringGetter();
@@ -47,7 +37,7 @@ export const AccountMenu = () => {
   const onboardingState = useSelector(getOnboardingState);
 
   const { evmAddress, walletType, dydxAddress, hdKey } = useAccounts();
-  const { v4TokenBalance } = useAccountBalance();
+  const { DYDXBalance } = useAccountBalance();
 
   const onRecoverKeys = () => {
     dispatch(openDialog({ type: DialogTypes.Onboarding }));
@@ -63,23 +53,15 @@ export const AccountMenu = () => {
             <Styled.AddressRow>
               <AssetIcon symbol="DYDX" />
               <Styled.Column>
-                <Styled.Label>
-                  {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
-                </Styled.Label>
+                <Styled.Label>{stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}</Styled.Label>
                 <Styled.Address>{truncateAddress(dydxAddress)}</Styled.Address>
               </Styled.Column>
 
-              <CopyButton
-                buttonType="icon"
-                value={dydxAddress}
-                shape={ButtonShape.Square}
-              />
+              <CopyButton buttonType="icon" value={dydxAddress} shape={ButtonShape.Square} />
 
               <IconButton
                 action={ButtonAction.Base}
-                href={`${
-                  import.meta.env.VITE_MINTSCAN_URL
-                }/account/${dydxAddress}`}
+                href={`${import.meta.env.VITE_MINTSCAN_URL}/account/${dydxAddress}`}
                 iconName={IconName.LinkOut}
                 shape={ButtonShape.Square}
                 type={ButtonType.Link}
@@ -89,31 +71,19 @@ export const AccountMenu = () => {
               {walletType && (
                 <Styled.SourceIcon>
                   <Styled.ConnectorIcon iconName={IconName.AddressConnector} />
-                  <Icon
-                    iconComponent={wallets[walletType as WalletType].icon}
-                  />
+                  <Icon iconComponent={wallets[walletType as WalletType].icon} />
                 </Styled.SourceIcon>
               )}
               <Styled.Column>
-                <Styled.Label>
-                  {stringGetter({ key: STRING_KEYS.SOURCE_ADDRESS })}
-                </Styled.Label>
-                <Styled.Address>
-                  {truncateAddress(evmAddress, "0x")}
-                </Styled.Address>
+                <Styled.Label>{stringGetter({ key: STRING_KEYS.SOURCE_ADDRESS })}</Styled.Label>
+                <Styled.Address>{truncateAddress(evmAddress, '0x')}</Styled.Address>
               </Styled.Column>
 
-              <CopyButton
-                buttonType="icon"
-                value={evmAddress}
-                shape={ButtonShape.Square}
-              />
+              <CopyButton buttonType="icon" value={evmAddress} shape={ButtonShape.Square} />
 
               <IconButton
                 action={ButtonAction.Base}
-                href={`${
-                  import.meta.env.VITE_ETHERSCAN_URL
-                }/address/${evmAddress}`}
+                href={`${import.meta.env.VITE_ETHERSCAN_URL}/address/${evmAddress}`}
                 iconName={IconName.LinkOut}
                 shape={ButtonShape.Square}
                 type={ButtonType.Link}
@@ -123,25 +93,20 @@ export const AccountMenu = () => {
               <Styled.Label>
                 {stringGetter({
                   key: STRING_KEYS.ASSET_BALANCE,
-                  params: { ASSET: "DYDX" },
+                  params: { ASSET: 'DYDX' },
                 })}
               </Styled.Label>
-              <Styled.BalanceOutput
-                type={OutputType.Asset}
-                value={v4TokenBalance}
-              />
+              <Styled.BalanceOutput type={OutputType.Asset} value={DYDXBalance} />
             </Styled.Balance>
           </Styled.AccountInfo>
         )
       }
       items={[
         onboardingState === OnboardingState.WalletConnected && {
-          value: "ConnectToChain",
+          value: 'ConnectToChain',
           label: (
             <Styled.ConnectToChain>
-              <p>
-                {stringGetter({ key: STRING_KEYS.MISSING_KEYS_DESCRIPTION })}
-              </p>
+              <p>{stringGetter({ key: STRING_KEYS.MISSING_KEYS_DESCRIPTION })}</p>
               <OnboardingTriggerButton />
             </Styled.ConnectToChain>
           ),
@@ -150,20 +115,18 @@ export const AccountMenu = () => {
         },
         onboardingState === OnboardingState.AccountConnected &&
           hdKey && {
-            value: "MnemonicExport",
+            value: 'MnemonicExport',
             icon: <Icon iconName={IconName.ExportKeys} />,
             label: stringGetter({ key: STRING_KEYS.EXPORT_SECRET_PHRASE }),
-            highlightColor: "negative",
-            onSelect: () =>
-              dispatch(openDialog({ type: DialogTypes.MnemonicExport })),
+            highlightColor: 'negative',
+            onSelect: () => dispatch(openDialog({ type: DialogTypes.MnemonicExport })),
           },
         {
-          value: "Disconnect",
+          value: 'Disconnect',
           icon: <Icon iconName={IconName.BoxClose} />,
           label: stringGetter({ key: STRING_KEYS.DISCONNECT }),
-          highlightColor: "negative",
-          onSelect: () =>
-            dispatch(openDialog({ type: DialogTypes.DisconnectWallet })),
+          highlightColor: 'negative',
+          onSelect: () => dispatch(openDialog({ type: DialogTypes.DisconnectWallet })),
         },
       ].filter(isTruthy)}
       align="end"
@@ -172,13 +135,9 @@ export const AccountMenu = () => {
       {onboardingState === OnboardingState.WalletConnected ? (
         <Styled.WarningIcon iconName={IconName.Warning} />
       ) : onboardingState === OnboardingState.AccountConnected ? (
-        walletType && (
-          <Icon iconComponent={wallets[walletType as WalletType].icon} />
-        )
+        walletType && <Icon iconComponent={wallets[walletType as WalletType].icon} />
       ) : null}
-      {!isTablet && (
-        <Styled.Address>{truncateAddress(dydxAddress)}</Styled.Address>
-      )}
+      {!isTablet && <Styled.Address>{truncateAddress(dydxAddress)}</Styled.Address>}
     </Styled.DropdownMenu>
   );
 };

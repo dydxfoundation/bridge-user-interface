@@ -1,46 +1,37 @@
-import { useSelector } from "react-redux";
-import styled, { type AnyStyledComponent } from "styled-components";
-import BigNumber from "bignumber.js";
+import { useSelector } from 'react-redux';
+import styled, { type AnyStyledComponent } from 'styled-components';
+import BigNumber from 'bignumber.js';
 
-import { ButtonAction, ButtonSize, ButtonType } from "@/constants/buttons";
-import { STRING_KEYS } from "@/constants/localization";
-import { NumberSign } from "@/constants/numbers";
+import { ButtonAction, ButtonSize, ButtonType } from '@/constants/buttons';
+import { STRING_KEYS } from '@/constants/localization';
+import { NumberSign } from '@/constants/numbers';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import {
-  useAccounts,
-  useAccountBalance,
-  useStringGetter,
-  useMigrateToken,
-} from "@/hooks";
+import { useAccounts, useAccountBalance, useStringGetter, useMigrateToken } from '@/hooks';
 
-import { Button } from "@/components/Button";
-import { DiffOutput } from "@/components/DiffOutput";
-import { OutputType } from "@/components/Output";
-import { Tag } from "@/components/Tag";
-import { WithDetailsReceipt } from "@/components/WithDetailsReceipt";
-import { OnboardingTriggerButton } from "@/views/dialogs/OnboardingTriggerButton";
+import { Button } from '@/components/Button';
+import { DiffOutput } from '@/components/DiffOutput';
+import { OutputType } from '@/components/Output';
+import { Tag } from '@/components/Tag';
+import { WithDetailsReceipt } from '@/components/WithDetailsReceipt';
+import { OnboardingTriggerButton } from '@/views/dialogs/OnboardingTriggerButton';
 
-import { calculateCanAccountMigrate } from "@/state/accountCalculators";
+import { calculateCanAccountMigrate } from '@/state/accountCalculators';
 
-import { MustBigNumber } from "@/lib/numbers";
-import { isTruthy } from "@/lib/isTruthy";
+import { MustBigNumber } from '@/lib/numbers';
+import { isTruthy } from '@/lib/isTruthy';
 
 type ElementProps = {
   isDisabled?: boolean;
   isLoading?: boolean;
 };
 
-export const PreviewMigrateButtonAndReceipt = ({
-  isDisabled,
-  isLoading,
-}: ElementProps) => {
+export const PreviewMigrateButtonAndReceipt = ({ isDisabled, isLoading }: ElementProps) => {
   const stringGetter = useStringGetter();
   const { dydxAddress, evmAddress } = useAccounts();
   const { amountBN, destinationAddress } = useMigrateToken();
-  const { v3TokenBalance, v4TokenBalance, wrappedV3TokenBalance } =
-    useAccountBalance();
+  const { ethDYDXBalance, DYDXBalance, wethDYDXBalance } = useAccountBalance();
 
   const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
@@ -56,60 +47,57 @@ export const PreviewMigrateButtonAndReceipt = ({
 
   const migrateDetailItems = [
     {
-      key: "v3TokenBalance",
-      label: getLabel({ chain: "Ethereum", asset: "ethDYDX" }),
+      key: 'ethDYDXBalance',
+      label: getLabel({ chain: 'Ethereum', asset: 'ethDYDX' }),
       value: (
         <DiffOutput
           type={OutputType.Asset}
-          value={v3TokenBalance}
-          newValue={MustBigNumber(v3TokenBalance)
+          value={ethDYDXBalance}
+          newValue={MustBigNumber(ethDYDXBalance)
             .minus(amountBN ?? 0)
             .toNumber()}
           sign={NumberSign.Negative}
-          withDiff={Boolean(v3TokenBalance !== undefined && amountBN)}
+          withDiff={Boolean(ethDYDXBalance !== undefined && amountBN)}
           roundingMode={BigNumber.ROUND_DOWN}
-          isLoading={v3TokenBalance === undefined}
+          isLoading={ethDYDXBalance === undefined}
         />
       ),
     },
-    {
-      key: "wrappedV3TokenBalance",
-      label: getLabel({ chain: "Ethereum", asset: "wethDYDX" }),
+    import.meta.env.VITE_WETH_DYDX_ADDRESS && {
+      key: 'wethDYDXBalance',
+      label: getLabel({ chain: 'Ethereum', asset: 'wethDYDX' }),
       value: (
         <DiffOutput
           type={OutputType.Asset}
-          value={wrappedV3TokenBalance}
-          newValue={amountBN?.plus(wrappedV3TokenBalance ?? 0).toNumber() ?? 0}
+          value={wethDYDXBalance}
+          newValue={amountBN?.plus(wethDYDXBalance ?? 0).toNumber() ?? 0}
           sign={NumberSign.Positive}
-          withDiff={Boolean(wrappedV3TokenBalance !== undefined && amountBN)}
+          withDiff={Boolean(wethDYDXBalance !== undefined && amountBN)}
           roundingMode={BigNumber.ROUND_DOWN}
-          isLoading={wrappedV3TokenBalance === undefined}
+          isLoading={wethDYDXBalance === undefined}
         />
       ),
     },
     dydxAddress &&
       dydxAddress === destinationAddress && {
-        key: "v4TokenBalance",
-        label: getLabel({ chain: "dYdX Chain", asset: "DYDX" }),
+        key: 'DYDXBalance',
+        label: getLabel({ chain: 'dYdX Chain', asset: 'DYDX' }),
         value: (
           <DiffOutput
             type={OutputType.Asset}
-            value={v4TokenBalance}
-            newValue={amountBN?.plus(v4TokenBalance ?? 0).toNumber() ?? 0}
+            value={DYDXBalance}
+            newValue={amountBN?.plus(DYDXBalance ?? 0).toNumber() ?? 0}
             sign={NumberSign.Positive}
-            withDiff={Boolean(v4TokenBalance !== undefined && amountBN)}
+            withDiff={Boolean(DYDXBalance !== undefined && amountBN)}
             roundingMode={BigNumber.ROUND_DOWN}
-            isLoading={v4TokenBalance === undefined}
+            isLoading={DYDXBalance === undefined}
           />
         ),
       },
   ].filter(isTruthy);
 
   return (
-    <WithDetailsReceipt
-      detailItems={migrateDetailItems}
-      hideReceipt={!evmAddress}
-    >
+    <WithDetailsReceipt detailItems={migrateDetailItems} hideReceipt={!evmAddress}>
       {!canAccountMigrate ? (
         <OnboardingTriggerButton size={ButtonSize.Base} />
       ) : (

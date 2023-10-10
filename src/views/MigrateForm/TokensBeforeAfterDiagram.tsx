@@ -1,16 +1,16 @@
-import styled, { type AnyStyledComponent } from "styled-components";
+import styled, { type AnyStyledComponent } from 'styled-components';
 
-import { STRING_KEYS } from "@/constants/localization";
+import { STRING_KEYS } from '@/constants/localization';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { useMigrateToken, useStringGetter } from "@/hooks";
+import { useMigrateToken, useStringGetter } from '@/hooks';
 
-import { AssetIcon } from "@/components/AssetIcon";
-import { Details } from "@/components/Details";
-import { Tag } from "@/components/Tag";
-import { Output, OutputType, ShowSign } from "@/components/Output";
-import { TOKEN_DECIMALS } from "@/constants/numbers";
+import { AssetIcon } from '@/components/AssetIcon';
+import { Details } from '@/components/Details';
+import { Tag } from '@/components/Tag';
+import { Output, OutputType, ShowSign } from '@/components/Output';
+import { TOKEN_DECIMALS } from '@/constants/numbers';
 
 export const TokensBeforeAfterDiagram = () => {
   const stringGetter = useStringGetter();
@@ -18,7 +18,7 @@ export const TokensBeforeAfterDiagram = () => {
 
   const detailItems = [
     {
-      key: "before",
+      key: 'before',
       label: stringGetter({ key: STRING_KEYS.BEFORE }),
       value: (
         <Styled.ValueContainer>
@@ -33,7 +33,7 @@ export const TokensBeforeAfterDiagram = () => {
               {stringGetter({
                 key: STRING_KEYS.ON_CHAIN,
                 params: {
-                  CHAIN: "Ethereum",
+                  CHAIN: 'Ethereum',
                 },
               })}
             </span>
@@ -42,7 +42,7 @@ export const TokensBeforeAfterDiagram = () => {
       ),
     },
     {
-      key: "after",
+      key: 'after',
       label: stringGetter({ key: STRING_KEYS.AFTER }),
       value: (
         <Styled.ValueContainer>
@@ -64,7 +64,7 @@ export const TokensBeforeAfterDiagram = () => {
               {stringGetter({
                 key: STRING_KEYS.ON_CHAIN,
                 params: {
-                  CHAIN: "Ethereum",
+                  CHAIN: 'Ethereum',
                 },
               })}
             </span>
@@ -87,7 +87,7 @@ export const TokensBeforeAfterDiagram = () => {
               {stringGetter({
                 key: STRING_KEYS.ON_CHAIN,
                 params: {
-                  CHAIN: "dYdX Chain",
+                  CHAIN: 'dYdX Chain',
                 },
               })}
             </span>
@@ -145,8 +145,8 @@ Styled.Details = styled(Details)`
   gap: 2rem;
 
   > :last-child:before {
-    content: "";
-    background: url("src/icons/arrows-right.svg");
+    content: '';
+    background: url('src/icons/arrows-right.svg');
     position: absolute;
     margin: 5rem 0 0 -2rem;
     width: 2rem;

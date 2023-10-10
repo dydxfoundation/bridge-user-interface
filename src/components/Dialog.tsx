@@ -1,9 +1,5 @@
-import { useRef } from "react";
-import styled, {
-  type AnyStyledComponent,
-  keyframes,
-  css,
-} from "styled-components";
+import { useRef } from 'react';
+import styled, { type AnyStyledComponent, keyframes, css } from 'styled-components';
 
 import {
   Root,
@@ -14,18 +10,18 @@ import {
   Description,
   Close,
   Portal,
-} from "@radix-ui/react-dialog";
+} from '@radix-ui/react-dialog';
 
-import breakpoints from "@/styles/breakpoints";
-import { layoutMixins } from "@/styles/layoutMixins";
-import { useDialogArea } from "@/hooks";
+import breakpoints from '@/styles/breakpoints';
+import { layoutMixins } from '@/styles/layoutMixins';
+import { useDialogArea } from '@/hooks';
 
-import { Icon, IconName } from "@/components/Icon";
-import { BackButton } from "@/components/BackButton";
+import { Icon, IconName } from '@/components/Icon';
+import { BackButton } from '@/components/BackButton';
 
 export enum DialogPlacement {
-  Default = "Default",
-  FullScreen = "FullScreen",
+  Default = 'Default',
+  FullScreen = 'FullScreen',
 }
 
 type ElementProps = {
@@ -120,9 +116,7 @@ export const Dialog = ({
               )}
             </Styled.HeaderTopRow>
 
-            {description && (
-              <Styled.Description>{description}</Styled.Description>
-            )}
+            {description && <Styled.Description>{description}</Styled.Description>}
 
             {slotHeaderInner}
           </Styled.Header>
@@ -151,7 +145,7 @@ Styled.Overlay = styled(Overlay)`
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    &[data-state="open"] {
+    &[data-state='open'] {
       animation: ${keyframes`
         to {
           backdrop-filter: blur(8px);
@@ -159,7 +153,7 @@ Styled.Overlay = styled(Overlay)`
       `} 0.15s var(--ease-out-expo) forwards;
     }
 
-    &[data-state="closed"] {
+    &[data-state='closed'] {
       animation: ${keyframes`
         from {
           backdrop-filter: blur(8px);
@@ -253,7 +247,7 @@ Styled.Container = styled(Content)<{ placement: DialogPlacement }>`
         }
 
         @media (prefers-reduced-motion: no-preference) {
-          &[data-state="open"] {
+          &[data-state='open'] {
             animation: ${keyframes`
               from {
                 opacity: 0;
@@ -264,7 +258,7 @@ Styled.Container = styled(Content)<{ placement: DialogPlacement }>`
             `} 0.15s var(--ease-out-expo);
           }
 
-          &[data-state="closed"] {
+          &[data-state='closed'] {
             animation: ${keyframes`
               to {
                 opacity: 0;
@@ -281,7 +275,7 @@ Styled.Container = styled(Content)<{ placement: DialogPlacement }>`
         top: 0;
         bottom: 0;
       `,
-    }[placement as DialogPlacement])}
+    })[placement as DialogPlacement]}
 `;
 
 Styled.Header = styled.header<{ $withBorder: boolean }>`

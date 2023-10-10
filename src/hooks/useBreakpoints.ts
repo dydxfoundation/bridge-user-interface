@@ -1,16 +1,15 @@
+import { useEffect, useState } from 'react';
 
-import { useEffect, useState } from "react";
-
-import breakpoints from "@/styles/breakpoints";
+import breakpoints from '@/styles/breakpoints';
 
 export enum MediaQueryKeys {
-  isMobile = "isMobile",
-  isNotMobile = "isNotMobile",
-  isTablet = "isTablet",
-  isNotTablet = "isNotTablet",
-  isDesktopSmall = "isDesktopSmall",
-  isDesktopMedium = "isDesktopMedium",
-  isDesktopLarge = "isDesktopLarge",
+  isMobile = 'isMobile',
+  isNotMobile = 'isNotMobile',
+  isTablet = 'isTablet',
+  isNotTablet = 'isNotTablet',
+  isDesktopSmall = 'isDesktopSmall',
+  isDesktopMedium = 'isDesktopMedium',
+  isDesktopLarge = 'isDesktopLarge',
 }
 
 export const mediaQueryLists = {
@@ -18,15 +17,9 @@ export const mediaQueryLists = {
   [MediaQueryKeys.isNotMobile]: globalThis.matchMedia(breakpoints.notMobile),
   [MediaQueryKeys.isTablet]: globalThis.matchMedia(breakpoints.tablet),
   [MediaQueryKeys.isNotTablet]: globalThis.matchMedia(breakpoints.notTablet),
-  [MediaQueryKeys.isDesktopSmall]: globalThis.matchMedia(
-    breakpoints.desktopSmall
-  ),
-  [MediaQueryKeys.isDesktopMedium]: globalThis.matchMedia(
-    breakpoints.desktopMedium
-  ),
-  [MediaQueryKeys.isDesktopLarge]: globalThis.matchMedia(
-    breakpoints.desktopLarge
-  ),
+  [MediaQueryKeys.isDesktopSmall]: globalThis.matchMedia(breakpoints.desktopSmall),
+  [MediaQueryKeys.isDesktopMedium]: globalThis.matchMedia(breakpoints.desktopMedium),
+  [MediaQueryKeys.isDesktopLarge]: globalThis.matchMedia(breakpoints.desktopLarge),
 };
 
 export const uniqueMediaQueryLists = { ...mediaQueryLists };
@@ -53,14 +46,14 @@ export const useBreakpoints = () => {
       };
 
       if (mediaQueryList.addEventListener) {
-        mediaQueryList.addEventListener("change", callbacks[key]);
+        mediaQueryList.addEventListener('change', callbacks[key]);
       }
     });
 
     return () => {
       Object.entries(mediaQueryLists).forEach(([key, mediaQueryList]) => {
         if (mediaQueryList.removeEventListener) {
-          mediaQueryList.removeEventListener("change", callbacks[key]);
+          mediaQueryList.removeEventListener('change', callbacks[key]);
         }
       });
     };

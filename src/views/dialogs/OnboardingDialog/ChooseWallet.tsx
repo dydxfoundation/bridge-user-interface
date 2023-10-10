@@ -1,27 +1,26 @@
-import styled, { AnyStyledComponent } from "styled-components";
+import styled, { AnyStyledComponent } from 'styled-components';
 
-import { AlertType } from "@/constants/alerts";
-import { STRING_KEYS } from "@/constants/localization";
-import { DISPLAYED_WALLETS, wallets } from "@/constants/wallets";
-import { ButtonAction, ButtonSize } from "@/constants/buttons";
+import { AlertType } from '@/constants/alerts';
+import { STRING_KEYS } from '@/constants/localization';
+import { DISPLAYED_WALLETS, wallets } from '@/constants/wallets';
+import { ButtonAction, ButtonSize } from '@/constants/buttons';
 
-import breakpoints from "@/styles/breakpoints";
-import { layoutMixins } from "@/styles/layoutMixins";
+import breakpoints from '@/styles/breakpoints';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { useAccounts, useStringGetter } from "@/hooks";
+import { useAccounts, useStringGetter } from '@/hooks';
 
-import { AlertMessage } from "@/components/AlertMessage";
-import { Button } from "@/components/Button";
-import { Icon } from "@/components/Icon";
-import { Link } from "@/components/Link";
+import { AlertMessage } from '@/components/AlertMessage';
+import { Button } from '@/components/Button';
+import { Icon } from '@/components/Icon';
+import { Link } from '@/components/Link';
 
 const aboutWalletsLink = `https://www.dydxacademy.info/educational-video-series/onboarding-to-defi-with-dydx`;
 
 export const ChooseWallet = () => {
   const stringGetter = useStringGetter();
 
-  const { selectWalletType, selectedWalletType, selectedWalletError } =
-    useAccounts();
+  const { selectWalletType, selectedWalletType, selectedWalletError } = useAccounts();
 
   return (
     <>

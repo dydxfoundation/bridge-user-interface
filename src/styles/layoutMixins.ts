@@ -1,4 +1,4 @@
-import { css, keyframes } from "styled-components";
+import { css, keyframes } from 'styled-components';
 
 export const layoutMixins: Record<string, any> = {
   // A standalone row
@@ -87,12 +87,11 @@ export const layoutMixins: Record<string, any> = {
     // Computed
 
     --grid-max-width: calc(
-      var(--grid-max-columns) * var(--column-max-width) +
-        (var(--grid-max-columns) - 1) * var(--column-gap)
+      var(--grid-max-columns) * var(--column-max-width) + (var(--grid-max-columns) - 1) *
+        var(--column-gap)
     );
     --column-width: calc(
-      (100% - ((var(--grid-max-columns) - 1) * var(--column-gap))) /
-        var(--grid-max-columns)
+      (100% - ((var(--grid-max-columns) - 1) * var(--column-gap))) / var(--grid-max-columns)
     );
 
     // Rules
@@ -102,17 +101,11 @@ export const layoutMixins: Record<string, any> = {
     grid-template-columns: repeat(
       auto-fill,
       minmax(
-        clamp(
-          min(100%, var(--column-min-width)),
-          var(--column-width),
-          var(--column-max-width)
-        ),
+        clamp(min(100%, var(--column-min-width)), var(--column-width), var(--column-max-width)),
         clamp(
           var(--column-min-width),
-          ((var(--column-min-width) * 2 + var(--column-gap)) - 100%) *
-            100000000000,
-          /* Width is smaller than 2 grid columns */
-            var(--single-column-max-width)
+          ((var(--column-min-width) * 2 + var(--column-gap)) - 100%) * 100000000000,
+          /* Width is smaller than 2 grid columns */ var(--single-column-max-width)
         )
       )
     );
@@ -138,7 +131,7 @@ export const layoutMixins: Record<string, any> = {
 
   stack: css`
     display: grid;
-    grid-template-areas: "stack";
+    grid-template-areas: 'stack';
 
     > *,
     &:before,
@@ -209,11 +202,7 @@ export const layoutMixins: Record<string, any> = {
     min-height: 100%;
     /* height: max-content; */
 
-    --padding-y: clamp(
-      0rem,
-      (var(--content-container-width) - var(--content-max-width)) / 2,
-      2rem
-    );
+    --padding-y: clamp(0rem, (var(--content-container-width) - var(--content-max-width)) / 2, 2rem);
     padding-top: var(--padding-y);
     padding-bottom: var(--padding-y);
     scroll-padding-top: var(--padding-y);
@@ -341,8 +330,7 @@ export const layoutMixins: Record<string, any> = {
             var(--stickyArea-topGap, 0px)
         ) -
         (
-          var(--stickyArea-paddingBottom, 0px) +
-            var(--stickyArea-bottomHeight, 0px) +
+          var(--stickyArea-paddingBottom, 0px) + var(--stickyArea-bottomHeight, 0px) +
             var(--stickyArea-bottomGap, 0px)
         )
     );
@@ -356,8 +344,8 @@ export const layoutMixins: Record<string, any> = {
             var(--stickyArea-leftGap, 0px)
         ) -
         (
-          var(--stickyArea-paddingRight, 0px) +
-            var(--stickyArea-rightWidth, 0px) + var(--stickyArea-rightGap, 0px)
+          var(--stickyArea-paddingRight, 0px) + var(--stickyArea-rightWidth, 0px) +
+            var(--stickyArea-rightGap, 0px)
         )
     );
 
@@ -457,18 +445,15 @@ export const layoutMixins: Record<string, any> = {
 
     --stickyArea1-height: calc(
       var(--stickyArea0-height) -
-        (
-          var(--stickyArea0-paddingTop) + var(--stickyArea0-topHeight) +
-            var(--stickyArea0-topGap)
-        ) -
+        (var(--stickyArea0-paddingTop) + var(--stickyArea0-topHeight) + var(--stickyArea0-topGap)) -
         (
           var(--stickyArea0-paddingBottom) + var(--stickyArea0-bottomHeight) +
             var(--stickyArea0-bottomGap)
         )
     );
     --stickyArea1-totalInsetTop: calc(
-      var(--stickyArea0-totalInsetTop) + var(--stickyArea0-topHeight) +
-        var(--stickyArea0-topGap) + var(--stickyArea1-paddingTop)
+      var(--stickyArea0-totalInsetTop) + var(--stickyArea0-topHeight) + var(--stickyArea0-topGap) +
+        var(--stickyArea1-paddingTop)
     );
     --stickyArea1-totalInsetBottom: calc(
       var(--stickyArea0-totalInsetBottom) + var(--stickyArea0-bottomHeight) +
@@ -477,18 +462,15 @@ export const layoutMixins: Record<string, any> = {
 
     --stickyArea1-width: calc(
       var(--stickyArea0-width) -
-        (
-          var(--stickyArea0-paddingLeft) + var(--stickyArea0-leftWidth) +
-            var(--stickyArea0-leftGap)
-        ) -
+        (var(--stickyArea0-paddingLeft) + var(--stickyArea0-leftWidth) + var(--stickyArea0-leftGap)) -
         (
           var(--stickyArea0-paddingRight) + var(--stickyArea0-rightWidth) +
             var(--stickyArea0-rightGap)
         )
     );
     --stickyArea1-totalInsetLeft: calc(
-      var(--stickyArea0-totalInsetLeft) + var(--stickyArea0-leftWidth) +
-        var(--stickyArea0-leftGap) + var(--stickyArea1-paddingLeft)
+      var(--stickyArea0-totalInsetLeft) + var(--stickyArea0-leftWidth) + var(--stickyArea0-leftGap) +
+        var(--stickyArea1-paddingLeft)
     );
     --stickyArea1-totalInsetRight: calc(
       var(--stickyArea0-totalInsetRight) + var(--stickyArea0-rightWidth) +
@@ -548,18 +530,15 @@ export const layoutMixins: Record<string, any> = {
     /* Computed */
     --stickyArea2-height: calc(
       var(--stickyArea1-height) -
-        (
-          var(--stickyArea1-paddingTop) + var(--stickyArea1-topHeight) +
-            var(--stickyArea1-topGap)
-        ) -
+        (var(--stickyArea1-paddingTop) + var(--stickyArea1-topHeight) + var(--stickyArea1-topGap)) -
         (
           var(--stickyArea1-paddingBottom) + var(--stickyArea1-bottomHeight) +
             var(--stickyArea1-bottomGap)
         )
     );
     --stickyArea2-totalInsetTop: calc(
-      var(--stickyArea1-totalInsetTop) + var(--stickyArea1-topHeight) +
-        var(--stickyArea1-topGap) + var(--stickyArea2-paddingTop)
+      var(--stickyArea1-totalInsetTop) + var(--stickyArea1-topHeight) + var(--stickyArea1-topGap) +
+        var(--stickyArea2-paddingTop)
     );
     --stickyArea2-totalInsetBottom: calc(
       var(--stickyArea1-totalInsetBottom) + var(--stickyArea1-bottomHeight) +
@@ -568,18 +547,15 @@ export const layoutMixins: Record<string, any> = {
 
     --stickyArea2-width: calc(
       var(--stickyArea1-width) -
-        (
-          var(--stickyArea1-paddingLeft) + var(--stickyArea1-leftWidth) +
-            var(--stickyArea1-leftGap)
-        ) -
+        (var(--stickyArea1-paddingLeft) + var(--stickyArea1-leftWidth) + var(--stickyArea1-leftGap)) -
         (
           var(--stickyArea1-paddingRight) + var(--stickyArea1-rightWidth) +
             var(--stickyArea1-rightGap)
         )
     );
     --stickyArea2-totalInsetLeft: calc(
-      var(--stickyArea1-totalInsetLeft) + var(--stickyArea1-leftWidth) +
-        var(--stickyArea1-leftGap) + var(--stickyArea2-paddingLeft)
+      var(--stickyArea1-totalInsetLeft) + var(--stickyArea1-leftWidth) + var(--stickyArea1-leftGap) +
+        var(--stickyArea2-paddingLeft)
     );
     --stickyArea2-totalInsetRight: calc(
       var(--stickyArea1-totalInsetRight) + var(--stickyArea1-rightWidth) +
@@ -639,18 +615,15 @@ export const layoutMixins: Record<string, any> = {
     /* Computed */
     --stickyArea3-height: calc(
       var(--stickyArea2-height) -
-        (
-          var(--stickyArea2-paddingTop) + var(--stickyArea2-topHeight) +
-            var(--stickyArea2-topGap)
-        ) -
+        (var(--stickyArea2-paddingTop) + var(--stickyArea2-topHeight) + var(--stickyArea2-topGap)) -
         (
           var(--stickyArea2-paddingBottom) + var(--stickyArea2-bottomHeight) +
             var(--stickyArea2-bottomGap)
         )
     );
     --stickyArea3-totalInsetTop: calc(
-      var(--stickyArea2-totalInsetTop) + var(--stickyArea2-topHeight) +
-        var(--stickyArea2-topGap) + var(--stickyArea3-paddingTop)
+      var(--stickyArea2-totalInsetTop) + var(--stickyArea2-topHeight) + var(--stickyArea2-topGap) +
+        var(--stickyArea3-paddingTop)
     );
     --stickyArea3-totalInsetBottom: calc(
       var(--stickyArea2-totalInsetBottom) + var(--stickyArea2-bottomHeight) +
@@ -659,18 +632,15 @@ export const layoutMixins: Record<string, any> = {
 
     --stickyArea3-width: calc(
       var(--stickyArea2-width) -
-        (
-          var(--stickyArea2-paddingLeft) + var(--stickyArea2-leftWidth) +
-            var(--stickyArea2-leftGap)
-        ) -
+        (var(--stickyArea2-paddingLeft) + var(--stickyArea2-leftWidth) + var(--stickyArea2-leftGap)) -
         (
           var(--stickyArea2-paddingRight) + var(--stickyArea2-rightWidth) +
             var(--stickyArea2-rightGap)
         )
     );
     --stickyArea3-totalInsetLeft: calc(
-      var(--stickyArea2-totalInsetLeft) + var(--stickyArea2-leftWidth) +
-        var(--stickyArea2-leftGap) + var(--stickyArea3-paddingLeft)
+      var(--stickyArea2-totalInsetLeft) + var(--stickyArea2-leftWidth) + var(--stickyArea2-leftGap) +
+        var(--stickyArea3-paddingLeft)
     );
     --stickyArea3-totalInsetRight: calc(
       var(--stickyArea2-totalInsetRight) + var(--stickyArea2-rightWidth) +
@@ -780,7 +750,8 @@ export const layoutMixins: Record<string, any> = {
     gap: var(--border-width);
 
     > * {
-      box-shadow: 0 var(--border-width) var(--border-color),
+      box-shadow:
+        0 var(--border-width) var(--border-color),
         0 calc(-1 * var(--border-width)) var(--border-color);
     }
   `,

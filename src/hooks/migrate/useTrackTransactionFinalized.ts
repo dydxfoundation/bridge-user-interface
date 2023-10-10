@@ -1,14 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { usePublicClient } from "wagmi";
+import { useEffect, useRef, useState } from 'react';
+import { usePublicClient } from 'wagmi';
 
 export const useTrackTransactionFinalized = ({
   bridgeTxMinedBlockNumber,
 }: {
   bridgeTxMinedBlockNumber: bigint | undefined;
 }) => {
-  const [numBlocksTillFinalized, setNumBlocksTillFinalized] = useState<
-    bigint | undefined
-  >();
+  const [numBlocksTillFinalized, setNumBlocksTillFinalized] = useState<bigint | undefined>();
 
   const unwatchRef = useRef<(() => void) | undefined>();
 
@@ -19,12 +17,12 @@ export const useTrackTransactionFinalized = ({
   const fetchLatestFinalizedBlock = async () => {
     if (!bridgeTxMinedBlockNumber || !publicClient) return;
     const { number } = await publicClient.getBlock({
-      blockTag: "finalized",
+      blockTag: 'finalized',
     });
 
     setNumBlocksTillFinalized(bridgeTxMinedBlockNumber - number);
   };
-  
+
   useEffect(() => {
     // get the latest finalized block number once to set the initial timer,
     // since watchBlocks's doesn't always emits at the start
@@ -32,11 +30,10 @@ export const useTrackTransactionFinalized = ({
       fetchLatestFinalizedBlock();
 
       unwatchRef.current = publicClient.watchBlocks({
-        blockTag: "finalized",
+        blockTag: 'finalized',
         emitOnBegin: true,
         poll: true,
-        onBlock: ({ number }) =>
-          setNumBlocksTillFinalized(bridgeTxMinedBlockNumber - number),
+        onBlock: ({ number }) => setNumBlocksTillFinalized(bridgeTxMinedBlockNumber - number),
       });
     }
 

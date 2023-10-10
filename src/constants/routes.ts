@@ -1,5 +1,4 @@
 export enum AppRoute {
-    Terms = "/terms",
-    Privacy = "/privacy",
-  }
-  
+  Terms = '/terms',
+  Privacy = '/privacy',
+}

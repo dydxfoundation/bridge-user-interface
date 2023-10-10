@@ -1,25 +1,17 @@
-import styled, { type AnyStyledComponent } from "styled-components";
+import styled, { type AnyStyledComponent } from 'styled-components';
 
 export type AssetSymbol = keyof typeof assetIcons;
 
 const assetIcons = {
-  DYDX: "/currencies/dydx.png",
-  ETH: "/currencies/eth.png",
+  DYDX: '/currencies/dydx.png',
+  ETH: '/currencies/eth.png',
 } as const;
 
 const isAssetSymbol = (symbol?: string): symbol is AssetSymbol =>
   symbol !== undefined && assetIcons.hasOwnProperty(symbol);
 
-export const AssetIcon = ({
-  symbol,
-  className,
-}: {
-  symbol?: string;
-  className?: string;
-}) =>
-  isAssetSymbol(symbol) ? (
-    <Styled.Img src={assetIcons[symbol]} className={className} />
-  ) : null;
+export const AssetIcon = ({ symbol, className }: { symbol?: string; className?: string }) =>
+  isAssetSymbol(symbol) ? <Styled.Img src={assetIcons[symbol]} className={className} /> : null;
 
 const Styled: Record<string, AnyStyledComponent> = {};
 

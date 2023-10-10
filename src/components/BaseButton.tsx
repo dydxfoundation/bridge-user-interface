@@ -1,16 +1,14 @@
-import { forwardRef } from "react";
-import styled, { css } from "styled-components";
+import { forwardRef } from 'react';
+import styled, { css } from 'styled-components';
 
-import { ButtonShape, ButtonSize, ButtonType } from "@/constants/buttons";
+import { ButtonShape, ButtonSize, ButtonType } from '@/constants/buttons';
 
 type ElementProps = {
   disabled?: boolean;
   type?: ButtonType;
   children?: React.ReactNode;
   href?: string;
-  onClick?:
-    | React.MouseEventHandler<HTMLButtonElement>
-    | React.MouseEventHandler<HTMLAnchorElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement> | React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 type StyleProps = {
@@ -19,13 +17,9 @@ type StyleProps = {
   className?: string;
 };
 
-export type BaseButtonProps = ElementProps &
-  Omit<StyleProps, keyof ElementProps>;
+export type BaseButtonProps = ElementProps & Omit<StyleProps, keyof ElementProps>;
 
-export const BaseButton = forwardRef<
-  HTMLButtonElement | HTMLAnchorElement,
-  BaseButtonProps
->(
+export const BaseButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, BaseButtonProps>(
   (
     {
       disabled,
@@ -50,8 +44,8 @@ export const BaseButton = forwardRef<
         ref={ref as React.ForwardedRef<HTMLAnchorElement>}
         // Native
         href={href}
-        rel={href ? "noopener noreferrer" : undefined}
-        target={href ? "_blank" : undefined}
+        rel={href ? 'noopener noreferrer' : undefined}
+        target={href ? '_blank' : undefined}
         // Style
         size={size}
         shape={shape}

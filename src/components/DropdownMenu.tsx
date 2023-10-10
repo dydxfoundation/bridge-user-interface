@@ -1,20 +1,13 @@
-import { type Ref, forwardRef } from "react";
-import styled, { type AnyStyledComponent } from "styled-components";
+import { type Ref, forwardRef } from 'react';
+import styled, { type AnyStyledComponent } from 'styled-components';
 
-import {
-  Root,
-  Trigger,
-  Content,
-  Portal,
-  Item,
-  Separator,
-} from "@radix-ui/react-dropdown-menu";
+import { Root, Trigger, Content, Portal, Item, Separator } from '@radix-ui/react-dropdown-menu';
 
-import { TriangleDownIcon } from "@radix-ui/react-icons";
+import { TriangleDownIcon } from '@radix-ui/react-icons';
 
-import { popoverMixins } from "@/styles/popoverMixins";
+import { popoverMixins } from '@/styles/popoverMixins';
 
-import { Fragment } from "react";
+import { Fragment } from 'react';
 
 export type DropdownMenuItem<T> = {
   value: T;
@@ -22,12 +15,12 @@ export type DropdownMenuItem<T> = {
   label: React.ReactNode;
   onSelect?: () => void;
   separator?: boolean;
-  highlightColor?: "accent" | "positive" | "negative";
+  highlightColor?: 'accent' | 'positive' | 'negative';
 };
 
 type StyleProps = {
-  align?: "center" | "start" | "end";
-  side?: "top" | "bottom";
+  align?: 'center' | 'start' | 'end';
+  side?: 'top' | 'bottom';
   sideOffset?: number;
   className?: string;
 };
@@ -43,12 +36,12 @@ type DropdownMenuProps<T> = StyleProps & ElementProps<T>;
 export const DropdownMenu = forwardRef(
   <T extends string>(
     {
-      align = "center",
+      align = 'center',
       children,
       className,
       items,
       slotTopContent,
-      side = "bottom",
+      side = 'bottom',
       sideOffset = 8,
     }: DropdownMenuProps<T>,
     ref: Ref<T>
@@ -62,12 +55,7 @@ export const DropdownMenu = forwardRef(
           </Styled.DropdownIcon>
         </Styled.Trigger>
         <Portal>
-          <Styled.Content
-            className={className}
-            align={align}
-            side={side}
-            sideOffset={sideOffset}
-          >
+          <Styled.Content className={className} align={align} side={side} sideOffset={sideOffset}>
             {slotTopContent}
             {items.map((item: DropdownMenuItem<T>) => (
               <Fragment key={item.value}>
@@ -97,22 +85,22 @@ Styled.Separator = styled(Separator)`
 `;
 
 Styled.Item = styled(Item)<{
-  $highlightColor: "accent" | "positive" | "negative";
+  $highlightColor: 'accent' | 'positive' | 'negative';
 }>`
   ${popoverMixins.item}
   --item-font-size: var(--dropdownMenu-item-font-size);
   ${({ $highlightColor }) =>
     ({
-      ["accent"]: `
+      ['accent']: `
         --item-highlighted-textColor: var(--color-accent);
       `,
-      ["positive"]: `
+      ['positive']: `
         --item-highlighted-textColor: var(--color-positive);
       `,
-      ["negative"]: `
+      ['negative']: `
         --item-highlighted-textColor: var(--color-negative);
       `,
-    }[$highlightColor])}
+    })[$highlightColor]}
 
   justify-content: start;
   color: var(--color-text-0);

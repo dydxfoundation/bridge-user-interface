@@ -14,7 +14,7 @@ export const FEE_DECIMALS = 3;
 export const QUANTUM_MULTIPLIER = 1_000_000;
 
 export enum NumberSign {
-  Positive = "Positive",
-  Negative = "Negative",
-  Neutral = "Neutral",
+  Positive = 'Positive',
+  Negative = 'Negative',
+  Neutral = 'Neutral',
 }

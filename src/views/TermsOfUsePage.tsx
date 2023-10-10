@@ -1,4 +1,4 @@
-import styled, { AnyStyledComponent } from "styled-components";
+import styled, { AnyStyledComponent } from 'styled-components';
 
 export const TermsOfUsePage = () => (
   <Styled.Article>

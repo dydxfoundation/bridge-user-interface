@@ -1,8 +1,8 @@
-import { forwardRef } from "react";
-import styled, { type AnyStyledComponent } from "styled-components";
-import { Root } from "@radix-ui/react-toggle";
+import { forwardRef } from 'react';
+import styled, { type AnyStyledComponent } from 'styled-components';
+import { Root } from '@radix-ui/react-toggle';
 
-import { BaseButton, type BaseButtonProps } from "@/components/BaseButton";
+import { BaseButton, type BaseButtonProps } from '@/components/BaseButton';
 
 type ElementProps = {
   isPressed?: boolean;
@@ -21,10 +21,7 @@ export type ToggleButtonProps = BaseButtonProps &
   ElementProps &
   Omit<StyleProps, keyof ElementProps>;
 
-export const ToggleButton = forwardRef<
-  HTMLButtonElement | HTMLAnchorElement,
-  ToggleButtonProps
->(
+export const ToggleButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ToggleButtonProps>(
   (
     {
       isPressed,
@@ -39,12 +36,7 @@ export const ToggleButton = forwardRef<
     ref
   ) => {
     return (
-      <Root
-        pressed={isPressed}
-        onPressedChange={onPressedChange}
-        className={className}
-        asChild
-      >
+      <Root pressed={isPressed} onPressedChange={onPressedChange} className={className} asChild>
         <Styled.BaseButton ref={ref} disabled={disabled} {...buttonProps}>
           {slotLeft}
           {children}
@@ -66,8 +58,8 @@ Styled.BaseButton = styled(BaseButton)`
   --button-backgroundColor: var(--button-toggle-off-backgroundColor);
   --button-textColor: var(--button-toggle-off-textColor);
 
-  &[data-state="on"],
-  &[data-state="active"] {
+  &[data-state='on'],
+  &[data-state='active'] {
     --button-backgroundColor: var(--button-toggle-on-backgroundColor);
     --button-textColor: var(--button-toggle-on-textColor);
   }

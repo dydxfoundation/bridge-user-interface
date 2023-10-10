@@ -1,5 +1,5 @@
-import React, { Key, useEffect } from "react";
-import styled, { type AnyStyledComponent } from "styled-components";
+import React, { Key, useEffect } from 'react';
+import styled, { type AnyStyledComponent } from 'styled-components';
 
 import {
   useTable,
@@ -9,17 +9,12 @@ import {
   useTableHeaderRow,
   useTableRowGroup,
   useCollator,
-} from "react-aria";
+} from 'react-aria';
 
-import { TriangleDownIcon } from "@radix-ui/react-icons";
+import { TriangleDownIcon } from '@radix-ui/react-icons';
 
-import { type TableCollection } from "@react-types/table";
-import type {
-  Node,
-  SortDescriptor,
-  SortDirection,
-  CollectionChildren,
-} from "@react-types/shared";
+import { type TableCollection } from '@react-types/table';
+import type { Node, SortDescriptor, SortDirection, CollectionChildren } from '@react-types/shared';
 
 import {
   Cell,
@@ -29,18 +24,18 @@ import {
   TableHeader,
   type TableState,
   useTableState,
-} from "@react-stately/table";
+} from '@react-stately/table';
 
-import { useAsyncList } from "react-stately";
+import { useAsyncList } from 'react-stately';
 
-import breakpoints from "@/styles/breakpoints";
-import { layoutMixins } from "@/styles/layoutMixins";
+import breakpoints from '@/styles/breakpoints';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { Icon, IconName } from "./Icon";
-import { Tag } from "./Tag";
+import { Icon, IconName } from './Icon';
+import { Tag } from './Tag';
 
-export { TableCell } from "./Table/TableCell";
-export { TableColumnHeader } from "./Table/TableColumnHeader";
+export { TableCell } from './Table/TableCell';
+export { TableColumnHeader } from './Table/TableColumnHeader';
 
 export type TableItem<TableRowData> = {
   value: TableRowData;
@@ -78,7 +73,7 @@ type StyleProps = {
 export type TableConfig<TableRowData> = TableItem<TableRowData>[];
 
 export const Table = <TableRowData extends object, TableRowKey extends Key>({
-  label = "",
+  label = '',
   columns,
   data = [],
   getRowKey,
@@ -111,7 +106,7 @@ export const Table = <TableRowData extends object, TableRowKey extends Key>({
               (parseInt(second as string) || (second as number))
           )) *
       // Flip the direction if descending order is specified.
-      (sortDirection === "descending" ? -1 : 1)
+      (sortDirection === 'descending' ? -1 : 1)
     );
   };
 
@@ -119,18 +114,14 @@ export const Table = <TableRowData extends object, TableRowKey extends Key>({
     getKey: getRowKey,
     load: async ({ sortDescriptor }) => ({
       items: sortDescriptor?.column
-        ? data.sort((a, b) =>
-            sortFn(a, b, sortDescriptor?.column, sortDescriptor?.direction)
-          )
+        ? data.sort((a, b) => sortFn(a, b, sortDescriptor?.column, sortDescriptor?.direction))
         : data,
     }),
 
     initialSortDescriptor: defaultSortDescriptor,
 
     sort: async ({ items, sortDescriptor }) => ({
-      items: items.sort((a, b) =>
-        sortFn(a, b, sortDescriptor?.column, sortDescriptor?.direction)
-      ),
+      items: items.sort((a, b) => sortFn(a, b, sortDescriptor?.column, sortDescriptor?.direction)),
     }),
   });
 
@@ -144,11 +135,7 @@ export const Table = <TableRowData extends object, TableRowKey extends Key>({
   return (
     <Styled.TableWrapper className={className}>
       {!isEmpty ? (
-        <TableRoot
-          aria-label={label}
-          sortDescriptor={list.sortDescriptor}
-          onSortChange={list.sort}
-        >
+        <TableRoot aria-label={label} sortDescriptor={list.sortDescriptor} onSortChange={list.sort}>
           <TableHeader columns={columns}>
             {(column) => (
               <Column
@@ -167,9 +154,7 @@ export const Table = <TableRowData extends object, TableRowKey extends Key>({
               <Row key={getRowKey(item)}>
                 {(columnKey) => (
                   <Cell key={`${getRowKey(item)}-${columnKey}`}>
-                    {columns
-                      .find((column) => column.columnKey === columnKey)
-                      ?.renderCell?.(item)}
+                    {columns.find((column) => column.columnKey === columnKey)?.renderCell?.(item)}
                   </Cell>
                 )}
               </Row>
@@ -184,7 +169,7 @@ export const Table = <TableRowData extends object, TableRowKey extends Key>({
 };
 
 const TableRoot = <TableRowData extends object>(props: {
-  "aria-label"?: string;
+  'aria-label'?: string;
   sortDescriptor?: SortDescriptor;
   onSortChange?: (descriptor: SortDescriptor) => void;
   children: CollectionChildren<TableRowData>;
@@ -192,11 +177,7 @@ const TableRoot = <TableRowData extends object>(props: {
   const state = useTableState<TableRowData>(props);
   const ref = React.useRef<HTMLTableElement>(null);
   const { collection } = state;
-  const { gridProps } = useTable(
-    { "aria-label": props["aria-label"] },
-    state,
-    ref
-  );
+  const { gridProps } = useTable({ 'aria-label': props['aria-label'] }, state, ref);
 
   return (
     <Styled.Table ref={ref} {...gridProps}>
@@ -204,11 +185,7 @@ const TableRoot = <TableRowData extends object>(props: {
         {collection.headerRows.map((headerRow) => (
           <TableHeaderRow key={headerRow.key} item={headerRow} state={state}>
             {[...headerRow.childNodes].map((column) => (
-              <TableColumnHeader
-                key={column.key}
-                column={column}
-                state={state}
-              />
+              <TableColumnHeader key={column.key} column={column} state={state} />
             ))}
           </TableHeaderRow>
         ))}
@@ -236,9 +213,7 @@ const TableHeadRowGroup = ({
   return <Styled.Thead {...rowGroupProps}>{children}</Styled.Thead>;
 };
 
-const TableBodyRowGroup = ({
-  children,
-}: { children: React.ReactNode } & StyleProps) => {
+const TableBodyRowGroup = ({ children }: { children: React.ReactNode } & StyleProps) => {
   const { rowGroupProps } = useTableRowGroup();
   return <Styled.Tbody {...rowGroupProps}>{children}</Styled.Tbody>;
 };
@@ -248,7 +223,7 @@ const TableHeaderRow = <TableRowData extends object>({
   state,
   children,
 }: {
-  item: TableCollection<TableRowData>["headerRows"][number];
+  item: TableCollection<TableRowData>['headerRows'][number];
   state: TableState<TableRowData>;
   children: React.ReactNode;
 }) => {
@@ -269,11 +244,7 @@ const TableColumnHeader = <TableRowData extends object>({
   state: TableState<TableRowData>;
 }) => {
   const ref = React.useRef<HTMLTableCellElement>(null);
-  const { columnHeaderProps } = useTableColumnHeader(
-    { node: column },
-    state,
-    ref
-  );
+  const { columnHeaderProps } = useTableColumnHeader({ node: column }, state, ref);
 
   return (
     <Styled.Th
@@ -288,8 +259,7 @@ const TableColumnHeader = <TableRowData extends object>({
           <Styled.SortArrow
             aria-hidden="true"
             sortDirection={
-              state.sortDescriptor?.column === column.key &&
-              state.sortDescriptor?.direction
+              state.sortDescriptor?.column === column.key && state.sortDescriptor?.direction
             }
           >
             <TriangleDownIcon />
@@ -306,7 +276,7 @@ export const TableRow = <TableRowData extends object>({
   state,
   ...attrs
 }: {
-  item: TableCollection<TableRowData>["rows"][number];
+  item: TableCollection<TableRowData>['rows'][number];
   children: React.ReactNode;
   state: TableState<TableRowData>;
 }) => {
@@ -397,16 +367,10 @@ Styled.Th = styled.th`
   --table-cell-currentAlign: var(--table-cell-align);
 
   &:first-of-type {
-    --table-cell-currentAlign: var(
-      --table-firstColumn-cell-align,
-      var(--table-cell-align)
-    );
+    --table-cell-currentAlign: var(--table-firstColumn-cell-align, var(--table-cell-align));
   }
   &:last-of-type {
-    --table-cell-currentAlign: var(
-      --table-lastColumn-cell-align,
-      var(--table-cell-align)
-    );
+    --table-cell-currentAlign: var(--table-lastColumn-cell-align, var(--table-cell-align));
   }
 
   white-space: nowrap;
@@ -417,16 +381,10 @@ Styled.Td = styled.td`
   --table-cell-currentAlign: var(--table-cell-align);
 
   &:first-of-type {
-    --table-cell-currentAlign: var(
-      --table-firstColumn-cell-align,
-      var(--table-cell-align)
-    );
+    --table-cell-currentAlign: var(--table-firstColumn-cell-align, var(--table-cell-align));
   }
   &:last-of-type {
-    --table-cell-currentAlign: var(
-      --table-lastColumn-cell-align,
-      var(--table-cell-align)
-    );
+    --table-cell-currentAlign: var(--table-lastColumn-cell-align, var(--table-cell-align));
   }
 
   padding: var(--tableCell-padding);
@@ -437,12 +395,13 @@ Styled.Td = styled.td`
   }
 `;
 
-Styled.SortArrow = styled.span<{ sortDirection: "ascending" | "descending" }>`
+Styled.SortArrow = styled.span<{ sortDirection: 'ascending' | 'descending' }>`
   float: right;
   margin-left: auto;
 
   display: inline-flex;
-  transition: transform 0.3s var(--ease-out-expo),
+  transition:
+    transform 0.3s var(--ease-out-expo),
     font-size 0.3s var(--ease-out-expo);
 
   font-size: 0.375em;

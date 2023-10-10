@@ -1,15 +1,15 @@
-import styled, { AnyStyledComponent } from "styled-components";
+import styled, { AnyStyledComponent } from 'styled-components';
 
-import { STRING_KEYS } from "@/constants/localization";
+import { STRING_KEYS } from '@/constants/localization';
 
-import breakpoints from "@/styles/breakpoints";
-import { layoutMixins } from "@/styles/layoutMixins";
+import breakpoints from '@/styles/breakpoints';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { useStringGetter } from "@/hooks";
+import { useStringGetter } from '@/hooks';
 
-import { Accordion } from "@/components/Accordion";
-import { Link } from "@/components/Link";
-import { Panel } from "@/components/Panel";
+import { Accordion } from '@/components/Accordion';
+import { Link } from '@/components/Link';
+import { Panel } from '@/components/Panel';
 
 export const HelpPanel = () => {
   const stringGetter = useStringGetter();
@@ -38,10 +38,7 @@ export const HelpPanel = () => {
                 key: STRING_KEYS.MIGRATION_FAQ_V4_PORTAL_ANSWER,
                 params: {
                   HERE: (
-                    <Styled.Link
-                      withIcon
-                      href="https://dydx.community/dashboard/proposal/15"
-                    >
+                    <Styled.Link withIcon href="https://dydx.community/dashboard/proposal/15">
                       {stringGetter({ key: STRING_KEYS.HERE })}
                     </Styled.Link>
                   ),

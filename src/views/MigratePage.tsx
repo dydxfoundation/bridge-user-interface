@@ -1,9 +1,9 @@
-import styled, { AnyStyledComponent } from "styled-components";
+import styled, { AnyStyledComponent } from 'styled-components';
 
-import { HelpPanel } from "./HelpPanel";
-import { MigratePanel } from "./MigratePanel";
-import { layoutMixins } from "@/styles/layoutMixins";
-import breakpoints from "@/styles/breakpoints";
+import { HelpPanel } from './HelpPanel';
+import { MigratePanel } from './MigratePanel';
+import { layoutMixins } from '@/styles/layoutMixins';
+import breakpoints from '@/styles/breakpoints';
 
 export const MigratePage = () => {
   return (

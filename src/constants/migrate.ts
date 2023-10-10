@@ -1,18 +1,18 @@
-import BigNumber from "bignumber.js";
-import { DydxAddress } from "./wallets";
+import BigNumber from 'bignumber.js';
+import { DydxAddress } from './wallets';
 
 export const DYDX_CHAIN_ESTIMATED_BLOCK_TIME_MS = 1_500;
 export const TOKEN_DECIMAL_SHIFT = 18;
 
 export enum MigrateTabs {
-  Migrate = "Migrate",
-  PendingMigrations = "PendingMigrations",
+  Migrate = 'Migrate',
+  PendingMigrations = 'PendingMigrations',
 }
 
 export enum MigrateFormSteps {
-  Edit = "Edit",
-  Preview = "Preview",
-  Confirmed = "Confirmed",
+  Edit = 'Edit',
+  Preview = 'Preview',
+  Confirmed = 'Confirmed',
 }
 
 export enum TransactionStatus {
@@ -24,8 +24,8 @@ export enum TransactionStatus {
 }
 
 export enum DestinationAddressOptions {
-  Account = "Account",
-  Other = "Other",
+  Account = 'Account',
+  Other = 'Other',
 }
 
 export type PendingMigrationData = {
@@ -36,6 +36,6 @@ export type PendingMigrationData = {
 };
 
 export enum PendingMigrationFilter {
-  Mine = "Mine",
-  All = "All",
+  Mine = 'Mine',
+  All = 'All',
 }

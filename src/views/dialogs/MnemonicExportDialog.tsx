@@ -1,34 +1,31 @@
-import { useState } from "react";
-import styled, { AnyStyledComponent, css } from "styled-components";
+import { useState } from 'react';
+import styled, { AnyStyledComponent, css } from 'styled-components';
 
-import { AlertType } from "@/constants/alerts";
-import { ButtonAction, ButtonSize } from "@/constants/buttons";
-import { DialogProps } from "@/constants/dialogs";
-import { STRING_KEYS } from "@/constants/localization";
-import { useAccounts, useStringGetter } from "@/hooks";
-import breakpoints from "@/styles/breakpoints";
-import { layoutMixins } from "@/styles/layoutMixins";
+import { AlertType } from '@/constants/alerts';
+import { ButtonAction, ButtonSize } from '@/constants/buttons';
+import { DialogProps } from '@/constants/dialogs';
+import { STRING_KEYS } from '@/constants/localization';
+import { useAccounts, useStringGetter } from '@/hooks';
+import breakpoints from '@/styles/breakpoints';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { AlertMessage } from "@/components/AlertMessage";
-import { CopyButton } from "@/components/CopyButton";
-import { Dialog } from "@/components/Dialog";
-import { Checkbox } from "@/components/Checkbox";
-import { Icon, IconName } from "@/components/Icon";
-import { TimeoutButton } from "@/components/TimeoutButton";
-import { ToggleButton } from "@/components/ToggleButton";
-import { WithReceipt } from "@/components/WithReceipt";
-
+import { AlertMessage } from '@/components/AlertMessage';
+import { CopyButton } from '@/components/CopyButton';
+import { Dialog } from '@/components/Dialog';
+import { Checkbox } from '@/components/Checkbox';
+import { Icon, IconName } from '@/components/Icon';
+import { TimeoutButton } from '@/components/TimeoutButton';
+import { ToggleButton } from '@/components/ToggleButton';
+import { WithReceipt } from '@/components/WithReceipt';
 
 enum MnemonicExportStep {
-  AcknowledgeRisk = "AcknowledgeRisk",
-  DisplayMnemonic = "DisplayMnemonic",
+  AcknowledgeRisk = 'AcknowledgeRisk',
+  DisplayMnemonic = 'DisplayMnemonic',
 }
 
 export const MnemonicExportDialog = ({ setIsOpen }: DialogProps) => {
   const [hasAcknowledged, setHasAcknowledged] = useState(false);
-  const [currentStep, setCurrentStep] = useState(
-    MnemonicExportStep.AcknowledgeRisk
-  );
+  const [currentStep, setCurrentStep] = useState(MnemonicExportStep.AcknowledgeRisk);
   const [isShowing, setIsShowing] = useState(false);
 
   const stringGetter = useStringGetter();
@@ -95,27 +92,20 @@ export const MnemonicExportDialog = ({ setIsOpen }: DialogProps) => {
             size={ButtonSize.Small}
             isPressed={isShowing}
             onPressedChange={setIsShowing}
-            slotLeft={
-              <Icon iconName={!isShowing ? IconName.Show : IconName.Hide} />
-            }
+            slotLeft={<Icon iconName={!isShowing ? IconName.Show : IconName.Hide} />}
           >
             {stringGetter({
-              key: !isShowing
-                ? STRING_KEYS.SHOW_PHRASE
-                : STRING_KEYS.HIDE_PHRASE,
+              key: !isShowing ? STRING_KEYS.SHOW_PHRASE : STRING_KEYS.HIDE_PHRASE,
             })}
           </ToggleButton>
         </Styled.RevealControls>
         <WithReceipt
           slotReceipt={
-            <Styled.WordList
-              isShowing={isShowing}
-              onClick={() => setIsShowing(!isShowing)}
-            >
+            <Styled.WordList isShowing={isShowing} onClick={() => setIsShowing(!isShowing)}>
               <Styled.List>
-                {mnemonic?.split(" ").map((word: string, i: number) => (
+                {mnemonic?.split(' ').map((word: string, i: number) => (
                   <Styled.Word key={i}>
-                    <span>{isShowing ? word : "*****"}</span>
+                    <span>{isShowing ? word : '*****'}</span>
                   </Styled.Word>
                 ))}
               </Styled.List>
@@ -167,7 +157,7 @@ Styled.CautionIconContainer = styled.div`
   }
 
   &:before {
-    content: "";
+    content: '';
     width: 2.5rem;
     height: 2.5rem;
     background-color: var(--color-error);
@@ -248,7 +238,7 @@ Styled.Word = styled.li`
     font-family: var(--fontFamily-base);
     font-feature-settings: var(--fontFeature-monoNumbers);
     counter-increment: word;
-    content: counter(word) ". ";
+    content: counter(word) '. ';
 
     display: inline-block;
     color: var(--color-text-0);

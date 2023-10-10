@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { initializeLocalization } from "@/state/app";
+import { initializeLocalization } from '@/state/app';
 
 export const useInitializePage = () => {
   const dispatch = useDispatch();

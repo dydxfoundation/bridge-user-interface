@@ -1,28 +1,24 @@
-import { useContext, createContext } from "react";
-import { useSelector } from "react-redux";
-import { useQuery } from "react-query";
-import { useBalance } from "wagmi";
-import { DYDX_DENOM } from "@dydxprotocol/v4-client-js";
+import { useContext, createContext } from 'react';
+import { useSelector } from 'react-redux';
+import { useQuery } from 'react-query';
+import { useBalance } from 'wagmi';
 
-import { TOKEN_DECIMAL_SHIFT } from "@/constants/migrate";
+import { TOKEN_DECIMAL_SHIFT } from '@/constants/migrate';
 
-import { calculateCanAccountMigrate } from "@/state/accountCalculators";
+import { calculateCanAccountMigrate } from '@/state/accountCalculators';
 
-import { MustBigNumber } from "@/lib/numbers";
+import { MustBigNumber } from '@/lib/numbers';
 
-import { useAccounts } from "./useAccounts";
+import { useAccounts } from './useAccounts';
 
 const AccountBalanceContext = createContext<
   ReturnType<typeof useAccountBalanceContext> | undefined
 >(undefined);
 
-AccountBalanceContext.displayName = "AccountBalance";
+AccountBalanceContext.displayName = 'AccountBalance';
 
 export const AccountBalanceProvider = ({ ...props }) => (
-  <AccountBalanceContext.Provider
-    value={useAccountBalanceContext()}
-    {...props}
-  />
+  <AccountBalanceContext.Provider value={useAccountBalanceContext()} {...props} />
 );
 
 export const useAccountBalance = () => useContext(AccountBalanceContext)!;
@@ -33,31 +29,27 @@ const useAccountBalanceContext = () => {
   const { evmAddress, dydxAddress, getAccountBalance } = useAccounts();
   const canAccountMigrate = useSelector(calculateCanAccountMigrate);
 
-  const { data: v3TokenBalanceData, refetch: refetchV3TokenBalance } =
-    useBalance({
-      enabled: evmAddress && canAccountMigrate,
-      address: evmAddress,
-      chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
-      token: import.meta.env.VITE_V3_TOKEN_ADDRESS,
-    });
+  const { data: ethDYDXBalanceData, refetch: refetchEthDYDXBalance } = useBalance({
+    enabled: import.meta.env.VITE_ETH_DYDX_ADDRESSS && evmAddress && canAccountMigrate,
+    address: evmAddress,
+    chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
+    token: import.meta.env.VITE_ETH_DYDX_ADDRESSS,
+  });
 
-  const {
-    data: wrappedV3TokenBalanceData,
-    refetch: refetchWrappedV3TokenBalance,
-  } = useBalance({
-    enabled: evmAddress && canAccountMigrate,
+  const { data: wethDYDXBalanceData, refetch: refetchwethDYDXBalance } = useBalance({
+    enabled: import.meta.env.VITE_WETH_DYDX_ADDRESS && evmAddress && canAccountMigrate,
     address: evmAddress,
     token: import.meta.env.VITE_WETH_DYDX_ADDRESS,
   });
 
-  const { data: v4TokenBalance, refetch: refetchV4TokenBalance } = useQuery({
-    enabled: dydxAddress !== undefined,
-    queryKey: ["usePollV4TokenBalance", { dydxAddress }],
+  const { data: DYDXBalance, refetch: refetchDYDXBalance } = useQuery({
+    enabled: import.meta.env.VITE_DYDX_DENOM && dydxAddress !== undefined,
+    queryKey: ['usePollDYDXBalance', { dydxAddress }],
     queryFn: async () => {
       if (!dydxAddress) return;
       return await getAccountBalance({
         dydxAddress,
-        denom: DYDX_DENOM,
+        denom: import.meta.env.VITE_DYDX_DENOM,
       });
     },
     refetchInterval: ACCOUNT_BALANCE_POLLING_INTERVAL,
@@ -68,22 +60,22 @@ const useAccountBalanceContext = () => {
         .toString(),
   });
 
-  const { formatted: v3TokenBalance } = v3TokenBalanceData || {};
-  const { formatted: wrappedV3TokenBalance } = wrappedV3TokenBalanceData || {};
+  const { formatted: ethDYDXBalance } = ethDYDXBalanceData || {};
+  const { formatted: wethDYDXBalance } = wethDYDXBalanceData || {};
 
   const refetchBalances = () => {
     if (!evmAddress || !canAccountMigrate) return;
 
-    refetchV3TokenBalance();
-    refetchWrappedV3TokenBalance();
+    refetchEthDYDXBalance();
+    refetchwethDYDXBalance();
 
-    if (dydxAddress !== undefined) refetchV4TokenBalance();
+    if (dydxAddress !== undefined) refetchDYDXBalance();
   };
 
   return {
-    v3TokenBalance,
-    wrappedV3TokenBalance: 0, // TODO: renable for mainnet
-    v4TokenBalance,
+    ethDYDXBalance,
+    wethDYDXBalance,
+    DYDXBalance,
 
     refetchBalances,
   };

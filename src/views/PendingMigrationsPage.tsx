@@ -1,17 +1,17 @@
-import { useState } from "react";
-import styled, { AnyStyledComponent } from "styled-components";
-import { CaretDownIcon } from "@radix-ui/react-icons";
+import { useState } from 'react';
+import styled, { AnyStyledComponent } from 'styled-components';
+import { CaretDownIcon } from '@radix-ui/react-icons';
 
-import { STRING_KEYS } from "@/constants/localization";
+import { STRING_KEYS } from '@/constants/localization';
 
-import { layoutMixins } from "@/styles/layoutMixins";
-import breakpoints from "@/styles/breakpoints";
+import { layoutMixins } from '@/styles/layoutMixins';
+import breakpoints from '@/styles/breakpoints';
 
-import { useStringGetter } from "@/hooks";
+import { useStringGetter } from '@/hooks';
 
-import { ToggleButton } from "@/components/ToggleButton";
+import { ToggleButton } from '@/components/ToggleButton';
 
-import { PendingMigrationsTable } from "./PendingMigrationsTable";
+import { PendingMigrationsTable } from './PendingMigrationsTable';
 
 export const PendingMigrationsPage = () => {
   const stringGetter = useStringGetter();
@@ -22,7 +22,7 @@ export const PendingMigrationsPage = () => {
       <Styled.Description>
         <p>
           {stringGetter({ key: STRING_KEYS.PENDING_MIGRATIONS_DESCRIPTION_I })}
-          {!showFullDescription && ".."}
+          {!showFullDescription && '..'}
         </p>
         {showFullDescription && (
           <>
@@ -43,9 +43,7 @@ export const PendingMigrationsPage = () => {
           slotRight={<CaretDownIcon />}
         >
           {stringGetter({
-            key: showFullDescription
-              ? STRING_KEYS.VIEW_LESS
-              : STRING_KEYS.VIEW_MORE,
+            key: showFullDescription ? STRING_KEYS.VIEW_LESS : STRING_KEYS.VIEW_MORE,
           })}
         </Styled.ViewMoreToggle>
       </Styled.Description>
@@ -88,7 +86,7 @@ Styled.ViewMoreToggle = styled(ToggleButton)`
   --button-border: none;
   --button-padding: 0;
 
-  &[data-state="on"] {
+  &[data-state='on'] {
     svg {
       rotate: 0.5turn;
     }

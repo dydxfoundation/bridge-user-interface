@@ -7,7 +7,7 @@ import { ButtonShape, ButtonSize } from '@/constants/buttons';
 import { useBreakpoints } from '@/hooks';
 import { layoutMixins } from '@/styles/layoutMixins';
 
-import {  type BaseButtonProps } from '@/components/BaseButton';
+import { type BaseButtonProps } from '@/components/BaseButton';
 import { ToggleButton } from '@/components/ToggleButton';
 
 type ElementProps<MenuItemValue extends string> = {

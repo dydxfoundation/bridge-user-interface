@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
-import BigNumber from "bignumber.js";
+import { useEffect, useState } from 'react';
+import BigNumber from 'bignumber.js';
 
-import {
-  useContractWrite,
-  useContractRead,
-  useWaitForTransaction,
-} from "wagmi";
+import { useContractWrite, useContractRead, useWaitForTransaction } from 'wagmi';
 
-import { v3TokenContractAbi } from "@/constants/abi";
-import { TOKEN_DECIMAL_SHIFT } from "@/constants/migrate";
+import { ethDYDXContractAbi } from '@/constants/abi';
+import { TOKEN_DECIMAL_SHIFT } from '@/constants/migrate';
 
-import { MustBigNumber } from "@/lib/numbers";
+import { MustBigNumber } from '@/lib/numbers';
 
-import { useAccounts } from "../useAccounts";
-import { useAccountBalance } from "../useAccountBalance";
+import { useAccounts } from '../useAccounts';
+import { useAccountBalance } from '../useAccountBalance';
 
 export const useTokenAllowance = ({
   amountBN,
@@ -25,22 +21,20 @@ export const useTokenAllowance = ({
   watch: boolean;
 }) => {
   const { evmAddress } = useAccounts();
-  const { v3TokenBalance } = useAccountBalance();
+  const { ethDYDXBalance } = useAccountBalance();
 
   const [needsRefetch, setNeedsRefetch] = useState(false);
 
   const { data: needTokenAllowance, refetch } = useContractRead({
-    address: import.meta.env.VITE_V3_TOKEN_ADDRESS,
-    abi: v3TokenContractAbi,
-    functionName: "allowance",
+    address: import.meta.env.VITE_ETH_DYDX_ADDRESSS,
+    abi: ethDYDXContractAbi,
+    functionName: 'allowance',
     args: [evmAddress, import.meta.env.VITE_BRIDGE_CONTRACT_ADDRESS],
     chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
     enabled,
     watch,
     select: (allowance) =>
-      MustBigNumber(allowance as string).lt(
-        amountBN?.shiftedBy(TOKEN_DECIMAL_SHIFT) ?? 0
-      ),
+      MustBigNumber(allowance as string).lt(amountBN?.shiftedBy(TOKEN_DECIMAL_SHIFT) ?? 0),
   });
 
   const {
@@ -48,26 +42,23 @@ export const useTokenAllowance = ({
     writeAsync: approveToken,
     isLoading: isApproveTokenPending,
   } = useContractWrite({
-    address: import.meta.env.VITE_V3_TOKEN_ADDRESS,
-    abi: v3TokenContractAbi,
-    functionName: "approve",
+    address: import.meta.env.VITE_ETH_DYDX_ADDRESSS,
+    abi: ethDYDXContractAbi,
+    functionName: 'approve',
     args: [
       import.meta.env.VITE_BRIDGE_CONTRACT_ADDRESS,
-      MustBigNumber(v3TokenBalance).shiftedBy(TOKEN_DECIMAL_SHIFT).toFixed(),
+      MustBigNumber(ethDYDXBalance).shiftedBy(TOKEN_DECIMAL_SHIFT).toFixed(),
     ],
     chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),
   });
 
-  const { isLoading: isApproveTokenTxPending, error: approveTokenTxError } =
-    useWaitForTransaction({
-      hash: approveTokenData?.hash,
-      enabled: approveTokenData?.hash !== undefined,
-      onSettled(data) {
-        (data ? refetch() : Promise.resolve()).then(() =>
-          setNeedsRefetch(false)
-        );
-      },
-    });
+  const { isLoading: isApproveTokenTxPending, error: approveTokenTxError } = useWaitForTransaction({
+    hash: approveTokenData?.hash,
+    enabled: approveTokenData?.hash !== undefined,
+    onSettled(data) {
+      (data ? refetch() : Promise.resolve()).then(() => setNeedsRefetch(false));
+    },
+  });
 
   useEffect(() => {
     if (isApproveTokenTxPending) setNeedsRefetch(true);
@@ -76,8 +67,7 @@ export const useTokenAllowance = ({
   return {
     needTokenAllowance,
 
-    isApproveTokenLoading:
-      isApproveTokenPending || isApproveTokenTxPending || needsRefetch,
+    isApproveTokenLoading: isApproveTokenPending || isApproveTokenTxPending || needsRefetch,
 
     approveTokenTxError,
     approveToken,

@@ -1,17 +1,12 @@
-import { forwardRef } from "react";
+import { forwardRef } from 'react';
 
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
-import {
-  ButtonAction,
-  ButtonShape,
-  ButtonSize,
-  ButtonState,
-} from "@/constants/buttons";
+import { ButtonAction, ButtonShape, ButtonSize, ButtonState } from '@/constants/buttons';
 
-import { LoadingDots } from "@/components/Loading/LoadingDots";
+import { LoadingDots } from '@/components/Loading/LoadingDots';
 
-import { BaseButton, BaseButtonProps } from "./BaseButton";
+import { BaseButton, BaseButtonProps } from './BaseButton';
 
 export type ButtonStateConfig = {
   isDisabled?: boolean;
@@ -21,9 +16,7 @@ export type ButtonStateConfig = {
 type ElementProps = {
   children?: React.ReactNode;
   href?: string;
-  onClick?:
-    | React.MouseEventHandler<HTMLButtonElement>
-    | React.MouseEventHandler<HTMLAnchorElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement> | React.MouseEventHandler<HTMLAnchorElement>;
   slotLeft?: React.ReactNode;
   slotRight?: React.ReactNode;
   state?: ButtonState | ButtonStateConfig;
@@ -35,14 +28,9 @@ type StyleProps = {
   className?: string;
 };
 
-export type ButtonProps = BaseButtonProps &
-  ElementProps &
-  Omit<StyleProps, keyof ElementProps>;
+export type ButtonProps = BaseButtonProps & ElementProps & Omit<StyleProps, keyof ElementProps>;
 
-export const Button = forwardRef<
-  HTMLButtonElement | HTMLAnchorElement,
-  ButtonProps
->(
+export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   (
     {
       action = ButtonAction.Secondary,
@@ -59,7 +47,7 @@ export const Button = forwardRef<
     ref
   ) => {
     const state: Record<string, boolean | undefined> =
-      typeof stateConfig === "string"
+      typeof stateConfig === 'string'
         ? { [stateConfig as ButtonState]: true }
         : {
             [ButtonState.Loading]: stateConfig.isLoading,
@@ -157,7 +145,6 @@ const StyledBaseButton = styled(BaseButton)<StyleProps>`
     css`
       // Ordered from lowest to highest priority (ie. Disabled should overwrite Active and Loading states)
       ${state[ButtonState.Loading] && buttonStateVariants[ButtonState.Loading]}
-      ${state[ButtonState.Disabled] &&
-      buttonStateVariants[ButtonState.Disabled]}
+      ${state[ButtonState.Disabled] && buttonStateVariants[ButtonState.Disabled]}
     `}
 `;

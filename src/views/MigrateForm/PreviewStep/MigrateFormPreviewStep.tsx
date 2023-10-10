@@ -1,23 +1,23 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import styled, { type AnyStyledComponent } from "styled-components";
+import styled, { type AnyStyledComponent } from 'styled-components';
 
-import { AlertType } from "@/constants/alerts";
-import { ButtonAction, ButtonType } from "@/constants/buttons";
-import { STRING_KEYS } from "@/constants/localization";
+import { AlertType } from '@/constants/alerts';
+import { ButtonAction, ButtonType } from '@/constants/buttons';
+import { STRING_KEYS } from '@/constants/localization';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { useMigrateToken, useStringGetter } from "@/hooks";
+import { useMigrateToken, useStringGetter } from '@/hooks';
 
-import { AlertMessage } from "@/components/AlertMessage";
-import { Button } from "@/components/Button";
-import { Checkbox } from "@/components/Checkbox";
-import { Tag } from "@/components/Tag";
-import { DetailsReceipt } from "@/components/DetailsReceipt";
-import { Icon, IconName } from "@/components/Icon";
+import { AlertMessage } from '@/components/AlertMessage';
+import { Button } from '@/components/Button';
+import { Checkbox } from '@/components/Checkbox';
+import { Tag } from '@/components/Tag';
+import { DetailsReceipt } from '@/components/DetailsReceipt';
+import { Icon, IconName } from '@/components/Icon';
 
-import { TokensBeforeAfterDiagram } from "../TokensBeforeAfterDiagram";
+import { TokensBeforeAfterDiagram } from '../TokensBeforeAfterDiagram';
 
 export const MigrateFormPreviewStep = () => {
   const stringGetter = useStringGetter();
@@ -44,38 +44,38 @@ export const MigrateFormPreviewStep = () => {
         headerIcon={<Icon iconName={IconName.Time} />}
         detailItems={[
           {
-            key: "eth_settlement",
+            key: 'eth_settlement',
             label: stringGetter({ key: STRING_KEYS.ETHEREUM_SETTLEMENT }),
             value: (
               <Tag>
                 {stringGetter({
                   key: STRING_KEYS.X_SECONDS_LOWERCASED,
-                  params: { X: "0-12" },
+                  params: { X: '0-12' },
                 })}
               </Tag>
             ),
           },
           {
-            key: "eth_finalization",
+            key: 'eth_finalization',
             label: stringGetter({ key: STRING_KEYS.ETHEREUM_FINALIZATION }),
             value: (
               <Tag>
                 {stringGetter({
                   key: STRING_KEYS.X_MINUTES_LOWERCASED,
-                  params: { X: "~20" },
+                  params: { X: '~20' },
                 })}
               </Tag>
             ),
           },
           {
-            key: "dydx_settlement",
+            key: 'dydx_settlement',
             label: stringGetter({ key: STRING_KEYS.DYDX_CHAIN_SETTLEMENT }),
-            tooltip: "dydx-chain-settlement",
+            tooltip: 'dydx-chain-settlement',
             value: (
               <Tag>
                 {stringGetter({
                   key: STRING_KEYS.X_HOURS_LOWERCASED,
-                  params: { X: "~40" },
+                  params: { X: '~40' },
                 })}
               </Tag>
             ),
@@ -121,16 +121,13 @@ export const MigrateFormPreviewStep = () => {
           state={{
             isLoading: isApproveTokenLoading || isBridgePending,
             isDisabled:
-              (!needTokenAllowance &&
-                !(hasAcknowledgedDuration && hasAcknowledgedLocked)) ||
+              (!needTokenAllowance && !(hasAcknowledgedDuration && hasAcknowledgedLocked)) ||
               isBridgePending ||
               !isAmountValid,
           }}
         >
           {stringGetter({
-            key: needTokenAllowance
-              ? STRING_KEYS.APPROVE_ALLOWANCE
-              : STRING_KEYS.CONFIRM_MIGRATION,
+            key: needTokenAllowance ? STRING_KEYS.APPROVE_ALLOWANCE : STRING_KEYS.CONFIRM_MIGRATION,
           })}
         </Styled.ConfirmButton>
       </Styled.ButtonRow>

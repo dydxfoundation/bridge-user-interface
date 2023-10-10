@@ -1,13 +1,13 @@
-import { forwardRef } from "react";
-import styled, { AnyStyledComponent, css } from "styled-components";
+import { forwardRef } from 'react';
+import styled, { AnyStyledComponent, css } from 'styled-components';
 
-import { AlertType } from "@/constants/alerts";
-import { layoutMixins } from "@/styles/layoutMixins";
-import { formMixins } from "@/styles/formMixins";
+import { AlertType } from '@/constants/alerts';
+import { layoutMixins } from '@/styles/layoutMixins';
+import { formMixins } from '@/styles/formMixins';
 
-import { AlertMessage } from "@/components/AlertMessage";
-import { Input, InputProps } from "@/components/Input";
-import { WithLabel } from "@/components/WithLabel";
+import { AlertMessage } from '@/components/AlertMessage';
+import { Input, InputProps } from '@/components/Input';
+import { WithLabel } from '@/components/WithLabel';
 
 type StyleProps = {
   className?: string;
@@ -26,10 +26,7 @@ type ElementProps = {
 export type FormInputProps = ElementProps & StyleProps & InputProps;
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
-  (
-    { id, label, slotRight, className, validationConfig, ...otherProps },
-    ref
-  ) => (
+  ({ id, label, slotRight, className, validationConfig, ...otherProps }, ref) => (
     <Styled.FormInputContainer
       className={className}
       isValidationAttached={validationConfig?.attached}

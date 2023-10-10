@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import styled, { type AnyStyledComponent } from "styled-components";
+import { useState, useEffect } from 'react';
+import styled, { type AnyStyledComponent } from 'styled-components';
 
-import { STRING_KEYS } from "@/constants/localization";
+import { STRING_KEYS } from '@/constants/localization';
 
-import { useStringGetter } from "@/hooks";
+import { useStringGetter } from '@/hooks';
 
-import { Tag } from "@/components/Tag";
+import { Tag } from '@/components/Tag';
 
 const NUM_EPOCH_BLOCKS = 32;
 const ETH_BLOCK_TIME_SECONDS = 12;
@@ -18,13 +18,9 @@ export const FinalizingCountdownTimer = ({
   const stringGetter = useStringGetter();
 
   const getEstimate = (blockDifference: number) =>
-    Math.ceil(blockDifference / NUM_EPOCH_BLOCKS) *
-    NUM_EPOCH_BLOCKS *
-    ETH_BLOCK_TIME_SECONDS;
+    Math.ceil(blockDifference / NUM_EPOCH_BLOCKS) * NUM_EPOCH_BLOCKS * ETH_BLOCK_TIME_SECONDS;
 
-  const [secondsRemaining, setSecondsRemaining] = useState(
-    getEstimate(numBlocksTillFinalized)
-  );
+  const [secondsRemaining, setSecondsRemaining] = useState(getEstimate(numBlocksTillFinalized));
 
   useEffect(() => {
     setSecondsRemaining(getEstimate(numBlocksTillFinalized));
@@ -39,13 +35,13 @@ export const FinalizingCountdownTimer = ({
 
   const minutes = Math.floor(secondsRemaining / 60)
     .toString()
-    .padStart(2, "0");
-  const seconds = (secondsRemaining % 60).toString().padStart(2, "0");
+    .padStart(2, '0');
+  const seconds = (secondsRemaining % 60).toString().padStart(2, '0');
 
   return (
     <Styled.Tag>
       {stringGetter({ key: STRING_KEYS.FINALIZING })}
-      {secondsRemaining > 0 ? ` ${minutes}:${seconds}` : "..."}
+      {secondsRemaining > 0 ? ` ${minutes}:${seconds}` : '...'}
     </Styled.Tag>
   );
 };

@@ -10,9 +10,9 @@
  *  a. Acknowledge Terms
  */
 export enum OnboardingSteps {
-  ChooseWallet = "ChooseWallet",
-  KeyDerivation = "KeyDerivation",
-  AcknowledgeTerms = "AcknowledgeTerms",
+  ChooseWallet = 'ChooseWallet',
+  KeyDerivation = 'KeyDerivation',
+  AcknowledgeTerms = 'AcknowledgeTerms',
 }
 
 /**
@@ -22,9 +22,9 @@ export enum OnboardingSteps {
  * - AccountConnected
  */
 export enum OnboardingState {
-  Disconnected = "Disconnected",
-  WalletConnected = "WalletConnected",
-  AccountConnected = "AccountConnected",
+  Disconnected = 'Disconnected',
+  WalletConnected = 'WalletConnected',
+  AccountConnected = 'AccountConnected',
 }
 
 /**
@@ -32,7 +32,7 @@ export enum OnboardingState {
  * - hasAcknowledgedTerms
  */
 export enum OnboardingGuard {
-  hasAcknowledgedTerms = "hasAcknowledgedTerms",
+  hasAcknowledgedTerms = 'hasAcknowledgedTerms',
 }
 
 export enum EvmDerivedAccountStatus {
@@ -42,7 +42,7 @@ export enum EvmDerivedAccountStatus {
   Derived,
 }
 
-import type { DydxAddress, EthereumAddress } from "./wallets";
+import type { DydxAddress, EthereumAddress } from './wallets';
 
 export type EvmDerivedAddresses = {
   version?: string;

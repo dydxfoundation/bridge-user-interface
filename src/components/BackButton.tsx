@@ -1,7 +1,7 @@
-import { ButtonAction, ButtonSize } from "@/constants/buttons";
+import { ButtonAction, ButtonSize } from '@/constants/buttons';
 
-import { IconName } from "@/components/Icon";
-import { IconButton } from "@/components/IconButton";
+import { IconName } from '@/components/Icon';
+import { IconButton } from '@/components/IconButton';
 
 type ElementProps = {
   onClick?: () => void;

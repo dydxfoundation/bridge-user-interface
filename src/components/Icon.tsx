@@ -1,6 +1,6 @@
-import { type ElementType } from "react";
+import { type ElementType } from 'react';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 import {
   AddressConnectorIcon,
@@ -30,36 +30,36 @@ import {
   TimeIcon,
   TriangleIcon,
   WarningIcon,
-} from "@/icons";
+} from '@/icons';
 
 export enum IconName {
-  AddressConnector = "AddressConnector",
-  Arrow = "Arrow",
-  ArrowsRight = "ArrowsRight",
-  BoxClose = "BoxClose",
-  CautionCircle = "CautionCircle",
-  CautionCircleStroke = "CautionCircleStroke",
-  Check = "Check",
-  CheckCircle = "CheckCircle",
-  ChevronLeft = "ChevronLeft",
-  Close = "Close",
-  Copy = "Copy",
-  Discord = "Discord",
-  ExportKeys = "ExportKeys",
-  File = "File",
-  HelpCircle = "HelpCircle",
-  Hide = "Hide",
-  LinkOut = "LinkOut",
-  LogoShort = "LogoShort",
-  Migrate = "Migrate",
-  Mintscan = "Mintscan",
-  Privacy = "Privacy",
-  Search = "Search",
-  Show = "Show",
-  Terminal = "Terminal",
-  Time = "Time",
-  Triangle = "Triangle",
-  Warning = "Warning",
+  AddressConnector = 'AddressConnector',
+  Arrow = 'Arrow',
+  ArrowsRight = 'ArrowsRight',
+  BoxClose = 'BoxClose',
+  CautionCircle = 'CautionCircle',
+  CautionCircleStroke = 'CautionCircleStroke',
+  Check = 'Check',
+  CheckCircle = 'CheckCircle',
+  ChevronLeft = 'ChevronLeft',
+  Close = 'Close',
+  Copy = 'Copy',
+  Discord = 'Discord',
+  ExportKeys = 'ExportKeys',
+  File = 'File',
+  HelpCircle = 'HelpCircle',
+  Hide = 'Hide',
+  LinkOut = 'LinkOut',
+  LogoShort = 'LogoShort',
+  Migrate = 'Migrate',
+  Mintscan = 'Mintscan',
+  Privacy = 'Privacy',
+  Search = 'Search',
+  Show = 'Show',
+  Terminal = 'Terminal',
+  Time = 'Time',
+  Triangle = 'Triangle',
+  Warning = 'Warning',
 }
 
 const icons = {

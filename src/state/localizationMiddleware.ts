@@ -1,27 +1,19 @@
-import type { PayloadAction } from "@reduxjs/toolkit";
-import {
-  LOCALE_DATA,
-  SupportedLocale,
-  TOOLTIPS,
-} from "@dydxprotocol/v4-localization";
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { LOCALE_DATA, SupportedLocale, TOOLTIPS } from '@dydxprotocol/v4-localization';
 
 import {
   type LocaleData,
   SUPPORTED_BASE_TAGS_LOCALE_MAPPING,
   SupportedLocales,
-} from "@/constants/localization";
+} from '@/constants/localization';
 
-import { LocalStorageKey } from "@/constants/localStorage";
+import { LocalStorageKey } from '@/constants/localStorage';
 
-import { initializeLocalization } from "@/state/app";
+import { initializeLocalization } from '@/state/app';
 
-import {
-  setLocaleData,
-  setLocaleLoaded,
-  setSelectedLocale,
-} from "@/state/localization";
+import { setLocaleData, setLocaleLoaded, setSelectedLocale } from '@/state/localization';
 
-import { getLocalStorage, setLocalStorage } from "@/lib/localStorage";
+import { getLocalStorage, setLocalStorage } from '@/lib/localStorage';
 
 const getNewLocaleData = ({
   store,
@@ -46,43 +38,39 @@ const getNewLocaleData = ({
   }
 };
 
-export default (store: any) =>
-  (next: any) =>
-  async (action: PayloadAction<any>) => {
-    next(action);
-    const { type, payload } = action;
+export default (store: any) => (next: any) => async (action: PayloadAction<any>) => {
+  next(action);
+  const { type, payload } = action;
 
-    switch (type) {
-      case initializeLocalization().type: {
-        const localStorageLocale = getLocalStorage({
-          key: LocalStorageKey.SelectedLocale,
-        }) as SupportedLocales;
+  switch (type) {
+    case initializeLocalization().type: {
+      const localStorageLocale = getLocalStorage({
+        key: LocalStorageKey.SelectedLocale,
+      }) as SupportedLocales;
 
-        if (localStorageLocale) {
-          store.dispatch(setSelectedLocale({ locale: localStorageLocale }));
-        } else if (globalThis.navigator?.language) {
-          const browserLanguageBaseTag = globalThis.navigator.language
-            .split("-")[0]
-            .toLowerCase();
+      if (localStorageLocale) {
+        store.dispatch(setSelectedLocale({ locale: localStorageLocale }));
+      } else if (globalThis.navigator?.language) {
+        const browserLanguageBaseTag = globalThis.navigator.language.split('-')[0].toLowerCase();
 
-          const locale = SUPPORTED_BASE_TAGS_LOCALE_MAPPING[
-            browserLanguageBaseTag
-          ] as SupportedLocales;
+        const locale = SUPPORTED_BASE_TAGS_LOCALE_MAPPING[
+          browserLanguageBaseTag
+        ] as SupportedLocales;
 
-          if (locale) {
-            store.dispatch(setSelectedLocale({ locale, isAutoDetect: true }));
-          }
+        if (locale) {
+          store.dispatch(setSelectedLocale({ locale, isAutoDetect: true }));
         }
-        break;
       }
-      // @ts-ignore
-      case setSelectedLocale().type: {
-        const { locale, isAutoDetect } = payload;
-        getNewLocaleData({ store, locale, isAutoDetect });
-        break;
-      }
-      default: {
-        break;
-      }
+      break;
     }
-  };
+    // @ts-ignore
+    case setSelectedLocale().type: {
+      const { locale, isAutoDetect } = payload;
+      getNewLocaleData({ store, locale, isAutoDetect });
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+};

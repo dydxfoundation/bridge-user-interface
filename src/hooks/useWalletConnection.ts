@@ -1,38 +1,31 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   useConnect as useConnectWagmi,
   useAccount as useAccountWagmi,
   useDisconnect as useDisconnectWagmi,
   useWalletClient as useWalletClientWagmi,
-} from "wagmi";
+} from 'wagmi';
 
-import {
-  type EthereumAddress,
-  WalletConnectionType,
-  WalletType,
-} from "@/constants/wallets";
+import { type EthereumAddress, WalletConnectionType, WalletType } from '@/constants/wallets';
 
-import { LocalStorageKey } from "@/constants/localStorage";
+import { LocalStorageKey } from '@/constants/localStorage';
 
-import { resolveWagmiConnector } from "@/lib/wagmi";
-import { getWalletConnection, parseWalletError } from "@/lib/wallet";
+import { resolveWagmiConnector } from '@/lib/wagmi';
+import { getWalletConnection, parseWalletError } from '@/lib/wallet';
 
-import { useLocalStorage } from "./useLocalStorage";
-import { useStringGetter } from "./useStringGetter";
+import { useLocalStorage } from './useLocalStorage';
+import { useStringGetter } from './useStringGetter';
 
 export const useWalletConnection = () => {
   const stringGetter = useStringGetter();
 
   // EVM wallet connection
-  const [evmAddress, saveEvmAddress] = useLocalStorage<
-    EthereumAddress | undefined
-  >({
+  const [evmAddress, saveEvmAddress] = useLocalStorage<EthereumAddress | undefined>({
     key: LocalStorageKey.EvmAddress,
     defaultValue: undefined,
   });
-  const { address: evmAddressWagmi, isConnected: isConnectedWagmi } =
-    useAccountWagmi();
+  const { address: evmAddressWagmi, isConnected: isConnectedWagmi } = useAccountWagmi();
   const { data: signerWagmi } = useWalletClientWagmi();
   const { disconnectAsync: disconnectWagmi } = useDisconnectWagmi();
 
@@ -77,7 +70,7 @@ export const useWalletConnection = () => {
 
       try {
         if (!walletConnection) {
-          throw new Error("Onboarding: No wallet connection found.");
+          throw new Error('Onboarding: No wallet connection found.');
         } else {
           if (!isConnectedWagmi) {
             await connectWagmi({
@@ -90,9 +83,7 @@ export const useWalletConnection = () => {
         }
       } catch (error) {
         throw Object.assign(
-          new Error(
-            [error.message, error.cause?.message].filter(Boolean).join("\n")
-          ),
+          new Error([error.message, error.cause?.message].filter(Boolean).join('\n')),
           {
             walletConnectionType: walletConnection?.type,
           }
@@ -114,12 +105,8 @@ export const useWalletConnection = () => {
 
   // Wallet selection
 
-  const [selectedWalletType, setSelectedWalletType] = useState<
-    WalletType | undefined
-  >(walletType);
-  const [selectedWalletError, setSelectedWalletError] = useState<
-    string | React.ReactNode[]
-  >();
+  const [selectedWalletType, setSelectedWalletType] = useState<WalletType | undefined>(walletType);
+  const [selectedWalletError, setSelectedWalletError] = useState<string | React.ReactNode[]>();
 
   useEffect(() => {
     (async () => {

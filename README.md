@@ -41,12 +41,19 @@ Select "Import Git Repository" from your dashboard, and provide the URL of this 
 ### Step 2: Configure your project
 
 For the "Build & Development Settings", we recommend the following:
+
 - Framework Preset: `Vite`
 - Build Command (override): `pnpm run build`
 
 For "Environment Variables", configure according to what needs to be overwritten in `.env`. In particular,
+
 - `VITE_ALCHEMY_API_KEY`: alchemy account API key ([docs](https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key))
 - `VITE_WALLETCONNECT2_PROJECT_ID`: Project ID for Wallet Connect v2 (required for connecting to wallets / onboarding), found [here](https://cloud.walletconnect.com/app)
-- `NPM_RC`: to npm packages, you'll also need an NPM token. The value of this variable should be `//registry.npmjs.org/:_authToken={TOKEN}`, replacing {TOKEN} with your npm token. More [here](https://docs.npmjs.com/creating-and-viewing-access-tokens)
+- `VITE_WALLETCONNECT1_BRIDGE`: If you want to continue supporting Wallet Connect v1, you will need to run your own bridge server. Docs [here](https://github.com/WalletConnect/node-walletconnect-bridge/blob/master/OLD-README.md).
+
+To configure network (e.g. staging or mainnet),
+
+- Update variables starting with `VITE_NETWORK_`, replace with the indexer and validator hosts of your choosing pointing to the desired network
+- Update the rest of the variables (e.g. token / contract addresses) to go from staging to prod environment.
 
 For more details, check out Vercel's [official documentation](https://vercel.com/docs).

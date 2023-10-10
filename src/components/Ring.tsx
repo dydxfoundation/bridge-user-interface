@@ -1,8 +1,4 @@
-import styled, {
-  css,
-  keyframes,
-  type AnyStyledComponent,
-} from "styled-components";
+import styled, { css, keyframes, type AnyStyledComponent } from 'styled-components';
 
 type ElementProps = {
   value: number;
@@ -13,11 +9,7 @@ type StyleProps = {
   withAnimation?: boolean;
 };
 
-export const Ring = ({
-  className,
-  value,
-  withAnimation,
-}: ElementProps & StyleProps) => {
+export const Ring = ({ className, value, withAnimation }: ElementProps & StyleProps) => {
   const radius = 12;
   const circumference = radius * 2 * Math.PI;
   const offset = Math.max(circumference - circumference * value, 0);

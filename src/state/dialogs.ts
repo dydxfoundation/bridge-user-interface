@@ -1,6 +1,6 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import type { DialogTypes } from "@/constants/dialogs";
+import type { DialogTypes } from '@/constants/dialogs';
 
 type DialogInfo<TDialog extends DialogTypes> = {
   type: TDialog;
@@ -19,13 +19,10 @@ const initialState: DialogsState = {
 };
 
 export const dialogsSlice = createSlice({
-  name: "Dialogs",
+  name: 'Dialogs',
   initialState,
   reducers: {
-    addDialogToQueue: (
-      state: DialogsState,
-      action: PayloadAction<DialogInfo<DialogTypes>>
-    ) => {
+    addDialogToQueue: (state: DialogsState, action: PayloadAction<DialogInfo<DialogTypes>>) => {
       const dialogQueue = state.dialogQueue;
       dialogQueue.push(action.payload);
 
@@ -38,10 +35,7 @@ export const dialogsSlice = createSlice({
       ...state,
       activeDialog: state.dialogQueue.shift(),
     }),
-    openDialog: (
-      state: DialogsState,
-      action: PayloadAction<DialogInfo<DialogTypes>>
-    ) => ({
+    openDialog: (state: DialogsState, action: PayloadAction<DialogInfo<DialogTypes>>) => ({
       ...state,
       activeDialog: action.payload,
     }),
@@ -51,5 +45,4 @@ export const dialogsSlice = createSlice({
   },
 });
 
-export const { addDialogToQueue, closeDialog, openDialog } =
-  dialogsSlice.actions;
+export const { addDialogToQueue, closeDialog, openDialog } = dialogsSlice.actions;

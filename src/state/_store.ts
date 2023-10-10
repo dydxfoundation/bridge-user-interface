@@ -1,11 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
-import localizationMiddleware from "./localizationMiddleware";
+import localizationMiddleware from './localizationMiddleware';
 
-import { accountSlice } from "./account";
-import { appSlice } from "./app";
-import { dialogsSlice } from "./dialogs";
-import { localizationSlice } from "./localization";
+import { accountSlice } from './account';
+import { appSlice } from './app';
+import { dialogsSlice } from './dialogs';
+import { localizationSlice } from './localization';
 
 export const store = configureStore({
   reducer: {
@@ -22,7 +22,7 @@ export const store = configureStore({
     localizationMiddleware,
   ],
 
-  devTools: process.env.NODE_ENV !== "production",
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export type RootStore = typeof store;

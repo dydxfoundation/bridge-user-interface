@@ -1,16 +1,16 @@
-import { createConfig, configureChains, mainnet, sepolia, Chain } from "wagmi";
+import { createConfig, configureChains, mainnet, sepolia, Chain } from 'wagmi';
 
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-import { publicProvider } from "wagmi/providers/public";
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { publicProvider } from 'wagmi/providers/public';
 
-import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { WalletConnectLegacyConnector } from "wagmi/connectors/walletConnectLegacy";
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { WalletConnectLegacyConnector } from 'wagmi/connectors/walletConnectLegacy';
 
-import { isTruthy } from "./isTruthy";
+import { isTruthy } from './isTruthy';
 
 // Config
 
@@ -31,7 +31,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 const injectedConnectorOptions = {
   chains,
   options: {
-    name: "Injected",
+    name: 'Injected',
     shimDisconnect: true,
     shimChainChangedDisconnect: false,
   },
@@ -45,31 +45,29 @@ const walletconnect1ConnectorOptions = {
   },
 };
 
-const walletconnect2ConnectorOptions: ConstructorParameters<
-  typeof WalletConnectConnector
->[0] = {
+const walletconnect2ConnectorOptions: ConstructorParameters<typeof WalletConnectConnector>[0] = {
   chains,
   options: {
     projectId: import.meta.env.VITE_WALLETCONNECT2_PROJECT_ID,
     metadata: {
       // TODO: update to local URLs/images
-      name: "dYdX",
-      description: "",
-      url: "https://trade.dydx.exchange",
-      icons: ["https://trade.dydx.exchange/cbw-image.png"],
+      name: 'dYdX',
+      description: '',
+      url: 'https://trade.dydx.exchange',
+      icons: ['https://trade.dydx.exchange/cbw-image.png'],
     },
     showQrModal: true,
     qrModalOptions: {
-      themeMode: "dark" as const,
+      themeMode: 'dark' as const,
       themeVariables: {
-        "--w3m-accent-color": "#5973fe",
-        "--w3m-background-color": "#5973fe",
-        "--w3m-color-bg-1": "var(--color-layer-3)",
-        "--w3m-color-bg-2": "var(--color-layer-4)",
-        "--w3m-color-bg-3": "var(--color-layer-5)",
-        "--w3m-font-family": "var(--fontFamily-base)",
-        "--w3m-font-feature-settings": "none",
-        "--w3m-overlay-backdrop-filter": "blur(6px)",
+        '--w3m-accent-color': '#5973fe',
+        '--w3m-background-color': '#5973fe',
+        '--w3m-color-bg-1': 'var(--color-layer-3)',
+        '--w3m-color-bg-2': 'var(--color-layer-4)',
+        '--w3m-color-bg-3': 'var(--color-layer-5)',
+        '--w3m-font-family': 'var(--fontFamily-base)',
+        '--w3m-font-feature-settings': 'none',
+        '--w3m-overlay-backdrop-filter': 'blur(6px)',
         // '--w3m-logo-image-url': 'https://trade.dydx.exchange/cbw-image.png',
       },
       enableExplorer: true,
@@ -91,7 +89,7 @@ const connectors = [
   new CoinbaseWalletConnector({
     chains,
     options: {
-      appName: "wagmi",
+      appName: 'wagmi',
       reloadOnDisconnect: false,
     },
   }),
@@ -109,15 +107,13 @@ export const config = createConfig({
 
 // Custom connectors
 
-import type { ExternalProvider } from "@ethersproject/providers";
+import type { ExternalProvider } from '@ethersproject/providers';
 
 // Create a custom wagmi InjectedConnector using a specific injected EIP-1193 provider (instead of wagmi's default detection logic)
 const createInjectedConnectorWithProvider = (provider: ExternalProvider) =>
   new (class extends InjectedConnector {
     getProvider = async () =>
-      provider as unknown as Awaited<
-        ReturnType<InjectedConnector["getProvider"]>
-      >;
+      provider as unknown as Awaited<ReturnType<InjectedConnector['getProvider']>>;
   })(injectedConnectorOptions) as InjectedConnector;
 
 // Create a custom wagmi WalletConnectLegacyConnector with a modal showing only wallet links matching the given name
@@ -141,7 +137,7 @@ const createWalletConnect2ConnectorWithId = (walletconnect2Id: string) =>
       qrModalOptions: {
         ...walletconnect2ConnectorOptions.options.qrModalOptions,
         explorerRecommendedWalletIds: [walletconnect2Id],
-        explorerExcludedWalletIds: "ALL",
+        explorerExcludedWalletIds: 'ALL',
         chainImages: {},
       },
     },
@@ -154,7 +150,7 @@ import {
   type WalletType,
   walletConnectionTypes,
   wallets,
-} from "@/constants/wallets";
+} from '@/constants/wallets';
 
 export const resolveWagmiConnector = ({
   walletType,
@@ -166,17 +162,12 @@ export const resolveWagmiConnector = ({
   const walletConfig = wallets[walletType];
   const walletConnectionConfig = walletConnectionTypes[walletConnection.type];
 
-  return walletConnection.type === WalletConnectionType.InjectedEip1193 &&
-    walletConnection.provider
+  return walletConnection.type === WalletConnectionType.InjectedEip1193 && walletConnection.provider
     ? createInjectedConnectorWithProvider(walletConnection.provider)
     : walletConnection.type === WalletConnectionType.WalletConnect1 &&
       walletConfig.walletconnect1Name
     ? createWalletConnect1ConnectorWithName(walletConfig.walletconnect1Name)
-    : walletConnection.type === WalletConnectionType.WalletConnect2 &&
-      walletConfig.walletconnect2Id
+    : walletConnection.type === WalletConnectionType.WalletConnect2 && walletConfig.walletconnect2Id
     ? createWalletConnect2ConnectorWithId(walletConfig.walletconnect2Id)
-    : connectors.find(
-        ({ id }: { id: string }) =>
-          id === walletConnectionConfig.wagmiConnectorId
-      );
+    : connectors.find(({ id }: { id: string }) => id === walletConnectionConfig.wagmiConnectorId);
 };

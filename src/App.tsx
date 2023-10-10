@@ -1,37 +1,37 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
 
-import styled, { AnyStyledComponent } from "styled-components";
-import { WagmiConfig } from "wagmi";
-import { QueryClient, QueryClientProvider } from "react-query";
+import styled, { AnyStyledComponent } from 'styled-components';
+import { WagmiConfig } from 'wagmi';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { STRING_KEYS } from "./constants/localization";
-import { MigrateTabs } from "@/constants/migrate";
-import { AppRoute } from "@/constants/routes";
+import { STRING_KEYS } from './constants/localization';
+import { MigrateTabs } from '@/constants/migrate';
+import { AppRoute } from '@/constants/routes';
 
-import { AccountsProvider } from "@/hooks/useAccounts";
-import { AccountBalanceProvider } from "@/hooks/useAccountBalance";
-import { useInitializePage, useStringGetter } from "@/hooks";
-import { DydxProvider } from "@/hooks/useDydxClient";
-import { DialogAreaProvider, useDialogArea } from "@/hooks/useDialogArea";
-import { LocaleProvider } from "@/hooks/useLocaleSeparators";
-import { MigrateTokenProvider, useMigrateToken } from "@/hooks/useMigrateToken";
+import { AccountsProvider } from '@/hooks/useAccounts';
+import { AccountBalanceProvider } from '@/hooks/useAccountBalance';
+import { useInitializePage, useStringGetter } from '@/hooks';
+import { DydxProvider } from '@/hooks/useDydxClient';
+import { DialogAreaProvider, useDialogArea } from '@/hooks/useDialogArea';
+import { LocaleProvider } from '@/hooks/useLocaleSeparators';
+import { MigrateTokenProvider, useMigrateToken } from '@/hooks/useMigrateToken';
 
-import { layoutMixins } from "@/styles/layoutMixins";
-import breakpoints from "@/styles/breakpoints";
+import { layoutMixins } from '@/styles/layoutMixins';
+import breakpoints from '@/styles/breakpoints';
 
-import { Tabs } from "@/components/Tabs";
+import { Tabs } from '@/components/Tabs';
 
-import { Header } from "@/views/Header";
-import { MigratePage } from "@/views/MigratePage";
-import { PendingMigrationsPage } from "@/views/PendingMigrationsPage";
-import { DialogManager } from "@/views/dialogs/DialogManager";
-import { TermsOfUsePage } from "@/views/TermsOfUsePage";
-import { PrivacyPolicyPage } from "@/views/PrivacyPolicyPage";
+import { Header } from '@/views/Header';
+import { MigratePage } from '@/views/MigratePage';
+import { PendingMigrationsPage } from '@/views/PendingMigrationsPage';
+import { DialogManager } from '@/views/dialogs/DialogManager';
+import { TermsOfUsePage } from '@/views/TermsOfUsePage';
+import { PrivacyPolicyPage } from '@/views/PrivacyPolicyPage';
 
-import { config } from "@/lib/wagmi";
+import { config } from '@/lib/wagmi';
 
-import "@/styles/constants.css";
-import "@/styles/web3modal.css";
+import '@/styles/constants.css';
+import '@/styles/web3modal.css';
 
 const queryClient = new QueryClient();
 
@@ -106,9 +106,12 @@ const providers = [
 ];
 
 const App = () => {
-  return [...providers].reverse().reduce((children, Provider) => {
-    return <Provider>{children}</Provider>;
-  }, <Content />);
+  return [...providers].reverse().reduce(
+    (children, Provider) => {
+      return <Provider>{children}</Provider>;
+    },
+    <Content />
+  );
 };
 
 const Styled: Record<string, AnyStyledComponent> = {};
@@ -137,8 +140,8 @@ Styled.Content = styled.div`
   ${layoutMixins.withOuterAndInnerBorders}
   display: grid;
   grid-template:
-    "Header" var(--page-currentHeaderHeight)
-    "Main" minmax(min-content, 1fr)
+    'Header' var(--page-currentHeaderHeight)
+    'Main' minmax(min-content, 1fr)
     / 100%;
 
   transition: 0.3s var(--ease-out-expo);

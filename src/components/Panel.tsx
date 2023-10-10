@@ -1,6 +1,6 @@
-import styled, { AnyStyledComponent } from "styled-components";
+import styled, { AnyStyledComponent } from 'styled-components';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
 type PanelProps = {
   slotHeader?: React.ReactNode;
@@ -12,11 +12,7 @@ type PanelStyleProps = {
   className?: string;
 };
 
-export const Panel = ({
-  slotHeader,
-  children,
-  className,
-}: PanelProps & PanelStyleProps) => (
+export const Panel = ({ slotHeader, children, className }: PanelProps & PanelStyleProps) => (
   <Styled.Panel className={className}>
     {slotHeader}
     <Styled.Content className={className}>{children}</Styled.Content>

@@ -1,9 +1,8 @@
+import { useEffect, useState } from 'react';
 
-import { useEffect, useState } from "react";
+import { LocalStorageKey } from '@/constants/localStorage';
 
-import { LocalStorageKey } from "@/constants/localStorage";
-
-import { getLocalStorage, setLocalStorage } from "@/lib/localStorage";
+import { getLocalStorage, setLocalStorage } from '@/lib/localStorage';
 
 export const useLocalStorage = <Value>({
   key,
@@ -14,18 +13,14 @@ export const useLocalStorage = <Value>({
   defaultValue: Value;
   validateFn?: (value: Value) => boolean;
 }) => {
-  const [value, setValue] = useState(
-    getLocalStorage({ key, defaultValue, validateFn })
-  );
+  const [value, setValue] = useState(getLocalStorage({ key, defaultValue, validateFn }));
 
   // Sync localStorage values across parallel browser sessions
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (key === e.key) {
         try {
-          const newValue = e.newValue
-            ? (JSON.parse(e.newValue) as Value)
-            : undefined;
+          const newValue = e.newValue ? (JSON.parse(e.newValue) as Value) : undefined;
           if (newValue !== undefined) setValue(newValue);
         } catch (error) {
           return false;
@@ -33,9 +28,9 @@ export const useLocalStorage = <Value>({
       }
     };
 
-    globalThis.window.addEventListener("storage", onStorage);
+    globalThis.window.addEventListener('storage', onStorage);
 
-    return () => globalThis.window.removeEventListener("storage", onStorage);
+    return () => globalThis.window.removeEventListener('storage', onStorage);
   }, []);
 
   useEffect(() => {

@@ -1,41 +1,36 @@
-import styled, { type AnyStyledComponent } from "styled-components";
+import styled, { type AnyStyledComponent } from 'styled-components';
 
-import { STRING_KEYS, StringGetterFunction } from "@/constants/localization";
+import { STRING_KEYS, StringGetterFunction } from '@/constants/localization';
 
 import {
   DYDX_CHAIN_ESTIMATED_BLOCK_TIME_MS,
   PendingMigrationData,
   PendingMigrationFilter,
-} from "@/constants/migrate";
+} from '@/constants/migrate';
 
-import {
-  useStringGetter,
-  usePendingMigrationsData,
-  useAccounts,
-  useBreakpoints,
-} from "@/hooks";
+import { useStringGetter, usePendingMigrationsData, useAccounts, useBreakpoints } from '@/hooks';
 
-import breakpoints from "@/styles/breakpoints";
-import { layoutMixins } from "@/styles/layoutMixins";
+import breakpoints from '@/styles/breakpoints';
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { AssetIcon } from "@/components/AssetIcon";
-import { CopyButton } from "@/components/CopyButton";
-import { Icon, IconName } from "@/components/Icon";
-import { IconButton } from "@/components/IconButton";
-import { Input, InputType } from "@/components/Input";
-import { Output, OutputType } from "@/components/Output";
-import { ToggleGroup } from "@/components/ToggleGroup";
-import { type ColumnDef, Table, TableCell } from "@/components/Table";
-import { VerticalSeparator } from "@/components/Separator";
-import { WithLabel } from "@/components/WithLabel";
+import { AssetIcon } from '@/components/AssetIcon';
+import { CopyButton } from '@/components/CopyButton';
+import { Icon, IconName } from '@/components/Icon';
+import { IconButton } from '@/components/IconButton';
+import { Input, InputType } from '@/components/Input';
+import { Output, OutputType } from '@/components/Output';
+import { ToggleGroup } from '@/components/ToggleGroup';
+import { type ColumnDef, Table, TableCell } from '@/components/Table';
+import { VerticalSeparator } from '@/components/Separator';
+import { WithLabel } from '@/components/WithLabel';
 
-import { truncateAddress } from "@/lib/wallet";
-import { formatRelativeTimeFromMs } from "@/lib/dateTime";
+import { truncateAddress } from '@/lib/wallet';
+import { formatRelativeTimeFromMs } from '@/lib/dateTime';
 
 export enum PendingMigrationsTableColumnKey {
-  Address = "Address",
-  Amount = "Amount",
-  BlockHeight = "BlockHeight",
+  Address = 'Address',
+  Amount = 'Amount',
+  BlockHeight = 'BlockHeight',
 }
 
 const getPendingMigrationsTableColumnDef = ({
@@ -47,8 +42,8 @@ const getPendingMigrationsTableColumnDef = ({
   latestBlockHeight?: number;
   stringGetter: StringGetterFunction;
 }): ColumnDef<PendingMigrationData> =>
-  ((
-    {
+  (
+    ({
       [PendingMigrationsTableColumnKey.Address]: {
         columnKey: PendingMigrationsTableColumnKey.Address,
         getCellValue: (row) => row.address,
@@ -80,10 +75,9 @@ const getPendingMigrationsTableColumnDef = ({
               <Output
                 type={OutputType.Text}
                 value={formatRelativeTimeFromMs(
-                  (blockHeight - latestBlockHeight) *
-                    DYDX_CHAIN_ESTIMATED_BLOCK_TIME_MS,
+                  (blockHeight - latestBlockHeight) * DYDX_CHAIN_ESTIMATED_BLOCK_TIME_MS,
                   {
-                    format: "short",
+                    format: 'short',
                   }
                 )}
               />
@@ -95,11 +89,8 @@ const getPendingMigrationsTableColumnDef = ({
           </TableCell>
         ),
       },
-    } as Record<
-      PendingMigrationsTableColumnKey,
-      ColumnDef<PendingMigrationData>
-    >
-  )[key]);
+    }) as Record<PendingMigrationsTableColumnKey, ColumnDef<PendingMigrationData>>
+  )[key];
 
 export const PendingMigrationsTable = ({
   columnKeys = Object.values(PendingMigrationsTableColumnKey),
@@ -132,7 +123,7 @@ export const PendingMigrationsTable = ({
             <h3>{stringGetter({ key: STRING_KEYS.PENDING_MIGRATIONS })}</h3>
             {latestBlockHeight && (
               <span>
-                {stringGetter({ key: STRING_KEYS.LATEST_BLOCK_HEIGHT })}:{" "}
+                {stringGetter({ key: STRING_KEYS.LATEST_BLOCK_HEIGHT })}:{' '}
                 <Output type={OutputType.Number} value={latestBlockHeight} />
               </span>
             )}
@@ -140,10 +131,7 @@ export const PendingMigrationsTable = ({
         )}
         <Styled.Filters>
           {showAddressSearchInput && (
-            <Styled.InputContainer
-              label={<Icon iconName={IconName.Search} />}
-              inputID="search"
-            >
+            <Styled.InputContainer label={<Icon iconName={IconName.Search} />} inputID="search">
               <Input
                 id="search"
                 placeholder={stringGetter({
@@ -155,10 +143,10 @@ export const PendingMigrationsTable = ({
                   setAddressSearchFilter(e.target.value);
                 }}
               />
-              {addressSearchFilter !== "" && (
+              {addressSearchFilter !== '' && (
                 <Styled.ClearButton
                   iconName={IconName.Close}
-                  onClick={() => setAddressSearchFilter("")}
+                  onClick={() => setAddressSearchFilter('')}
                 />
               )}
             </Styled.InputContainer>
@@ -178,9 +166,7 @@ export const PendingMigrationsTable = ({
                   },
                 ]}
                 value={filter}
-                onValueChange={(val: string) =>
-                  setFilter(val as PendingMigrationFilter)
-                }
+                onValueChange={(val: string) => setFilter(val as PendingMigrationFilter)}
               />
             </>
           )}
@@ -203,14 +189,12 @@ export const PendingMigrationsTable = ({
               key:
                 filter === PendingMigrationFilter.Mine
                   ? STRING_KEYS.EMPTY_PENDING_MIGRATIONS_MINE
-                  : addressSearchFilter !== ""
+                  : addressSearchFilter !== ''
                   ? STRING_KEYS.EMPTY_PENDING_MIGRATIONS_SEARCH
                   : STRING_KEYS.EMPTY_PENDING_MIGRATIONS_ALL,
               params: {
                 SEARCH_STRING: (
-                  <Styled.HighlightedText>
-                    "{addressSearchFilter}"
-                  </Styled.HighlightedText>
+                  <Styled.HighlightedText>"{addressSearchFilter}"</Styled.HighlightedText>
                 ),
               },
             })}
@@ -338,7 +322,6 @@ Styled.InputContainer = styled(WithLabel)`
     :not(:focus-within, :only-child) {
       min-width: 5rem;
     }
- 
   }
 
   label {

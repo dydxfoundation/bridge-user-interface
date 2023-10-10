@@ -1,9 +1,9 @@
-import styled, { type AnyStyledComponent } from "styled-components";
+import styled, { type AnyStyledComponent } from 'styled-components';
 
-import { Root, Item, Indicator } from "@radix-ui/react-radio-group";
-import { layoutMixins } from "@/styles/layoutMixins";
-import { formMixins } from "@/styles/formMixins";
-import breakpoints from "@/styles/breakpoints";
+import { Root, Item, Indicator } from '@radix-ui/react-radio-group';
+import { layoutMixins } from '@/styles/layoutMixins';
+import { formMixins } from '@/styles/formMixins';
+import breakpoints from '@/styles/breakpoints';
 
 export type RadioGroupItem = {
   value: string;
@@ -23,18 +23,8 @@ type ElementProps = {
 
 type RadioGroupProps = StyleProps & ElementProps;
 
-export const RadioGroup = ({
-  items,
-  value,
-  onValueChange,
-  className,
-}: RadioGroupProps) => (
-  <Styled.Root
-    className={className}
-    defaultValue={value}
-    onValueChange={onValueChange}
-    required
-  >
+export const RadioGroup = ({ items, value, onValueChange, className }: RadioGroupProps) => (
+  <Styled.Root className={className} defaultValue={value} onValueChange={onValueChange} required>
     {items.map((item: RadioGroupItem, index) => (
       <Styled.RadioItem
         className={className}
@@ -120,8 +110,8 @@ Styled.Indicator = styled(Indicator)`
   height: 100%;
   position: relative;
 
-  &[data-state="checked"]:after {
-    content: "";
+  &[data-state='checked']:after {
+    content: '';
     display: block;
     width: 0.5rem;
     height: 0.5rem;

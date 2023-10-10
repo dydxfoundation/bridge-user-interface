@@ -1,18 +1,18 @@
-import { Fragment } from "react";
+import { Fragment } from 'react';
 
 import styled, {
   type AnyStyledComponent,
   css,
   type FlattenInterpolation,
   ThemeProps,
-} from "styled-components";
+} from 'styled-components';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { WithSeparators } from "@/components/Separator";
-import { WithTooltip } from "@/components/WithTooltip";
+import { WithSeparators } from '@/components/Separator';
+import { WithTooltip } from '@/components/WithTooltip';
 
-import { LoadingContext } from "@/contexts/LoadingContext";
+import { LoadingContext } from '@/contexts/LoadingContext';
 
 export type DetailsItem = {
   key: string;
@@ -25,19 +25,19 @@ export type DetailsItem = {
 };
 
 const DETAIL_LAYOUTS = {
-  column: "column",
-  row: "row",
-  rowColumns: "row",
-  grid: "row",
-  stackColumn: "column",
+  column: 'column',
+  row: 'row',
+  rowColumns: 'row',
+  grid: 'row',
+  stackColumn: 'column',
 } as const;
 
 const DETAIL_ITEM_TOOLTIP_LAYOUTS = {
-  column: "left",
-  row: "top",
-  rowColumns: "top",
+  column: 'left',
+  row: 'top',
+  rowColumns: 'top',
   grid: undefined,
-  stackColumn: "top",
+  stackColumn: 'top',
 } as const;
 
 type ElementProps = {
@@ -48,8 +48,8 @@ type ElementProps = {
 };
 
 type StyleProps = {
-  layout?: "column" | "row" | "rowColumns" | "grid" | "stackColumn";
-  justifyItems?: "start" | "end";
+  layout?: 'column' | 'row' | 'rowColumns' | 'grid' | 'stackColumn';
+  justifyItems?: 'start' | 'end';
   withSeparators?: boolean;
   withOverflow?: boolean;
   className?: string;
@@ -62,14 +62,10 @@ const DetailItem = ({
   value,
   withTooltipIcon,
   justifyItems,
-  layout = "column",
+  layout = 'column',
   withOverflow,
 }: DetailsItem & StyleProps) => (
-  <Styled.Item
-    justifyItems={justifyItems}
-    layout={layout}
-    withOverflow={withOverflow}
-  >
+  <Styled.Item justifyItems={justifyItems} layout={layout} withOverflow={withOverflow}>
     <dt>
       <WithTooltip
         tooltip={tooltip}
@@ -80,7 +76,7 @@ const DetailItem = ({
         {label}
       </WithTooltip>
     </dt>
-    <dd>{value ?? ""}</dd>
+    <dd>{value ?? ''}</dd>
   </Styled.Item>
 );
 
@@ -90,56 +86,39 @@ export const Details = ({
   items,
   slotHeader,
   isLoading = false,
-  justifyItems = "start",
-  layout = "column",
+  justifyItems = 'start',
+  layout = 'column',
   withOverflow = true,
   withSeparators = false,
 }: ElementProps & StyleProps) => (
   <LoadingContext.Provider value={isLoading}>
     {slotHeader}
-    <Styled.Details
-      layout={layout}
-      withSeparators={withSeparators}
-      className={className}
-    >
-      <WithSeparators
-        withSeparators={withSeparators}
-        layout={DETAIL_LAYOUTS[layout]}
-      >
-        {items.map(
-          ({
-            key,
-            tooltip,
-            tooltipParams,
-            label,
-            subitems,
-            value,
-            withTooltipIcon,
-          }) => (
-            <Fragment key={key}>
-              <DetailItem
-                {...{
-                  key,
-                  tooltip,
-                  tooltipParams,
-                  label,
-                  value,
-                  withTooltipIcon,
-                  justifyItems,
-                  layout,
-                  withOverflow,
-                }}
+    <Styled.Details layout={layout} withSeparators={withSeparators} className={className}>
+      <WithSeparators withSeparators={withSeparators} layout={DETAIL_LAYOUTS[layout]}>
+        {items.map(({ key, tooltip, tooltipParams, label, subitems, value, withTooltipIcon }) => (
+          <Fragment key={key}>
+            <DetailItem
+              {...{
+                key,
+                tooltip,
+                tooltipParams,
+                label,
+                value,
+                withTooltipIcon,
+                justifyItems,
+                layout,
+                withOverflow,
+              }}
+            />
+            {subitems && showSubitems && layout === 'column' && (
+              <Styled.SubDetails
+                items={subitems}
+                layout={DETAIL_LAYOUTS[layout]}
+                withSeparators={withSeparators}
               />
-              {subitems && showSubitems && layout === "column" && (
-                <Styled.SubDetails
-                  items={subitems}
-                  layout={DETAIL_LAYOUTS[layout]}
-                  withSeparators={withSeparators}
-                />
-              )}
-            </Fragment>
-          )
-        )}
+            )}
+          </Fragment>
+        ))}
       </WithSeparators>
     </Styled.Details>
   </LoadingContext.Provider>
@@ -172,10 +151,7 @@ const detailsLayoutVariants = {
   `,
 };
 
-const itemLayoutVariants: Record<
-  string,
-  FlattenInterpolation<ThemeProps<AnyStyledComponent>>
-> = {
+const itemLayoutVariants: Record<string, FlattenInterpolation<ThemeProps<AnyStyledComponent>>> = {
   column: css`
     isolation: isolate;
 
@@ -235,7 +211,7 @@ const itemLayoutVariants: Record<
 const Styled: Record<string, AnyStyledComponent> = {};
 
 Styled.Details = styled.dl<{
-  layout: "column" | "row" | "rowColumns" | "grid" | "stackColumn";
+  layout: 'column' | 'row' | 'rowColumns' | 'grid' | 'stackColumn';
   withSeparators: boolean;
 }>`
   --details-item-height: 2rem;
@@ -249,14 +225,14 @@ Styled.Details = styled.dl<{
 `;
 
 Styled.Item = styled.div<{
-  layout: "column" | "row" | "rowColumns" | "grid" | "stackColumn";
-  justifyItems?: "start" | "end";
+  layout: 'column' | 'row' | 'rowColumns' | 'grid' | 'stackColumn';
+  justifyItems?: 'start' | 'end';
   withOverflow: boolean;
 }>`
   ${({ layout }) => layout && itemLayoutVariants[layout]}
 
   ${({ justifyItems }) =>
-    justifyItems === "end" &&
+    justifyItems === 'end' &&
     css`
       &:nth-child(even) {
         justify-items: end;
@@ -306,7 +282,7 @@ Styled.Item = styled.div<{
     flex-direction: row;
 
     &:empty:after {
-      content: "–";
+      content: '–';
       color: var(--color-text-0);
       opacity: 0.5;
     }
@@ -318,7 +294,7 @@ Styled.SubDetails = styled(Details)`
   position: relative;
 
   &:before {
-    content: "";
+    content: '';
     background-color: var(--color-border);
     position: absolute;
     bottom: 0.25rem;

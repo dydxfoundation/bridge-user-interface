@@ -1,13 +1,12 @@
-import { OnboardingState } from "@/constants/account";
+import { OnboardingState } from '@/constants/account';
 
-import type { RootState } from "./_store";
+import type { RootState } from './_store';
 
 /**
  * @param state
  * @returns user's OnboardingState
  */
-export const getOnboardingState = (state: RootState) =>
-  state.account.onboardingState;
+export const getOnboardingState = (state: RootState) => state.account.onboardingState;
 
 /**
  * @param state
@@ -20,5 +19,4 @@ export const getIsAccountConnected = (state: RootState) =>
  * @param state
  * @returns OnboardingGuards (Record of boolean items) to aid in determining what Onboarding Step the user is on.
  */
-export const getOnboardingGuards = (state: RootState) =>
-  state.account.onboardingGuards;
+export const getOnboardingGuards = (state: RootState) => state.account.onboardingGuards;

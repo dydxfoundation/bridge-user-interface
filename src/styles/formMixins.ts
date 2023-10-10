@@ -1,7 +1,7 @@
-import { css } from "styled-components";
+import { css } from 'styled-components';
 
-import { layoutMixins } from "./layoutMixins";
-import breakpoints from "./breakpoints";
+import { layoutMixins } from './layoutMixins';
+import breakpoints from './breakpoints';
 
 export const formMixins: Record<string, any> = {
   inputsColumn: css`

@@ -1,8 +1,8 @@
-import styled, { type AnyStyledComponent } from "styled-components";
-import { Root, Indicator } from "@radix-ui/react-checkbox";
-import { CheckIcon } from "@radix-ui/react-icons";
+import styled, { type AnyStyledComponent } from 'styled-components';
+import { Root, Indicator } from '@radix-ui/react-checkbox';
+import { CheckIcon } from '@radix-ui/react-icons';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
 type ElementProps = {
   checked: boolean;
@@ -25,12 +25,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   label,
 }) => (
   <Styled.Container>
-    <Styled.Root
-      className={className}
-      checked={checked}
-      onCheckedChange={onCheckedChange}
-      id={id}
-    >
+    <Styled.Root className={className} checked={checked} onCheckedChange={onCheckedChange} id={id}>
       <Styled.Indicator>
         <CheckIcon />
       </Styled.Indicator>
@@ -61,7 +56,7 @@ Styled.Root = styled(Root)`
   border: var(--border-width) solid var(--color-border);
   background-color: var(--checkbox-backgroundColor);
 
-  &[data-state="checked"] {
+  &[data-state='checked'] {
     --checkbox-backgroundColor: var(--color-accent);
   }
 `;

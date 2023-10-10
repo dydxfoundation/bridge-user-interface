@@ -1,5 +1,5 @@
-import { cloneElement } from "react";
-import styled, { type AnyStyledComponent } from "styled-components";
+import { cloneElement } from 'react';
+import styled, { type AnyStyledComponent } from 'styled-components';
 import {
   Root,
   Trigger,
@@ -8,16 +8,16 @@ import {
   RadioGroup,
   RadioItem,
   Portal,
-} from "@radix-ui/react-dropdown-menu";
+} from '@radix-ui/react-dropdown-menu';
 
-import { TriangleDownIcon, CheckIcon } from "@radix-ui/react-icons";
+import { TriangleDownIcon, CheckIcon } from '@radix-ui/react-icons';
 
-import { type MenuItem } from "@/constants/menus";
+import { type MenuItem } from '@/constants/menus';
 
-import { Tag } from "@/components/Tag";
+import { Tag } from '@/components/Tag';
 
-import { popoverMixins } from "@/styles/popoverMixins";
-import { layoutMixins } from "@/styles/layoutMixins";
+import { popoverMixins } from '@/styles/popoverMixins';
+import { layoutMixins } from '@/styles/layoutMixins';
 
 type ElementProps<MenuItemValue extends string> = {
   disabled?: boolean;
@@ -29,7 +29,7 @@ type ElementProps<MenuItemValue extends string> = {
 };
 
 type StyleProps = {
-  align?: "center" | "start" | "end";
+  align?: 'center' | 'start' | 'end';
   sideOffset?: number;
   className?: string;
 };
@@ -49,7 +49,7 @@ export const DropdownSelectMenu = <MenuItemValue extends string>({
       </>
     );
   })(),
-  align = "start",
+  align = 'start',
   sideOffset = 1,
   className,
 
@@ -66,48 +66,36 @@ export const DropdownSelectMenu = <MenuItemValue extends string>({
 
   return (
     <Root>
-      <Styled.Trigger
-        disabled={disabled}
-        className={className}
-        asChild={slotTrigger}
-      >
-        {slotTrigger
-          ? cloneElement(slotTrigger, { children: triggerContent })
-          : triggerContent}
+      <Styled.Trigger disabled={disabled} className={className} asChild={slotTrigger}>
+        {slotTrigger ? cloneElement(slotTrigger, { children: triggerContent }) : triggerContent}
       </Styled.Trigger>
       <Portal>
-        <Styled.Content
-          align={align}
-          sideOffset={sideOffset}
-          className={className}
-        >
+        <Styled.Content align={align} sideOffset={sideOffset} className={className}>
           <RadioGroup
             value={value}
             onValueChange={(value) => onValueChange(value as MenuItemValue)}
           >
-            {items.map(
-              ({ value, label, slotBefore, slotAfter, tag, disabled }) => (
-                <Styled.RadioItem key={value} value={value} disabled={disabled}>
-                  {slotBefore}
+            {items.map(({ value, label, slotBefore, slotAfter, tag, disabled }) => (
+              <Styled.RadioItem key={value} value={value} disabled={disabled}>
+                {slotBefore}
 
-                  <Styled.ItemLabel>
-                    {label}
-                    {tag && (
-                      <>
-                        {" "}
-                        <Tag>{tag}</Tag>
-                      </>
-                    )}
-                  </Styled.ItemLabel>
+                <Styled.ItemLabel>
+                  {label}
+                  {tag && (
+                    <>
+                      {' '}
+                      <Tag>{tag}</Tag>
+                    </>
+                  )}
+                </Styled.ItemLabel>
 
-                  {slotAfter}
+                {slotAfter}
 
-                  <Styled.ItemIndicator>
-                    <CheckIcon />
-                  </Styled.ItemIndicator>
-                </Styled.RadioItem>
-              )
-            )}
+                <Styled.ItemIndicator>
+                  <CheckIcon />
+                </Styled.ItemIndicator>
+              </Styled.RadioItem>
+            ))}
           </RadioGroup>
         </Styled.Content>
       </Portal>

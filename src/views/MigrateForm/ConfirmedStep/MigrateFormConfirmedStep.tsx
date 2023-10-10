@@ -1,28 +1,28 @@
-import styled, { type AnyStyledComponent, css } from "styled-components";
-import BigNumber from "bignumber.js";
+import styled, { type AnyStyledComponent, css } from 'styled-components';
+import BigNumber from 'bignumber.js';
 
-import { ButtonAction, ButtonType } from "@/constants/buttons";
-import { TransactionStatus } from "@/constants/migrate";
-import { STRING_KEYS } from "@/constants/localization";
+import { ButtonAction, ButtonType } from '@/constants/buttons';
+import { TransactionStatus } from '@/constants/migrate';
+import { STRING_KEYS } from '@/constants/localization';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { useAccounts, useMigrateToken, useStringGetter } from "@/hooks";
+import { useAccounts, useMigrateToken, useStringGetter } from '@/hooks';
 
-import { AssetIcon } from "@/components/AssetIcon";
-import { Button } from "@/components/Button";
-import { CopyButton } from "@/components/CopyButton";
-import { DetailsReceipt } from "@/components/DetailsReceipt";
-import { Link } from "@/components/Link";
-import { LoadingDots } from "@/components/Loading/LoadingDots";
-import { Output, OutputType, ShowSign } from "@/components/Output";
-import { Ring } from "@/components/Ring";
-import { Tag, TagSign } from "@/components/Tag";
+import { AssetIcon } from '@/components/AssetIcon';
+import { Button } from '@/components/Button';
+import { CopyButton } from '@/components/CopyButton';
+import { DetailsReceipt } from '@/components/DetailsReceipt';
+import { Link } from '@/components/Link';
+import { LoadingDots } from '@/components/Loading/LoadingDots';
+import { Output, OutputType, ShowSign } from '@/components/Output';
+import { Ring } from '@/components/Ring';
+import { Tag, TagSign } from '@/components/Tag';
 
-import { truncateAddress } from "@/lib/wallet";
+import { truncateAddress } from '@/lib/wallet';
 
-import { TokensBeforeAfterDiagram } from "../TokensBeforeAfterDiagram";
-import { FinalizingCountdownTimer } from "./FinalizingCountdownTimer";
+import { TokensBeforeAfterDiagram } from '../TokensBeforeAfterDiagram';
+import { FinalizingCountdownTimer } from './FinalizingCountdownTimer';
 
 export const MigrateFormConfirmedStep = () => {
   const stringGetter = useStringGetter();
@@ -39,16 +39,9 @@ export const MigrateFormConfirmedStep = () => {
 
   const { evmAddress } = useAccounts();
 
-  const getAssetOnChainLabel = ({
-    asset,
-    chain,
-  }: {
-    asset: string;
-    chain: string;
-  }) => (
+  const getAssetOnChainLabel = ({ asset, chain }: { asset: string; chain: string }) => (
     <span>
-      {asset}{" "}
-      {stringGetter({ key: STRING_KEYS.ON_CHAIN, params: { CHAIN: chain } })}
+      {asset} {stringGetter({ key: STRING_KEYS.ON_CHAIN, params: { CHAIN: chain } })}
     </span>
   );
 
@@ -61,7 +54,7 @@ export const MigrateFormConfirmedStep = () => {
         headerIcon={<AssetIcon symbol="ETH" />}
         detailItems={[
           {
-            key: "transaction",
+            key: 'transaction',
             label: (
               <Styled.InlineRow>
                 {transactionStatus > TransactionStatus.NotStarted &&
@@ -69,47 +62,36 @@ export const MigrateFormConfirmedStep = () => {
                   !bridgeTxError && <Ring withAnimation value={0.25} />}
                 {stringGetter({ key: STRING_KEYS.TRANSACTION })}
                 {transactionStatus >= TransactionStatus.Finalized ? (
-                  <Tag sign={TagSign.Positive}>
-                    {stringGetter({ key: STRING_KEYS.FINALIZED })}
-                  </Tag>
+                  <Tag sign={TagSign.Positive}>{stringGetter({ key: STRING_KEYS.FINALIZED })}</Tag>
                 ) : bridgeTxError ? (
-                  <Tag sign={TagSign.Negative}>
-                    {stringGetter({ key: STRING_KEYS.FAILED })}
-                  </Tag>
+                  <Tag sign={TagSign.Negative}>{stringGetter({ key: STRING_KEYS.FAILED })}</Tag>
                 ) : (
                   transactionStatus === TransactionStatus.Unfinalized && (
-                    <FinalizingCountdownTimer
-                      numBlocksTillFinalized={numBlocksTillFinalized}
-                    />
+                    <FinalizingCountdownTimer numBlocksTillFinalized={numBlocksTillFinalized} />
                   )
                 )}
               </Styled.InlineRow>
             ),
             value: (
-              <Link
-                href={`${
-                  import.meta.env.VITE_ETHERSCAN_URL
-                }/tx/${bridgeTxHash}`}
-                withIcon
-              >
+              <Link href={`${import.meta.env.VITE_ETHERSCAN_URL}/tx/${bridgeTxHash}`} withIcon>
                 {stringGetter({ key: STRING_KEYS.BLOCK_EXPLORER })}
               </Link>
             ),
           },
           {
-            key: "address",
+            key: 'address',
             label: stringGetter({ key: STRING_KEYS.ADDRESS }),
             value: (
               <CopyButton buttonType="text" value={evmAddress}>
-                {truncateAddress(evmAddress, "0x")}
+                {truncateAddress(evmAddress, '0x')}
               </CopyButton>
             ),
           },
           {
-            key: "wethDYDX",
+            key: 'wethDYDX',
             label: getAssetOnChainLabel({
-              asset: "wethDYDX",
-              chain: "Ethereum",
+              asset: 'wethDYDX',
+              chain: 'Ethereum',
             }),
             value: (
               <Styled.Output
@@ -121,10 +103,10 @@ export const MigrateFormConfirmedStep = () => {
             ),
           },
           {
-            key: "v3Token",
+            key: 'ethDYDX',
             label: getAssetOnChainLabel({
-              asset: "ethDYDX",
-              chain: "Ethereum",
+              asset: 'ethDYDX',
+              chain: 'Ethereum',
             }),
             value: (
               <Styled.Output
@@ -144,7 +126,7 @@ export const MigrateFormConfirmedStep = () => {
         headerIcon={<AssetIcon symbol="DYDX" />}
         detailItems={[
           {
-            key: "transaction",
+            key: 'transaction',
             label: (
               <Styled.InlineRow>
                 {transactionStatus === TransactionStatus.Finalized && (
@@ -152,9 +134,7 @@ export const MigrateFormConfirmedStep = () => {
                 )}
                 {stringGetter({ key: STRING_KEYS.TRANSACTION })}
                 <Styled.StartedTag
-                  hasStarted={
-                    transactionStatus === TransactionStatus.Acknowledged
-                  }
+                  hasStarted={transactionStatus === TransactionStatus.Acknowledged}
                 >
                   {stringGetter({
                     key:
@@ -167,11 +147,11 @@ export const MigrateFormConfirmedStep = () => {
             ),
             value: stringGetter({
               key: STRING_KEYS.X_HOURS_LOWERCASED,
-              params: { X: "~40" },
+              params: { X: '~40' },
             }),
           },
           {
-            key: "address",
+            key: 'address',
             label: stringGetter({ key: STRING_KEYS.ADDRESS }),
             value: (
               <CopyButton buttonType="text" value={destinationAddress}>
@@ -180,10 +160,10 @@ export const MigrateFormConfirmedStep = () => {
             ),
           },
           {
-            key: "DYDX",
+            key: 'DYDX',
             label: getAssetOnChainLabel({
-              asset: "DYDX",
-              chain: "dYdX Chain",
+              asset: 'DYDX',
+              chain: 'dYdX Chain',
             }),
             value: (
               <Styled.Output
@@ -199,10 +179,7 @@ export const MigrateFormConfirmedStep = () => {
 
       {bridgeTxError ? (
         <Styled.ButtonRow>
-          <Styled.SubmitButton
-            action={ButtonAction.Primary}
-            type={ButtonType.Submit}
-          >
+          <Styled.SubmitButton action={ButtonAction.Primary} type={ButtonType.Submit}>
             {stringGetter({ key: STRING_KEYS.RETRY_MIGRATION })}
           </Styled.SubmitButton>
         </Styled.ButtonRow>
@@ -219,10 +196,7 @@ export const MigrateFormConfirmedStep = () => {
           <Styled.ResetButton onClick={() => resetForm(true)}>
             {stringGetter({ key: STRING_KEYS.NEW_MIGRATION })}
           </Styled.ResetButton>
-          <Styled.SubmitButton
-            action={ButtonAction.Primary}
-            type={ButtonType.Submit}
-          >
+          <Styled.SubmitButton action={ButtonAction.Primary} type={ButtonType.Submit}>
             {stringGetter({ key: STRING_KEYS.CHECK_STATUS })}
           </Styled.SubmitButton>
         </Styled.ButtonRow>

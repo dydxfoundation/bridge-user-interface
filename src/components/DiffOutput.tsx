@@ -1,11 +1,11 @@
-import styled, { type AnyStyledComponent, css } from "styled-components";
+import styled, { type AnyStyledComponent, css } from 'styled-components';
 
-import { layoutMixins } from "@/styles/layoutMixins";
+import { layoutMixins } from '@/styles/layoutMixins';
 
-import { DiffArrow, type DiffArrowProps } from "@/components/DiffArrow";
-import { Output, type OutputProps, OutputType } from "@/components/Output";
+import { DiffArrow, type DiffArrowProps } from '@/components/DiffArrow';
+import { Output, type OutputProps, OutputType } from '@/components/Output';
 
-import { BigNumberish } from "@/lib/numbers";
+import { BigNumberish } from '@/lib/numbers';
 
 export { OutputType as DiffOutputType };
 
@@ -16,13 +16,10 @@ type ElementProps = {
 };
 
 type StyleProps = {
-  layout?: "row" | "column";
+  layout?: 'row' | 'column';
 };
 
-export type DiffOutputProps = DiffArrowProps &
-  OutputProps &
-  ElementProps &
-  StyleProps;
+export type DiffOutputProps = DiffArrowProps & OutputProps & ElementProps & StyleProps;
 
 export const DiffOutput = ({
   className,
@@ -34,7 +31,7 @@ export const DiffOutput = ({
   type,
   useGrouping,
   withDiff,
-  layout = "row",
+  layout = 'row',
   showSign,
   withBaseFont,
 
@@ -86,7 +83,7 @@ Styled.DiffValue = styled.div<{ hasInvalidNewValue?: boolean }>`
 `;
 
 Styled.DiffOutput = styled.div<{
-  layout: "row" | "column";
+  layout: 'row' | 'column';
   withDiff?: boolean;
 }>`
   --diffOutput-gap: 0.25rem;
@@ -103,22 +100,19 @@ Styled.DiffOutput = styled.div<{
 
   ${({ layout }) =>
     ({
-      ["row"]: `
+      ['row']: `
         ${layoutMixins.row}
       `,
-      ["column"]: `
+      ['column']: `
         ${layoutMixins.column}
       `,
-    }[layout])}
+    })[layout]}
 
   ${({ withDiff }) =>
     withDiff &&
     css`
       & > :first-child {
-        color: var(
-          --diffOutput-valueWithDiff-color,
-          var(--diffOutput-value-color)
-        );
+        color: var(--diffOutput-valueWithDiff-color, var(--diffOutput-value-color));
         font: var(--diffOutput-valueWithDiff-font);
       }
 

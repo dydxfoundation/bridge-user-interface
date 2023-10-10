@@ -1,15 +1,9 @@
-import styled, { keyframes, type AnyStyledComponent } from "styled-components";
+import styled, { keyframes, type AnyStyledComponent } from 'styled-components';
 
-import {
-  Root,
-  Item,
-  Header,
-  Trigger,
-  Content,
-} from "@radix-ui/react-accordion";
+import { Root, Item, Header, Trigger, Content } from '@radix-ui/react-accordion';
 
-import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { layoutMixins } from "@/styles/layoutMixins";
+import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { layoutMixins } from '@/styles/layoutMixins';
 
 export type AccordionItem = {
   header: React.ReactNode;
@@ -60,7 +54,7 @@ Styled.Trigger = styled(Trigger)`
     transition: transform 0.3s var(--ease-out-expo);
   }
 
-  &[data-state="open"] svg {
+  &[data-state='open'] svg {
     transform: rotate(0.5turn);
   }
 `;
@@ -70,7 +64,7 @@ Styled.Content = styled(Content)`
   overflow: hidden;
   margin: 0 1.5rem 1rem;
 
-  &[data-state="open"] {
+  &[data-state='open'] {
     animation: ${keyframes`
       from {
         height: 0;
@@ -81,7 +75,7 @@ Styled.Content = styled(Content)`
     `} 0.3s var(--ease-out-expo);
   }
 
-  &[data-state="closed"] {
+  &[data-state='closed'] {
     animation: ${keyframes`
       from {
         height: var(--radix-accordion-content-height);

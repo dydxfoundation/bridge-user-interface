@@ -1,8 +1,8 @@
-import styled, { type AnyStyledComponent, css } from "styled-components";
-import { Content, List, Root, Trigger } from "@radix-ui/react-tabs";
+import styled, { type AnyStyledComponent, css } from 'styled-components';
+import { Content, List, Root, Trigger } from '@radix-ui/react-tabs';
 
-import { layoutMixins } from "@/styles/layoutMixins";
-import breakpoints from "@/styles/breakpoints";
+import { layoutMixins } from '@/styles/layoutMixins';
+import breakpoints from '@/styles/breakpoints';
 
 export type TabItem<TabItemsValue> = {
   value: TabItemsValue;
@@ -119,7 +119,7 @@ Styled.Trigger = styled(Trigger)`
   border-radius: 0.5rem;
   border: var(--border-width) solid var(--trigger-borderColor);
 
-  &[data-state="active"] {
+  &[data-state='active'] {
     color: var(--trigger-active-textColor);
     background-color: var(--trigger-active-backgroundColor);
     border: var(--border-width) solid var(--trigger-active-borderColor);
@@ -139,7 +139,7 @@ Styled.Content = styled(Content)<{ $hide?: boolean }>`
   outline: none;
   box-shadow: none;
 
-  &[data-state="inactive"] {
+  &[data-state='inactive'] {
     pointer-events: none;
   }
 

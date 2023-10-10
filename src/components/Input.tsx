@@ -1,30 +1,26 @@
-import { Dispatch, forwardRef, SetStateAction } from "react";
-import styled, { type AnyStyledComponent, css } from "styled-components";
-import {
-  NumericFormat,
-  type NumberFormatValues,
-  type SourceInfo,
-} from "react-number-format";
-import type { SyntheticInputEvent } from "react-number-format/types/types";
+import { Dispatch, forwardRef, SetStateAction } from 'react';
+import styled, { type AnyStyledComponent, css } from 'styled-components';
+import { NumericFormat, type NumberFormatValues, type SourceInfo } from 'react-number-format';
+import type { SyntheticInputEvent } from 'react-number-format/types/types';
 
 import {
   LEVERAGE_DECIMALS,
   PERCENT_DECIMALS,
   TOKEN_DECIMALS,
   USD_DECIMALS,
-} from "@/constants/numbers";
+} from '@/constants/numbers';
 
-import { useLocaleSeparators } from "@/hooks";
+import { useLocaleSeparators } from '@/hooks';
 
-import { BIG_NUMBERS } from "@/lib/numbers";
+import { BIG_NUMBERS } from '@/lib/numbers';
 
 export enum InputType {
-  Currency = "Currency",
-  Leverage = "Leverage",
-  Number = "Number",
-  Percent = "Percent",
-  Text = "Text",
-  Search = "Search",
+  Currency = 'Currency',
+  Leverage = 'Leverage',
+  Number = 'Number',
+  Percent = 'Percent',
+  Text = 'Text',
+  Search = 'Search',
 }
 
 type StyleProps = {
@@ -85,40 +81,37 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const numberFormatConfig = {
       [InputType.Currency]: {
         defaultDecimals: USD_DECIMALS,
-        prefix: "$",
+        prefix: '$',
       },
       [InputType.Leverage]: {
         defaultDecimals: LEVERAGE_DECIMALS,
-        suffix: "×",
+        suffix: '×',
       },
       [InputType.Number]: {
         defaultDecimals: TOKEN_DECIMALS,
       },
       [InputType.Percent]: {
         defaultDecimals: PERCENT_DECIMALS,
-        suffix: "%",
+        suffix: '%',
       },
       [InputType.Text]: null,
       [InputType.Search]: null,
     }[type];
 
-    decimals =
-      decimals !== undefined ? decimals : numberFormatConfig?.defaultDecimals;
+    decimals = decimals !== undefined ? decimals : numberFormatConfig?.defaultDecimals;
 
-    const defaultNumberPlaceholder = `${
-      numberFormatConfig?.prefix ?? ""
-    }${BIG_NUMBERS.ZERO.toFixed(
+    const defaultNumberPlaceholder = `${numberFormatConfig?.prefix ?? ''}${BIG_NUMBERS.ZERO.toFixed(
       decimals !== undefined ? decimals : USD_DECIMALS
-    )}${numberFormatConfig?.suffix ?? ""}`;
+    )}${numberFormatConfig?.suffix ?? ''}`;
 
     const formattedValue =
-      typeof value === "string"
+      typeof value === 'string'
         ? value
         : value != null
-        ? Intl.NumberFormat(navigator.language || "en-US", {
+        ? Intl.NumberFormat(navigator.language || 'en-US', {
             maximumFractionDigits: decimals,
           }).format(value)
-        : "";
+        : '';
 
     return (
       <Styled.InputContainer className={className}>
@@ -160,17 +153,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             onInput={(e: SyntheticInputEvent) => {
               if (!onInput) return;
               const value = e.target.value;
-              const { prefix = "", suffix = "" } = numberFormatConfig || {};
+              const { prefix = '', suffix = '' } = numberFormatConfig || {};
               // Remove prefix and suffix, replace commas with periods
-              const formattedValue = value
-                .replace(prefix, "")
-                .replace(suffix, "");
+              const formattedValue = value.replace(prefix, '').replace(suffix, '');
 
-              const floatValue: number | undefined = isNaN(
-                Number(formattedValue.replace(",", "."))
-              )
+              const floatValue: number | undefined = isNaN(Number(formattedValue.replace(',', '.')))
                 ? undefined
-                : Number(formattedValue.replace(",", "."));
+                : Number(formattedValue.replace(',', '.'));
 
               onInput?.({ value, floatValue, formattedValue });
             }}

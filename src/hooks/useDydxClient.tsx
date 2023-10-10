@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import {
   BECH32_PREFIX,
@@ -6,11 +6,13 @@ import {
   LocalWallet,
   onboarding,
   Network,
-} from "@dydxprotocol/v4-client-js";
+  ValidatorConfig,
+  IndexerConfig,
+} from '@dydxprotocol/v4-client-js';
 
 type DydxContextType = ReturnType<typeof useDydxClientContext>;
 const DydxContext = createContext<DydxContextType>({} as DydxContextType);
-DydxContext.displayName = "dYdXClient";
+DydxContext.displayName = 'dYdXClient';
 
 export const DydxProvider = ({ ...props }) => (
   <DydxContext.Provider value={useDydxClientContext()} {...props} />
@@ -26,8 +28,19 @@ const useDydxClientContext = () => {
     (async () => {
       try {
         const initializedClient = await CompositeClient.connect(
-          Network.staging()
+          new Network(
+            import.meta.env.VITE_NETWORK_ENVIRONMENT,
+            new IndexerConfig(
+              import.meta.env.VITE_NETWORK_INDEXER_REST_ENDPOINT,
+              import.meta.env.VITE_NETWORK_INDEXER_WS_ENDPOINT
+            ),
+            new ValidatorConfig(
+              import.meta.env.VITE_NEWORK_VALIDATOR_REST_ENDPOINT,
+              import.meta.env.VITE_NETWORK_CHAIN_ID
+            )
+          )
         );
+
         setCompositeClient(initializedClient);
       } catch (error) {
         console.error(error);
@@ -36,11 +49,7 @@ const useDydxClientContext = () => {
   }, []);
 
   // ------ Wallet Methods ------ //
-  const getWalletFromEvmSignature = async ({
-    signature,
-  }: {
-    signature: string;
-  }) => {
+  const getWalletFromEvmSignature = async ({ signature }: { signature: string }) => {
     const { mnemonic, privateKey, publicKey } =
       onboarding.deriveHDKeyFromEthereumSignature(signature);
 
