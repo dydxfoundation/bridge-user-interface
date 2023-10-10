@@ -15,6 +15,7 @@ import { DydxProvider } from '@/hooks/useDydxClient';
 import { DialogAreaProvider, useDialogArea } from '@/hooks/useDialogArea';
 import { LocaleProvider } from '@/hooks/useLocaleSeparators';
 import { MigrateTokenProvider, useMigrateToken } from '@/hooks/useMigrateToken';
+import { RestrictionProvider } from '@/hooks/useRestrictions';
 
 import { layoutMixins } from '@/styles/layoutMixins';
 import breakpoints from '@/styles/breakpoints';
@@ -100,18 +101,16 @@ const providers = [
   wrapProvider(LocaleProvider),
   wrapProvider(DydxProvider),
   wrapProvider(AccountsProvider),
+  wrapProvider(RestrictionProvider),
   wrapProvider(AccountBalanceProvider),
   wrapProvider(MigrateTokenProvider),
   wrapProvider(DialogAreaProvider),
 ];
 
 const App = () => {
-  return [...providers].reverse().reduce(
-    (children, Provider) => {
-      return <Provider>{children}</Provider>;
-    },
-    <Content />
-  );
+  return [...providers].reverse().reduce((children, Provider) => {
+    return <Provider>{children}</Provider>;
+  }, <Content />);
 };
 
 const Styled: Record<string, AnyStyledComponent> = {};

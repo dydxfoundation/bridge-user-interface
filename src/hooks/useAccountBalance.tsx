@@ -36,7 +36,7 @@ const useAccountBalanceContext = () => {
     token: import.meta.env.VITE_ETH_DYDX_ADDRESSS,
   });
 
-  const { data: wethDYDXBalanceData, refetch: refetchwethDYDXBalance } = useBalance({
+  const { data: wethDYDXBalanceData, refetch: refetchWethDYDXBalance } = useBalance({
     enabled: import.meta.env.VITE_WETH_DYDX_ADDRESS && evmAddress && canAccountMigrate,
     address: evmAddress,
     token: import.meta.env.VITE_WETH_DYDX_ADDRESS,
@@ -67,7 +67,7 @@ const useAccountBalanceContext = () => {
     if (!evmAddress || !canAccountMigrate) return;
 
     refetchEthDYDXBalance();
-    refetchwethDYDXBalance();
+    refetchWethDYDXBalance();
 
     if (dydxAddress !== undefined) refetchDYDXBalance();
   };

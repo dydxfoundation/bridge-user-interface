@@ -6,10 +6,12 @@ import { closeDialog, openDialog } from '@/state/dialogs';
 
 import { getActiveDialog } from '@/state/dialogsSelectors';
 
-import { DisconnectDialog } from '@/views/dialogs/DisconnectDialog';
-import { OnboardingDialog } from '@/views/dialogs/OnboardingDialog';
-import { MnemonicExportDialog } from '@/views/dialogs/MnemonicExportDialog';
-import { MoreLinksDialog } from '@/views/dialogs/MoreLinksDialog';
+import { DisconnectDialog } from './DisconnectDialog';
+import { MnemonicExportDialog } from './MnemonicExportDialog';
+import { MoreLinksDialog } from './MoreLinksDialog';
+import { OnboardingDialog } from './OnboardingDialog';
+import { RestrictedGeoDialog } from './RestrictedGeoDialog';
+import { WalletRestrictedDialog } from './WalletRestrictedDialog';
 
 export const DialogManager = () => {
   const dispatch = useDispatch();
@@ -34,8 +36,10 @@ export const DialogManager = () => {
 
   return {
     [DialogTypes.DisconnectWallet]: <DisconnectDialog {...modalProps} />,
-    [DialogTypes.Onboarding]: <OnboardingDialog {...modalProps} />,
     [DialogTypes.MnemonicExport]: <MnemonicExportDialog {...modalProps} />,
     [DialogTypes.MoreLinks]: <MoreLinksDialog {...modalProps} />,
+    [DialogTypes.Onboarding]: <OnboardingDialog {...modalProps} />,
+    [DialogTypes.RestrictedGeo]: <RestrictedGeoDialog {...modalProps} />,
+    [DialogTypes.WalletRestricted]: <WalletRestrictedDialog {...modalProps} />,
   }[type];
 };

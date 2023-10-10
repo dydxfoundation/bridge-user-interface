@@ -13,7 +13,13 @@ import { NumberSign, TOKEN_DECIMALS } from '@/constants/numbers';
 import { formMixins } from '@/styles/formMixins';
 import { layoutMixins } from '@/styles/layoutMixins';
 
-import { useAccounts, useStringGetter, useAccountBalance, useMigrateToken } from '@/hooks';
+import {
+  useAccounts,
+  useStringGetter,
+  useAccountBalance,
+  useMigrateToken,
+  useRestrictions,
+} from '@/hooks';
 
 import { DiffOutput } from '@/components/DiffOutput';
 import { FormInput } from '@/components/FormInput';
@@ -34,6 +40,7 @@ export const MigrateFormEditingStep = () => {
   const stringGetter = useStringGetter();
   const { dydxAddress: accountDydxAddress } = useAccounts();
   const { ethDYDXBalance } = useAccountBalance();
+  const { isAddressSanctioned } = useRestrictions();
 
   const {
     amountBN,
@@ -223,7 +230,9 @@ export const MigrateFormEditingStep = () => {
                       attached: true,
                       type: AlertType.Error,
                       message: stringGetter({
-                        key: STRING_KEYS.TRANSFER_INVALID_DYDX_ADDRESS,
+                        key: isAddressSanctioned(destinationAddress)
+                          ? STRING_KEYS.MIGRATION_BLOCKED_MESSAGE_DESTINATION
+                          : STRING_KEYS.INVALID_ADDRESS_BODY,
                       }),
                     }
                   }

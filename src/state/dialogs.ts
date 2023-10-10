@@ -5,6 +5,7 @@ import type { DialogTypes } from '@/constants/dialogs';
 type DialogInfo<TDialog extends DialogTypes> = {
   type: TDialog;
   dialogProps?: any;
+  openImmediately?: boolean;
 };
 
 export interface DialogsState {
@@ -14,7 +15,6 @@ export interface DialogsState {
 
 const initialState: DialogsState = {
   activeDialog: undefined,
-
   dialogQueue: [],
 };
 
@@ -22,27 +22,24 @@ export const dialogsSlice = createSlice({
   name: 'Dialogs',
   initialState,
   reducers: {
-    addDialogToQueue: (state: DialogsState, action: PayloadAction<DialogInfo<DialogTypes>>) => {
-      const dialogQueue = state.dialogQueue;
-      dialogQueue.push(action.payload);
-
-      return {
-        ...state,
-        dialogQueue,
-      };
+    closeDialog: (state: DialogsState) => {
+      state.activeDialog = state.dialogQueue.shift();
     },
-    closeDialog: (state: DialogsState) => ({
-      ...state,
-      activeDialog: state.dialogQueue.shift(),
-    }),
-    openDialog: (state: DialogsState, action: PayloadAction<DialogInfo<DialogTypes>>) => ({
-      ...state,
-      activeDialog: action.payload,
-    }),
-    closeDialogInTradeBox: (state: DialogsState) => ({
-      ...state,
-    }),
+    openDialog: (state: DialogsState, action: PayloadAction<DialogInfo<DialogTypes>>) => {
+      if (state.activeDialog?.type === action.payload.type) return;
+
+      if (action.payload.openImmediately) {
+        if (state.activeDialog) {
+          state.dialogQueue.unshift(state.activeDialog);
+        }
+        state.activeDialog = action.payload;
+      } else if (state.activeDialog) {
+        state.dialogQueue.push(action.payload);
+      } else {
+        state.activeDialog = action.payload;
+      }
+    },
   },
 });
 
-export const { addDialogToQueue, closeDialog, openDialog } = dialogsSlice.actions;
+export const { closeDialog, openDialog } = dialogsSlice.actions;
