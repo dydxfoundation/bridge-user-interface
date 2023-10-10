@@ -13,6 +13,6 @@ export const useIsDydxAddressValid = (dydxAddress?: string) => {
       dydxAddress !== undefined &&
       (dydxAddress === accountDydxAddress || validation.isValidAddress(dydxAddress)) &&
       !isAddressSanctioned(dydxAddress),
-    [dydxAddress, accountDydxAddress]
+    [dydxAddress, accountDydxAddress, isAddressSanctioned]
   );
 };

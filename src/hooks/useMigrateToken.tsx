@@ -41,7 +41,7 @@ export const useMigrateToken = () => useContext(MigrateTokenContext)!;
 const useMigrateTokenContext = () => {
   const stringGetter = useStringGetter();
   const { evmAddress, dydxAddress } = useAccounts();
-  const { v3TokenBalance, refetchBalances } = useAccountBalance();
+  const { ethDYDXBalance, refetchBalances } = useAccountBalance();
   const { screenAddresses, restrictUser } = useRestrictions();
   const { isMatchingNetwork, matchNetwork, isSwitchingNetwork } = useMatchingEvmNetwork({
     chainId: Number(import.meta.env.VITE_ETH_CHAIN_ID),

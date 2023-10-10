@@ -1,28 +1,28 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { useDispatch } from "react-redux";
+import { DialogTypes } from '@/constants/dialogs';
 
-import { DialogTypes } from "@/constants/dialogs";
+import { openDialog } from '@/state/dialogs';
 
-import { openDialog } from "@/state/dialogs";
-
-import { useDydxClient } from "./useDydxClient";
-import { useAccounts } from "./useAccounts";
+import { useDydxClient } from './useDydxClient';
+import { useAccounts } from './useAccounts';
 
 const useRestrictionContext = () => {
   const { compositeClient } = useDydxClient();
   const { evmAddress, dydxAddress, disconnect } = useAccounts();
   const dispatch = useDispatch();
 
-  const [sanctionedAddresses, setSanctionedAddresses] = useState<Set<string>>(
-    new Set()
-  );
+  const [sanctionedAddresses, setSanctionedAddresses] = useState<Set<string>>(new Set());
+
+  const restrictGeo = () =>
+    dispatch(
+      openDialog({
+        type: DialogTypes.RestrictedGeo,
+        openImmediately: true,
+        dialogProps: { preventClose: true },
+      })
+    );
 
   const restrictUser = useCallback(() => {
     disconnect();
@@ -40,16 +40,11 @@ const useRestrictionContext = () => {
 
       try {
         const results = await Promise.all(
-          addresses.map((address) =>
-            compositeClient.indexerClient.utility.screen(address)
-          )
+          addresses.map((address) => compositeClient.indexerClient.utility.screen(address))
         );
 
         const screenedAddresses = Object.fromEntries(
-          addresses.map((address, index) => [
-            address,
-            results[index]?.restricted,
-          ])
+          addresses.map((address, index) => [address, results[index]?.restricted])
         );
 
         const toAdd = Object.entries(screenedAddresses)
@@ -62,14 +57,7 @@ const useRestrictionContext = () => {
 
         return screenedAddresses;
       } catch (error) {
-        if (error.code === 403)
-          dispatch(
-            openDialog({
-              type: DialogTypes.RestrictedGeo,
-              openImmediately: true,
-              dialogProps: { preventClose: true },
-            })
-          );
+        if (error.code === 403) restrictGeo();
       }
     },
     [compositeClient, dispatch]
@@ -80,14 +68,26 @@ const useRestrictionContext = () => {
     [sanctionedAddresses]
   );
 
+  // Check geo restriction
+  useEffect(() => {
+    if (!compositeClient) return;
+    (async () => {
+      try {
+        await compositeClient.indexerClient.utility.getHeight();
+      } catch (error) {
+        if (error.code === 403) restrictGeo();
+      }
+    })();
+  }, [compositeClient]);
+
   // Screen account addresses
   useEffect(() => {
     if (evmAddress) screenAddresses({ addresses: [evmAddress] });
-  }, [compositeClient, evmAddress]);
+  }, [screenAddresses, evmAddress]);
 
   useEffect(() => {
     if (dydxAddress) screenAddresses({ addresses: [dydxAddress] });
-  }, [compositeClient, dydxAddress]);
+  }, [screenAddresses, dydxAddress]);
 
   useEffect(() => {
     if (
@@ -96,7 +96,7 @@ const useRestrictionContext = () => {
     ) {
       restrictUser();
     }
-  }, [evmAddress, dydxAddress, isAddressSanctioned]);
+  }, [evmAddress, dydxAddress, isAddressSanctioned, restrictUser]);
 
   return {
     screenAddresses,
@@ -106,10 +106,8 @@ const useRestrictionContext = () => {
 };
 
 type RestrictionContextType = ReturnType<typeof useRestrictionContext>;
-const RestrictionContext = createContext<RestrictionContextType>(
-  {} as RestrictionContextType
-);
-RestrictionContext.displayName = "Restriction";
+const RestrictionContext = createContext<RestrictionContextType>({} as RestrictionContextType);
+RestrictionContext.displayName = 'Restriction';
 
 export const RestrictionProvider = ({ ...props }) => (
   <RestrictionContext.Provider value={useRestrictionContext()} {...props} />
