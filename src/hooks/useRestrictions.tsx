@@ -30,7 +30,6 @@ const useRestrictionContext = () => {
       openDialog({
         type: DialogTypes.WalletRestricted,
         openImmediately: true,
-        dialogProps: { preventClose: true },
       })
     );
   }, [disconnect, dispatch]);
