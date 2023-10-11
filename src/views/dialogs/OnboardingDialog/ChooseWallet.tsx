@@ -15,7 +15,7 @@ import { Button } from '@/components/Button';
 import { Icon } from '@/components/Icon';
 import { Link } from '@/components/Link';
 
-const aboutWalletsLink = `https://www.dydxacademy.info/educational-video-series/onboarding-to-defi-with-dydx`;
+const aboutWalletsLink = `https://www.dydx.academy/video/defi-wallet`;
 
 export const ChooseWallet = () => {
   const stringGetter = useStringGetter();

@@ -106,7 +106,7 @@ Styled.Header = styled.header`
   ${layoutMixins.scrollSnapItem}
   backdrop-filter: none;
 
-  grid-area: Header;
+  height: var(--page-currentHeaderHeight);
 
   display: grid;
   align-items: stretch;

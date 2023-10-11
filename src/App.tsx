@@ -22,6 +22,7 @@ import breakpoints from '@/styles/breakpoints';
 
 import { Tabs } from '@/components/Tabs';
 
+import { Banner } from '@/views/Banner';
 import { Header } from '@/views/Header';
 import { MigratePage } from '@/views/MigratePage';
 import { PendingMigrationsPage } from '@/views/PendingMigrationsPage';
@@ -46,6 +47,7 @@ const Content = () => {
 
   return (
     <Styled.Content>
+      <Banner />
       <Header />
 
       <Styled.Main>
@@ -137,12 +139,8 @@ Styled.Content = styled.div`
   --stickyArea0-topGap: var(--border-width);
 
   ${layoutMixins.withOuterAndInnerBorders}
-  display: grid;
-  grid-template:
-    'Header' var(--page-currentHeaderHeight)
-    'Main' minmax(min-content, 1fr)
-    / 100%;
 
+  display: flex;
   transition: 0.3s var(--ease-out-expo);
 `;
 
