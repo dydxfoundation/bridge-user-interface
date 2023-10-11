@@ -25,12 +25,12 @@ export const RELEVANT_LINKS = [
     value: 'TERMS_OF_USE',
     iconName: IconName.File,
     labelStringKey: STRING_KEYS.TERMS_OF_USE,
-    href: import.meta.env.VITE_TERMS_OF_USE_URL || AppRoute.Terms,
+    href: AppRoute.Terms,
   },
   {
     value: 'PRIVACY_POLICY',
     iconName: IconName.Privacy,
     labelStringKey: STRING_KEYS.PRIVACY_POLICY,
-    href: import.meta.env.PRVIACY_POLICY_URL || AppRoute.Privacy,
+    href: AppRoute.Privacy,
   },
 ];

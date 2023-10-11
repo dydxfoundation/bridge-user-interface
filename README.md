@@ -49,7 +49,6 @@ For "Environment Variables", configure according to what needs to be overwritten
 
 - `VITE_ALCHEMY_API_KEY`: alchemy account API key ([docs](https://docs.alchemy.com/docs/alchemy-quickstart-guide#1key-create-an-alchemy-key))
 - `VITE_WALLETCONNECT2_PROJECT_ID`: Project ID for Wallet Connect v2 (required for connecting to wallets / onboarding), found [here](https://cloud.walletconnect.com/app)
-- `VITE_WALLETCONNECT1_BRIDGE`: If you want to continue supporting Wallet Connect v1, you will need to run your own bridge server. Docs [here](https://github.com/WalletConnect/node-walletconnect-bridge/blob/master/OLD-README.md).
 
 To configure network (e.g. staging or mainnet),
 

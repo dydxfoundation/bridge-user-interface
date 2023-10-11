@@ -8,7 +8,6 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { WalletConnectLegacyConnector } from 'wagmi/connectors/walletConnectLegacy';
 
 import { isTruthy } from './isTruthy';
 
@@ -37,23 +36,14 @@ const injectedConnectorOptions = {
   },
 };
 
-const walletconnect1ConnectorOptions = {
-  chains,
-  options: {
-    bridge: import.meta.env.VITE_WALLETCONNECT1_BRIDGE,
-    qrcode: true,
-  },
-};
-
 const walletconnect2ConnectorOptions: ConstructorParameters<typeof WalletConnectConnector>[0] = {
   chains,
   options: {
     projectId: import.meta.env.VITE_WALLETCONNECT2_PROJECT_ID,
     metadata: {
-      // TODO: update to local URLs/images
       name: 'dYdX',
       description: '',
-      url: 'https://trade.dydx.exchange',
+      url: import.meta.env.VITE_APP_URL,
       icons: ['https://trade.dydx.exchange/cbw-image.png'],
     },
     showQrModal: true,
@@ -83,7 +73,6 @@ const connectors = [
     chains,
     options: {
       shimDisconnect: true,
-      shimChainChangedDisconnect: false,
     },
   }),
   new CoinbaseWalletConnector({
@@ -93,14 +82,13 @@ const connectors = [
       reloadOnDisconnect: false,
     },
   }),
-  new WalletConnectLegacyConnector(walletconnect1ConnectorOptions),
   new WalletConnectConnector(walletconnect2ConnectorOptions),
   new InjectedConnector(injectedConnectorOptions),
 ];
 
 export const config = createConfig({
   autoConnect: true,
-  // connectors,
+  connectors,
   publicClient,
   webSocketPublicClient,
 });
@@ -115,19 +103,6 @@ const createInjectedConnectorWithProvider = (provider: ExternalProvider) =>
     getProvider = async () =>
       provider as unknown as Awaited<ReturnType<InjectedConnector['getProvider']>>;
   })(injectedConnectorOptions) as InjectedConnector;
-
-// Create a custom wagmi WalletConnectLegacyConnector with a modal showing only wallet links matching the given name
-const createWalletConnect1ConnectorWithName = (walletconnect1Name: string) =>
-  new WalletConnectLegacyConnector({
-    ...walletconnect1ConnectorOptions,
-    options: {
-      ...walletconnect1ConnectorOptions.options,
-      qrcodeModalOptions: {
-        desktopLinks: [walletconnect1Name],
-        mobileLinks: [walletconnect1Name],
-      },
-    },
-  });
 
 const createWalletConnect2ConnectorWithId = (walletconnect2Id: string) =>
   new WalletConnectConnector({
@@ -164,9 +139,6 @@ export const resolveWagmiConnector = ({
 
   return walletConnection.type === WalletConnectionType.InjectedEip1193 && walletConnection.provider
     ? createInjectedConnectorWithProvider(walletConnection.provider)
-    : walletConnection.type === WalletConnectionType.WalletConnect1 &&
-      walletConfig.walletconnect1Name
-    ? createWalletConnect1ConnectorWithName(walletConfig.walletconnect1Name)
     : walletConnection.type === WalletConnectionType.WalletConnect2 && walletConfig.walletconnect2Id
     ? createWalletConnect2ConnectorWithId(walletConfig.walletconnect2Id)
     : connectors.find(({ id }: { id: string }) => id === walletConnectionConfig.wagmiConnectorId);

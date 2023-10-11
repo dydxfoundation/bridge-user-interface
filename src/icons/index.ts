@@ -27,20 +27,7 @@ export { default as TriangleIcon } from './triangle.svg';
 export { default as WarningIcon } from './warning.svg';
 
 // Wallets
-export { default as BitkeepIcon } from './wallets/bitkeep.svg';
-export { default as BitpieIcon } from './wallets/bitpie.svg';
-export { default as CloverWalletIcon } from './wallets/clover-wallet.svg';
-export { default as Coin98Icon } from './wallets/coin98.svg';
 export { default as CoinbaseIcon } from './wallets/coinbase-wallet.svg';
 export { default as GenericWalletIcon } from './wallets/generic-wallet.svg';
-export { default as HuobiIcon } from './wallets/huobi-wallet.svg';
-export { default as ImTokenIcon } from './wallets/imtoken.svg';
-export { default as LedgerIcon } from './wallets/ledger.svg';
-export { default as MagicIcon } from './wallets/magic.svg';
-export { default as MathWalletIcon } from './wallets/mathwallet.svg';
 export { default as MetaMaskIcon } from './wallets/metamask.svg';
-export { default as RainbowIcon } from './wallets/rainbow-wallet.svg';
-export { default as TestWalletIcon } from './wallets/test-wallet.svg';
-export { default as TokenPocketIcon } from './wallets/tokenpocket.svg';
-export { default as TrustWalletIcon } from './wallets/trust-wallet.svg';
 export { default as WalletConnectIcon } from './wallets/walletconnect.svg';

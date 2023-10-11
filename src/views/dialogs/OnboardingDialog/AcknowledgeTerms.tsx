@@ -4,6 +4,9 @@ import { useAccounts, useStringGetter } from '@/hooks';
 
 import { STRING_KEYS } from '@/constants/localization';
 import { ButtonAction } from '@/constants/buttons';
+import { AppRoute } from '@/constants/routes';
+
+import { layoutMixins } from '@/styles/layoutMixins';
 
 import { Button } from '@/components/Button';
 import { Link } from '@/components/Link';
@@ -29,12 +32,12 @@ export const AcknowledgeTerms = ({ onContinue }: ElementProps) => {
           key: STRING_KEYS.LEGAL_UPDATES_DESCRIPTION,
           params: {
             TOU: (
-              <Styled.Link href="https://dydx.exchange/v4-terms">
+              <Styled.Link href={`/#${AppRoute.Terms}`} withIcon>
                 {stringGetter({ key: STRING_KEYS.TERMS_OF_USE })}
               </Styled.Link>
             ),
             PRIVACY_POLICY: (
-              <Styled.Link href="https://dydx.exchange/privacy">
+              <Styled.Link href={`/#${AppRoute.Privacy}`} withIcon>
                 {stringGetter({ key: STRING_KEYS.PRIVACY_POLICY })}
               </Styled.Link>
             ),
@@ -51,7 +54,8 @@ export const AcknowledgeTerms = ({ onContinue }: ElementProps) => {
 const Styled: Record<string, AnyStyledComponent> = {};
 
 Styled.Link = styled(Link)`
-  display: inline-block;
+  ${layoutMixins.inlineRow}
+  gap: 0.25rem;
   color: var(--color-accent);
 
   &:visited {

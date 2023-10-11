@@ -1,6 +1,7 @@
 import styled, { AnyStyledComponent } from 'styled-components';
 
 import { STRING_KEYS } from '@/constants/localization';
+import { AppRoute } from '@/constants/routes';
 
 import breakpoints from '@/styles/breakpoints';
 import { layoutMixins } from '@/styles/layoutMixins';
@@ -92,11 +93,10 @@ export const HelpPanel = () => {
           ]}
         />
       </Styled.HelpCard>
-      {import.meta.env.VITE_TERMS_OF_USE_URL && (
-        <Styled.TermsLink href={import.meta.env.VITE_TERMS_OF_USE_URL} withIcon>
-          Terms of Use
-        </Styled.TermsLink>
-      )}
+
+      <Styled.TermsLink href={`/#${AppRoute.Terms}`} withIcon>
+        {stringGetter({ key: STRING_KEYS.TERMS_OF_USE })}
+      </Styled.TermsLink>
     </Styled.Container>
   );
 };
