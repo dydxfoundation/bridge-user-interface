@@ -17,7 +17,7 @@
     "@cosmjs/encoding": "^0.31.1",
     "@cosmjs/stargate": "^0.31.1",
     "@dydxprotocol/v4-client-js": "^0.38.1",
-    "@dydxprotocol/v4-localization": "^0.1.28",
+    "@dydxprotocol/v4-localization": "^0.1.29",
     "@ethersproject/providers": "^5.7.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-checkbox": "^1.0.4",

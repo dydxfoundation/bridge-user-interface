@@ -33,10 +33,10 @@ export const HelpPanel = () => {
           items={[
             {
               header: stringGetter({
-                key: STRING_KEYS.MIGRATION_FAQ_V4_PORTAL,
+                key: STRING_KEYS.MIGRATION_FAQ_DYDX_CHAIN_PORTAL,
               }),
               content: stringGetter({
-                key: STRING_KEYS.MIGRATION_FAQ_V4_PORTAL_ANSWER,
+                key: STRING_KEYS.MIGRATION_FAQ_DYDX_CHAIN_PORTAL_ANSWER,
                 params: {
                   HERE: (
                     <Styled.Link withIcon href="https://dydx.community/dashboard/proposal/15">
