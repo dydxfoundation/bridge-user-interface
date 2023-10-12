@@ -43,8 +43,8 @@ const walletconnect2ConnectorOptions: ConstructorParameters<typeof WalletConnect
     metadata: {
       name: 'dYdX',
       description: '',
-      url: import.meta.env.VITE_APP_URL,
-      icons: ['https://trade.dydx.exchange/cbw-image.png'],
+      url: import.meta.env.VITE_BASE_URL,
+      icons: [`${import.meta.env.VITE_BASE_URL}/cbw-image.png}`],
     },
     showQrModal: true,
     qrModalOptions: {
@@ -60,10 +60,14 @@ const walletconnect2ConnectorOptions: ConstructorParameters<typeof WalletConnect
         '--w3m-overlay-backdrop-filter': 'blur(6px)',
         // '--w3m-logo-image-url': 'https://trade.dydx.exchange/cbw-image.png',
       },
-      enableExplorer: true,
-      explorerAllowList: [],
-      explorerDenyList: [],
-      chainImages: {},
+      chains: ['eip155:1'],
+      explorerRecommendedWalletIds: [
+        'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+        '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
+        '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369',
+        'ef333840daf915aafdc4a004525502d6d49d77bd9c65e0642dbaefb3c2893bef',
+        '2a3c89040ac3b723a1972a33a125b1db11e258a6975d3a61252cd64e6ea5ea01',
+      ],
     },
   },
 };
