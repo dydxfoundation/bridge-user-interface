@@ -58,3 +58,5 @@ To configure network (e.g. staging, testnet or mainnet),
 - Update the rest of the variables (e.g. token / contract addresses / denom).
 
 For more details, check out Vercel's [official documentation](https://vercel.com/docs).
+
+The primary license for this project is the GNU Affero General Public License v3.0 (AGPL-3.0), see [LICENSE](https://github.com/dydxfoundation/bridge/blob/main/LICENSE.md).
