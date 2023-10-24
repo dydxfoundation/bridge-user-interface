@@ -1,0 +1,33 @@
+export { default as AddressConnectorIcon } from './address-connector.svg';
+export { default as ArrowIcon } from './arrow.svg';
+export { default as ArrowsRightIcon } from './arrows-right.svg';
+export { default as BoxCloseIcon } from './box-close.svg';
+export { default as CautionCircleIcon } from './caution-circle.svg';
+export { default as CautionCircleStrokeIcon } from './caution-circle-stroke.svg';
+export { default as CheckIcon } from './check.svg';
+export { default as CheckCircleIcon } from './check-circle.svg';
+export { default as ChevronLeftIcon } from './chevron-left.svg';
+export { default as CloseIcon } from './close.svg';
+export { default as CopyIcon } from './copy.svg';
+export { default as DiscordIcon } from './discord.svg';
+export { default as ExportKeysIcon } from './export-keys.svg';
+export { default as FileIcon } from './file.svg';
+export { default as HelpCircleIcon } from './help-circle.svg';
+export { default as HideIcon } from './hide.svg';
+export { default as LinkOutIcon } from './link-out.svg';
+export { default as LogoShortIcon } from './logo-short';
+export { default as MigrateIcon } from './migrate.svg';
+export { default as MintscanIcon } from './mintscan.svg';
+export { default as PrivacyIcon } from './privacy.svg';
+export { default as SearchIcon } from './search.svg';
+export { default as ShowIcon } from './show.svg';
+export { default as TerminalIcon } from './terminal.svg';
+export { default as TimeIcon } from './time.svg';
+export { default as TriangleIcon } from './triangle.svg';
+export { default as WarningIcon } from './warning.svg';
+
+// Wallets
+export { default as CoinbaseIcon } from './wallets/coinbase-wallet.svg';
+export { default as GenericWalletIcon } from './wallets/generic-wallet.svg';
+export { default as MetaMaskIcon } from './wallets/metamask.svg';
+export { default as WalletConnectIcon } from './wallets/walletconnect.svg';
