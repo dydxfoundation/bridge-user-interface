@@ -99,29 +99,28 @@ export const GenerateKeys = ({
       // 2. Ensure signature is deterministic
       // Check if subaccounts exist
       const dydxAddress = dydxWallet.address as DydxAddress;
-      let hasPreviousTransactions = false;
 
       try {
         const subaccounts = await getSubaccounts({ dydxAddress });
-        hasPreviousTransactions = subaccounts.length > 0;
 
-        if (!hasPreviousTransactions) {
+        if (!subaccounts.length) {
           setStatus(EvmDerivedAccountStatus.EnsuringDeterminism);
-
-          // Second signature
           const additionalSignature = await signTypedDataAsync();
-
           if (signature !== additionalSignature) {
-            throw new Error(
+            setStatus(EvmDerivedAccountStatus.NotDerived);
+            setError(
               stringGetter({
                 key: STRING_KEYS.INDETERMINISTIC_SIGNING,
               }) as string
             );
+            return;
           }
         }
       } catch (error) {
+        setStatus(EvmDerivedAccountStatus.NotDerived);
         const { message } = parseWalletError({ error, stringGetter });
         if (message) setError(message);
+        return;
       }
 
       await setWalletFromEvmSignature(signature);

@@ -138,6 +138,14 @@ const useAccountsContext = () => {
           // 404 is expected if the user has no subaccounts
           if (error.status === 404) {
             return [];
+          } else if (error.status === 403) {
+            dispatch(
+              openDialog({
+                type: DialogTypes.RestrictedGeo,
+                openImmediately: true,
+                dialogProps: { preventClose: true },
+              })
+            );
           } else {
             throw error;
           }
