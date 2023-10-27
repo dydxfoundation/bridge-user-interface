@@ -1,6 +1,5 @@
 export { default as AddressConnectorIcon } from './address-connector.svg';
 export { default as ArrowIcon } from './arrow.svg';
-export { default as ArrowsRightIcon } from './arrows-right.svg';
 export { default as BoxCloseIcon } from './box-close.svg';
 export { default as CautionCircleIcon } from './caution-circle.svg';
 export { default as CautionCircleStrokeIcon } from './caution-circle-stroke.svg';

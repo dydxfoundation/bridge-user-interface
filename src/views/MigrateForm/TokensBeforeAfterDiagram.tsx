@@ -148,7 +148,7 @@ Styled.Details = styled(Details)`
 
   > :last-child:before {
     content: '';
-    background: url('src/icons/arrows-right.svg');
+    background: url(/arrows-right.svg);
     position: absolute;
     margin: 5rem 0 0 -2rem;
     width: 2rem;

@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import {
   AddressConnectorIcon,
   ArrowIcon,
-  ArrowsRightIcon,
   BoxCloseIcon,
   CautionCircleIcon,
   CautionCircleStrokeIcon,
@@ -35,7 +34,6 @@ import {
 export enum IconName {
   AddressConnector = 'AddressConnector',
   Arrow = 'Arrow',
-  ArrowsRight = 'ArrowsRight',
   BoxClose = 'BoxClose',
   CautionCircle = 'CautionCircle',
   CautionCircleStroke = 'CautionCircleStroke',
@@ -65,7 +63,6 @@ export enum IconName {
 const icons = {
   [IconName.AddressConnector]: AddressConnectorIcon,
   [IconName.Arrow]: ArrowIcon,
-  [IconName.ArrowsRight]: ArrowsRightIcon,
   [IconName.BoxClose]: BoxCloseIcon,
   [IconName.CautionCircle]: CautionCircleIcon,
   [IconName.CautionCircleStroke]: CautionCircleStrokeIcon,
