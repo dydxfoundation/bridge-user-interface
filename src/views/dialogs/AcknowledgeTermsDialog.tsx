@@ -48,7 +48,7 @@ export const AcknowledgeTermsDialog = ({ setIsOpen }: ElementProps) => {
           label={
             <Styled.Label>
               I have read and agree to the <Link href={`/#${AppRoute.Terms}`}>Terms of Use</Link>{' '}
-              and <Link href={`/#${AppRoute.Privacy}`}>Privacy Policy.</Link>
+              and <Link href={`/#${AppRoute.Privacy}`}>Privacy Policy</Link>.
             </Styled.Label>
           }
         />

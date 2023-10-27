@@ -35,7 +35,7 @@ const useRestrictionContext = () => {
   }, [disconnect, dispatch]);
 
   const screenAddresses = useCallback(
-    async ({ addresses }: { addresses: string[] }) => {
+    async ({ addresses, throwError }: { addresses: string[]; throwError?: boolean }) => {
       if (!compositeClient) return;
 
       try {
@@ -57,7 +57,11 @@ const useRestrictionContext = () => {
 
         return screenedAddresses;
       } catch (error) {
-        if (error.code === 403) restrictGeo();
+        if (error.status === 403) {
+          restrictGeo();
+        } else if (throwError) {
+          throw error;
+        }
       }
     },
     [compositeClient, dispatch]
@@ -75,7 +79,7 @@ const useRestrictionContext = () => {
       try {
         await compositeClient.indexerClient.utility.getHeight();
       } catch (error) {
-        if (error.code === 403) restrictGeo();
+        if (error.status === 403) restrictGeo();
       }
     })();
   }, [compositeClient]);

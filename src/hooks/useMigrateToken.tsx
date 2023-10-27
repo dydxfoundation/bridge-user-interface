@@ -130,19 +130,25 @@ const useMigrateTokenContext = () => {
         if (!canWriteContracts) return;
         setIsRequesting(true);
 
-        const screenResults = await screenAddresses({
-          addresses: [evmAddress!, dydxAddress!, destinationAddress!],
-        });
+        try {
+          const screenResults = await screenAddresses({
+            addresses: [evmAddress!, dydxAddress!, destinationAddress!],
+            throwError: true,
+          });
 
-        if (screenResults?.[evmAddress as string] || screenResults?.[dydxAddress as string]) {
-          restrictUser();
-          return;
-        } else if (screenResults?.[destinationAddress!]) {
-          setErrorMsg(
-            stringGetter({
-              key: STRING_KEYS.MIGRATION_BLOCKED_MESSAGE_DESTINATION,
-            })
-          );
+          if (screenResults?.[evmAddress as string] || screenResults?.[dydxAddress as string]) {
+            restrictUser();
+            return;
+          } else if (screenResults?.[destinationAddress!]) {
+            setErrorMsg(
+              stringGetter({
+                key: STRING_KEYS.MIGRATION_BLOCKED_MESSAGE_DESTINATION,
+              })
+            );
+            return;
+          }
+        } catch (error) {
+          setErrorMsg('Indexer is currently unavailable.');
           return;
         }
 
