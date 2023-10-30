@@ -5,6 +5,8 @@ import { DialogTypes } from '@/constants/dialogs';
 
 import { openDialog } from '@/state/dialogs';
 
+import { shouldGeoRestrict } from '@/lib/restrictions';
+
 import { useDydxClient } from './useDydxClient';
 import { useAccounts } from './useAccounts';
 
@@ -57,7 +59,7 @@ const useRestrictionContext = () => {
 
         return screenedAddresses;
       } catch (error) {
-        if (error.status === 403) {
+        if (shouldGeoRestrict(error)) {
           restrictGeo();
         } else if (throwError) {
           throw error;
@@ -79,7 +81,7 @@ const useRestrictionContext = () => {
       try {
         await compositeClient.indexerClient.utility.getHeight();
       } catch (error) {
-        if (error.status === 403) restrictGeo();
+        if (shouldGeoRestrict(error)) restrictGeo();
       }
     })();
   }, [compositeClient]);

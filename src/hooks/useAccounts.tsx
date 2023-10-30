@@ -14,6 +14,8 @@ import { DydxAddress, EthereumAddress, PrivateInformation } from '@/constants/wa
 import { setOnboardingState } from '@/state/account';
 import { openDialog } from '@/state/dialogs';
 
+import { shouldGeoRestrict } from '@/lib/restrictions';
+
 import { useLocalStorage } from './useLocalStorage';
 import { useWalletConnection } from './useWalletConnection';
 import { useDydxClient } from './useDydxClient';
@@ -133,12 +135,12 @@ const useAccountsContext = () => {
       getSubaccounts: async ({ dydxAddress }: { dydxAddress: DydxAddress }) => {
         try {
           const response = await compositeClient?.indexerClient.account.getSubaccounts(dydxAddress);
-          return response.subaccounts;
+          return response?.subaccounts;
         } catch (error) {
           // 404 is expected if the user has no subaccounts
           if (error.status === 404) {
             return [];
-          } else if (error.status === 403) {
+          } else if (shouldGeoRestrict(error)) {
             dispatch(
               openDialog({
                 type: DialogTypes.RestrictedGeo,
