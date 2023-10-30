@@ -22,7 +22,7 @@ export const HelpPanel = () => {
             <h3>{stringGetter({ key: STRING_KEYS.MIGRATION_HELP })}</h3>
             <Link
               withIcon
-              href="https://www.dydx.foundation/blog/update-on-exploring-the-future-of-dydx"
+              href="https://www.dydx.foundation/how-to-bridge/"
             >
               {stringGetter({ key: STRING_KEYS.LEARN_MORE })}
             </Link>
