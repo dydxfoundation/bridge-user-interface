@@ -18,7 +18,7 @@ export const Banner = () => {
       <h4>✨ {stringGetter({ key: STRING_KEYS.BANNER_ALPHA_CONTENT })}</h4>
       {stakingLearnMoreLink && (
         <Styled.Button size={ButtonSize.XSmall} href={stakingLearnMoreLink} type={ButtonType.Link}>
-          {stringGetter({ key: STRING_KEYS.LEARN_ABOUT_STAKING })}
+          {stringGetter({ key: STRING_KEYS.HOW_TO_STAKE })}
         </Styled.Button>
       )}
       {launchBlogPostLink && (
