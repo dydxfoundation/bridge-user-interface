@@ -78,8 +78,10 @@ Styled.Content = styled.div`
 Styled.Label = styled.span`
   display: inline-block;
   font: var(--font-base-book);
+  color: var(--color-text-3);
 
   a {
     display: inline-block;
+    --link-color: var(--color-text-2);
   }
 `;

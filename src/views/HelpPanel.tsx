@@ -20,10 +20,7 @@ export const HelpPanel = () => {
         slotHeader={
           <Styled.Header>
             <h3>{stringGetter({ key: STRING_KEYS.MIGRATION_HELP })}</h3>
-            <Link
-              withIcon
-              href="https://www.dydx.foundation/how-to-bridge/"
-            >
+            <Link withIcon href="https://www.dydx.foundation/how-to-bridge/">
               {stringGetter({ key: STRING_KEYS.LEARN_MORE })}
             </Link>
           </Styled.Header>
@@ -105,6 +102,10 @@ const Styled: Record<string, AnyStyledComponent> = {};
 
 Styled.Container = styled.div`
   text-align: center;
+  
+  @media ${breakpoints.notTablet} {
+    width: max-content;
+  }
 `;
 
 Styled.HelpCard = styled(Panel)`

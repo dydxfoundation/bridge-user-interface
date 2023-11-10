@@ -274,6 +274,10 @@ Styled.Table = styled(Table)`
 
 Styled.InlineRow = styled.div`
   ${layoutMixins.inlineRow}
+
+  img {
+    height: 1.25em;
+  }
 `;
 
 Styled.VerticalSeparator = styled(VerticalSeparator)`
