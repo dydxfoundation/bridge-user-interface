@@ -61,6 +61,11 @@ button:disabled {
   cursor: pointer;
 }
 
+:focus-visible{
+  outline: var(--color-accent) 1px solid;
+  outline-offset: -2px;
+}
+
 a {
   text-decoration: inherit;
 }
