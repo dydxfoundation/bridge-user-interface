@@ -6,8 +6,8 @@ import { OnboardingState } from '@/constants/account';
 import { ButtonAction, ButtonShape, ButtonSize, ButtonType } from '@/constants/buttons';
 
 import { DialogTypes } from '@/constants/dialogs';
-import { STRING_KEYS } from '@/constants/localization';
-import { wallets, WalletType } from '@/constants/wallets';
+import { STRING_KEYS, TOOLTIP_STRING_KEYS } from '@/constants/localization';
+import { wallets } from '@/constants/wallets';
 
 import { layoutMixins } from '@/styles/layoutMixins';
 import { headerMixins } from '@/styles/headerMixins';
@@ -29,6 +29,7 @@ import { getOnboardingState } from '@/state/accountSelectors';
 
 import { isTruthy } from '@/lib/isTruthy';
 import { truncateAddress } from '@/lib/wallet';
+import { WithTooltip } from '@/components/WithTooltip';
 
 export const AccountMenu = () => {
   const stringGetter = useStringGetter();
@@ -53,13 +54,29 @@ export const AccountMenu = () => {
             <Styled.AddressRow>
               <AssetIcon symbol="DYDX" />
               <Styled.Column>
-                <Styled.Label>{stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}</Styled.Label>
+                <WithTooltip
+                  slotTooltip={
+                    <dl>
+                      <dt>
+                        {stringGetter({
+                          key: TOOLTIP_STRING_KEYS.DYDX_ADDRESS_BODY,
+                          params: {
+                            DYDX_ADDRESS: <strong>{truncateAddress(dydxAddress)}</strong>,
+                            EVM_ADDRESS: truncateAddress(evmAddress, '0x'),
+                          },
+                        })}
+                      </dt>
+                    </dl>
+                  }
+                >
+                  <Styled.Label>
+                    {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
+                  </Styled.Label>
+                </WithTooltip>
                 <Styled.Address>{truncateAddress(dydxAddress)}</Styled.Address>
               </Styled.Column>
-
-              <CopyButton buttonType="icon" value={dydxAddress} shape={ButtonShape.Square} />
-
-              <IconButton
+              <Styled.CopyButton buttonType="icon" value={dydxAddress} shape={ButtonShape.Square} />
+              <Styled.IconButton
                 action={ButtonAction.Base}
                 href={`${import.meta.env.VITE_MINTSCAN_URL}/account/${dydxAddress}`}
                 iconName={IconName.LinkOut}
@@ -71,7 +88,7 @@ export const AccountMenu = () => {
               {walletType && (
                 <Styled.SourceIcon>
                   <Styled.ConnectorIcon iconName={IconName.AddressConnector} />
-                  <Icon iconComponent={wallets[walletType as WalletType].icon} />
+                  <Icon iconComponent={wallets[walletType].icon} />
                 </Styled.SourceIcon>
               )}
               <Styled.Column>
@@ -79,9 +96,9 @@ export const AccountMenu = () => {
                 <Styled.Address>{truncateAddress(evmAddress, '0x')}</Styled.Address>
               </Styled.Column>
 
-              <CopyButton buttonType="icon" value={evmAddress} shape={ButtonShape.Square} />
+              <Styled.CopyButton buttonType="icon" value={evmAddress} shape={ButtonShape.Square} />
 
-              <IconButton
+              <Styled.IconButton
                 action={ButtonAction.Base}
                 href={`${import.meta.env.VITE_ETHERSCAN_URL}/address/${evmAddress}`}
                 iconName={IconName.LinkOut}
@@ -135,7 +152,7 @@ export const AccountMenu = () => {
       {onboardingState === OnboardingState.WalletConnected ? (
         <Styled.WarningIcon iconName={IconName.Warning} />
       ) : onboardingState === OnboardingState.AccountConnected ? (
-        walletType && <Icon iconComponent={wallets[walletType as WalletType].icon} />
+        walletType && <Icon iconComponent={wallets[walletType].icon} />
       ) : null}
       {!isTablet && <Styled.Address>{truncateAddress(dydxAddress)}</Styled.Address>}
     </Styled.DropdownMenu>
@@ -240,4 +257,14 @@ Styled.Balance = styled.div`
 
 Styled.BalanceOutput = styled(Output)`
   font-size: var(--fontSize-medium);
+`;
+
+Styled.IconButton = styled(IconButton)`
+  --button-padding: 0 0.25rem;
+  --button-border: solid var(--border-width) var(--color-layer-6);
+`;
+
+Styled.CopyButton = styled(CopyButton)`
+  --button-padding: 0 0.25rem;
+  --button-border: solid var(--border-width) var(--color-layer-6);
 `;

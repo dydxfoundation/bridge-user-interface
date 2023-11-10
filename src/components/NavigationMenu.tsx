@@ -101,8 +101,6 @@ const NavItem = forwardRef(
   }
 );
 
-type TriggerRef = HTMLAnchorElement | HTMLDivElement | HTMLButtonElement | null;
-
 export const NavigationMenu = <MenuItemValue extends string, MenuGroupValue extends string>({
   onSelectItem,
   onSelectGroup,
@@ -113,33 +111,6 @@ export const NavigationMenu = <MenuItemValue extends string, MenuGroupValue exte
   dir = 'ltr',
   className,
 }: ElementProps<MenuItemValue, MenuGroupValue> & StyleProps) => {
-  // Disable click (close) in the first 500ms after hover (open)
-  // https://github.com/radix-ui/primitives/issues/1630#issuecomment-1545995075
-  const [clickIsDisabled, setClickIsDisabled] = useState(false);
-  const triggerRefs = useRef({} as { [value: string]: TriggerRef });
-
-  useEffect(() => {
-    const observer = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-        if (
-          mutation.type === 'attributes' &&
-          mutation.attributeName === 'data-state' &&
-          (mutation.target as unknown as HTMLOrSVGElement).dataset.state === 'open' &&
-          mutation.target !== document.activeElement
-        ) {
-          setClickIsDisabled(true);
-          setTimeout(() => setClickIsDisabled(false), 500);
-        }
-      }
-    });
-
-    for (const element of Object.values(triggerRefs.current).filter(isTruthy)) {
-      observer.observe(element, { attributes: true });
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   const renderSubitems = ({
     item,
     depth = 0,
@@ -149,18 +120,18 @@ export const NavigationMenu = <MenuItemValue extends string, MenuGroupValue exte
   }) => (
     <>
       <Styled.SubMenuTrigger
-        asChild={depth > 0}
-        ref={(ref: TriggerRef) => (triggerRefs.current[item.value] = ref)}
-        onClick={(e: MouseEvent) => {
-          if (clickIsDisabled) {
-            e.preventDefault();
-          }
-        }}
+        asChild
+        onPointerMove={(e: MouseEvent) => e.preventDefault()}
+        onPointerLeave={(e: MouseEvent) => e.preventDefault()}
       >
         <Styled.NavItem onSelect={onSelectGroup} orientation={itemOrientation} {...item} />
       </Styled.SubMenuTrigger>
 
-      <Styled.Content data-placement={submenuPlacement}>
+      <Styled.Content
+        onPointerEnter={(e: MouseEvent) => e.preventDefault()}
+        onPointerLeave={(e: MouseEvent) => e.preventDefault()}
+        data-placement={submenuPlacement}
+      >
         <Styled.Sub data-placement={submenuPlacement}>
           <Styled.List
             data-orientation={depth > 0 ? 'menu' : orientation === 'vertical' ? 'vertical' : 'menu'}
@@ -417,11 +388,6 @@ Styled.SubMenuTrigger = styled(Trigger)`
   outline-offset: -2px;
 
   &[data-state='open'] {
-    div {
-      background-color: var(--navigationMenu-item-checked-backgroundColor);
-      color: var(--navigationMenu-item-checked-textColor);
-    }
-
     svg {
       rotate: 0.5turn;
     }
@@ -433,11 +399,10 @@ Styled.NavItem = styled(NavItem)<{ orientation: 'horizontal' | 'vertical' }>`
     subitems?.length
       ? css`
           ${popoverMixins.trigger}
-          --trigger-backgroundColor: transparent;
-          --trigger-open-backgroundColor: var(--color-layer-3);
+          --trigger-open-backgroundColor: var(--navigationMenu-item-checked-backgroundColor);
         `
       : css`
-          &:hover:not(.active) {
+          &:hover:not(:active) {
             background-color: var(--navigationMenu-item-highlighted-backgroundColor);
             color: var(--navigationMenu-item-highlighted-textColor);
           }
@@ -450,8 +415,6 @@ Styled.NavItem = styled(NavItem)<{ orientation: 'horizontal' | 'vertical' }>`
   --item-highlighted-textColor: var(--navigationMenu-item-highlighted-textColor);
   --item-radius: var(--navigationMenu-item-radius);
   --item-padding: var(--navigationMenu-item-padding);
-
-  /* ${popoverMixins.backdropOverlay} */
 
   ${layoutMixins.scrollSnapItem}
 
@@ -467,7 +430,7 @@ Styled.NavItem = styled(NavItem)<{ orientation: 'horizontal' | 'vertical' }>`
         justify-items: center;
         align-content: center;
       `,
-    })[orientation]}
+    }[orientation])}
   gap: 0.7rem 0.5rem;
 
   > span {
@@ -506,6 +469,9 @@ Styled.NavItem = styled(NavItem)<{ orientation: 'horizontal' | 'vertical' }>`
 `;
 
 Styled.Icon = styled(Icon)`
+  font-size: 0.375em;
+  transition: rotate 0.3s var(--ease-out-expo);
+
   ${Styled.List}[data-orientation="menu"] & {
     rotate: -0.25turn;
   }
