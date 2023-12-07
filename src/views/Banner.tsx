@@ -15,7 +15,6 @@ export const Banner = () => {
 
   return !(stakingLearnMoreLink || launchBlogPostLink) ? null : (
     <Styled.Banner>
-      <h4>✨ {stringGetter({ key: STRING_KEYS.BANNER_ALPHA_CONTENT })}</h4>
       {stakingLearnMoreLink && (
         <Styled.Button size={ButtonSize.XSmall} href={stakingLearnMoreLink} type={ButtonType.Link}>
           {stringGetter({ key: STRING_KEYS.HOW_TO_STAKE })}
