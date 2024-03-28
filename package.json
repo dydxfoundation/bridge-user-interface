@@ -39,12 +39,12 @@
     "autoprefixer": "10.4.15",
     "bignumber.js": "^9.1.1",
     "buffer": "^6.0.3",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "lodash": "^4.17.21",
     "luxon": "^3.4.3",
-    "postcss": "8.4.28",
+    "postcss": "8.4.31",
     "react": "18.2.0",
     "react-aria": "^3.25.0",
     "react-dom": "18.2.0",
@@ -81,6 +81,6 @@
     "typescript": "^5.0.2",
     "url-polyfill": "^1.1.12",
     "util": "^0.12.5",
-    "vite": "^4.4.5"
+    "vite": "^4.5.2"
   }
 }
