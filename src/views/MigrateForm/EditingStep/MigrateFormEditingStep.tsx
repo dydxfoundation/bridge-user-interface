@@ -146,53 +146,11 @@ export const MigrateFormEditingStep = () => {
         />
       </WithDetailsReceipt>
 
-      <RadioGroup
+      {/* <RadioGroup
         items={[
           {
-            value: DestinationAddressOptions.Account,
-            label: (
-              <Styled.Label>
-                {stringGetter({
-                  key: STRING_KEYS.GENERATED_ADDRESS_VIA_ADDRESS,
-                  params: {
-                    ADDRESS_OR_WALLET_SIGNATURE: (
-                      <strong>
-                        {accountDydxAddress
-                          ? truncateAddress(accountDydxAddress)
-                          : stringGetter({ key: STRING_KEYS.WALLET_SIGNATURE })}
-                      </strong>
-                    ),
-                  },
-                })}
-              </Styled.Label>
-            ),
-            slotContent: accountDydxAddress && (
-              <Styled.InnerFormInput
-                label={
-                  <Styled.DestinationInputLabel>
-                    {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
-                    <Icon iconName={IconName.Check} />
-                  </Styled.DestinationInputLabel>
-                }
-                type={InputType.Text}
-                value={truncateAddress(accountDydxAddress)}
-                validationConfig={{
-                  attached: true,
-                  type: AlertType.Info,
-                  message: stringGetter({
-                    key: STRING_KEYS.GENERATED_ADDRESS_INFO,
-                    params: {
-                      TRADE_URL: import.meta.env.VITE_TRADE_URL || 'the trading app',
-                    },
-                  }),
-                }}
-                disabled
-              />
-            ),
-          },
-          {
             value: DestinationAddressOptions.Other,
-            label: (
+            label: ( */}
               <Styled.Label>
                 {stringGetter({
                   key: STRING_KEYS.SEND_TO_ANOTHER_ADDRESS,
@@ -203,8 +161,8 @@ export const MigrateFormEditingStep = () => {
                   },
                 })}
               </Styled.Label>
-            ),
-            slotContent: (
+            {/* ), */}
+            {/* slotContent: ( */}
               <Styled.AdressInputContainer>
                 <Styled.InnerFormInput
                   id="destination"
@@ -238,12 +196,12 @@ export const MigrateFormEditingStep = () => {
                   }
                 />
               </Styled.AdressInputContainer>
-            ),
+            {/* ),
           },
         ]}
         value={destinationAddressOption}
         onValueChange={onOptionChange}
-      />
+      /> */}
 
       <Styled.Footer>
         <PreviewMigrateButtonAndReceipt isDisabled={!isAmountValid || !isDestinationAddressValid} />

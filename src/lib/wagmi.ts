@@ -3,6 +3,7 @@ import { createConfig, configureChains, mainnet, sepolia, Chain } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
+import { infuraProvider } from 'wagmi/providers/infura';
 
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -20,6 +21,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     import.meta.env.VITE_ALCHEMY_API_KEY &&
       alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_API_KEY }),
+    infuraProvider({apiKey: "https://mainnet.infura.io/v3/bee5140d9d2243d580ef49ade75c2356"}),
     jsonRpcProvider({
       rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }),
     }),

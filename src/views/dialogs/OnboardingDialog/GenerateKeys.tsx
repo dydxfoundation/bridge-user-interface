@@ -92,36 +92,36 @@ export const GenerateKeys = ({
       setStatus(EvmDerivedAccountStatus.Deriving);
 
       const signature = await signTypedDataAsync();
-      const { wallet: dydxWallet } = await getWalletFromEvmSignature({
-        signature,
-      });
+      // const { wallet: dydxWallet } = await getWalletFromEvmSignature({
+      //   signature,
+      // });
 
-      // 2. Ensure signature is deterministic
-      // Check if subaccounts exist
-      const dydxAddress = dydxWallet.address as DydxAddress;
+      // // 2. Ensure signature is deterministic
+      // // Check if subaccounts exist
+      // const dydxAddress = dydxWallet.address as DydxAddress;
 
-      try {
-        const subaccounts = await getSubaccounts({ dydxAddress });
+      // try {
+      //   // const subaccounts = await getSubaccounts({ dydxAddress });
 
-        if (!subaccounts.length) {
-          setStatus(EvmDerivedAccountStatus.EnsuringDeterminism);
-          const additionalSignature = await signTypedDataAsync();
-          if (signature !== additionalSignature) {
-            setStatus(EvmDerivedAccountStatus.NotDerived);
-            setError(
-              stringGetter({
-                key: STRING_KEYS.INDETERMINISTIC_SIGNING,
-              }) as string
-            );
-            return;
-          }
-        }
-      } catch (error) {
-        setStatus(EvmDerivedAccountStatus.NotDerived);
-        const { message } = parseWalletError({ error, stringGetter });
-        if (message) setError(message);
-        return;
-      }
+      //   // if (!subaccounts.length) {
+      //     setStatus(EvmDerivedAccountStatus.EnsuringDeterminism);
+      //     const additionalSignature = await signTypedDataAsync();
+      //     if (signature !== additionalSignature) {
+      //       setStatus(EvmDerivedAccountStatus.NotDerived);
+      //       setError(
+      //         stringGetter({
+      //           key: STRING_KEYS.INDETERMINISTIC_SIGNING,
+      //         }) as string
+      //       );
+      //       return;
+      //     // }
+      //   }
+      // } catch (error) {
+        // setStatus(EvmDerivedAccountStatus.NotDerived);
+        // const { message } = parseWalletError({ error, stringGetter });
+        // if (message) setError(message);
+        // return;
+      // }
 
       await setWalletFromEvmSignature(signature);
 
@@ -140,7 +140,7 @@ export const GenerateKeys = ({
         error,
         stringGetter,
       });
-
+      console.log(`find error, error is ${error}`)
       if (message) setError(message);
     }
   };
@@ -149,14 +149,14 @@ export const GenerateKeys = ({
     <>
       <Styled.StatusCardsContainer>
         {[
-          {
+/*           {
             status: EvmDerivedAccountStatus.Deriving,
             title: stringGetter({ key: STRING_KEYS.GENERATE_DYDX_WALLET }),
             description: stringGetter({
               key: STRING_KEYS.VERIFY_WALLET_OWNERSHIP,
             }),
-          },
-          status === EvmDerivedAccountStatus.EnsuringDeterminism && {
+          }, */
+          {
             status: EvmDerivedAccountStatus.EnsuringDeterminism,
             title: stringGetter({
               key: STRING_KEYS.VERIFY_WALLET_COMPATIBILITY,

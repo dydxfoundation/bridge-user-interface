@@ -52,47 +52,13 @@ export const AccountMenu = () => {
         onboardingState === OnboardingState.AccountConnected && (
           <Styled.AccountInfo>
             <Styled.AddressRow>
-              <AssetIcon symbol="DYDX" />
-              <Styled.Column>
-                <WithTooltip
-                  slotTooltip={
-                    <dl>
-                      <dt>
-                        {stringGetter({
-                          key: TOOLTIP_STRING_KEYS.DYDX_ADDRESS_BODY,
-                          params: {
-                            DYDX_ADDRESS: <strong>{truncateAddress(dydxAddress)}</strong>,
-                            EVM_ADDRESS: truncateAddress(evmAddress, '0x'),
-                          },
-                        })}
-                      </dt>
-                    </dl>
-                  }
-                >
-                  <Styled.Label>
-                    {stringGetter({ key: STRING_KEYS.DYDX_CHAIN_ADDRESS })}
-                  </Styled.Label>
-                </WithTooltip>
-                <Styled.Address>{truncateAddress(dydxAddress)}</Styled.Address>
-              </Styled.Column>
-              <Styled.CopyButton buttonType="icon" value={dydxAddress} shape={ButtonShape.Square} />
-              <Styled.IconButton
-                action={ButtonAction.Base}
-                href={`${import.meta.env.VITE_MINTSCAN_URL}/account/${dydxAddress}`}
-                iconName={IconName.LinkOut}
-                shape={ButtonShape.Square}
-                type={ButtonType.Link}
-              />
-            </Styled.AddressRow>
-            <Styled.AddressRow>
-              {walletType && (
+              {/* {walletType && (
                 <Styled.SourceIcon>
                   <Styled.ConnectorIcon iconName={IconName.AddressConnector} />
                   <Icon iconComponent={wallets[walletType].icon} />
                 </Styled.SourceIcon>
-              )}
+              )} */}
               <Styled.Column>
-                <Styled.Label>{stringGetter({ key: STRING_KEYS.SOURCE_ADDRESS })}</Styled.Label>
                 <Styled.Address>{truncateAddress(evmAddress, '0x')}</Styled.Address>
               </Styled.Column>
 
@@ -106,7 +72,7 @@ export const AccountMenu = () => {
                 type={ButtonType.Link}
               />
             </Styled.AddressRow>
-            <Styled.Balance>
+            {/* <Styled.Balance>
               <Styled.Label>
                 {stringGetter({
                   key: STRING_KEYS.ASSET_BALANCE,
@@ -114,7 +80,7 @@ export const AccountMenu = () => {
                 })}
               </Styled.Label>
               <Styled.BalanceOutput type={OutputType.Asset} value={DYDXBalance} />
-            </Styled.Balance>
+            </Styled.Balance> */}
           </Styled.AccountInfo>
         )
       }
@@ -130,14 +96,14 @@ export const AccountMenu = () => {
           onSelect: onRecoverKeys,
           separator: true,
         },
-        onboardingState === OnboardingState.AccountConnected &&
-          hdKey && {
-            value: 'MnemonicExport',
-            icon: <Icon iconName={IconName.ExportKeys} />,
-            label: stringGetter({ key: STRING_KEYS.EXPORT_SECRET_PHRASE }),
-            highlightColor: 'negative',
-            onSelect: () => dispatch(openDialog({ type: DialogTypes.MnemonicExport })),
-          },
+        // onboardingState === OnboardingState.AccountConnected &&
+        //   hdKey && {
+        //     value: 'MnemonicExport',
+        //     icon: <Icon iconName={IconName.ExportKeys} />,
+        //     label: stringGetter({ key: STRING_KEYS.EXPORT_SECRET_PHRASE }),
+        //     highlightColor: 'negative',
+        //     onSelect: () => dispatch(openDialog({ type: DialogTypes.MnemonicExport })),
+        //   },
         {
           value: 'Disconnect',
           icon: <Icon iconName={IconName.BoxClose} />,
@@ -154,7 +120,7 @@ export const AccountMenu = () => {
       ) : onboardingState === OnboardingState.AccountConnected ? (
         walletType && <Icon iconComponent={wallets[walletType].icon} />
       ) : null}
-      {!isTablet && <Styled.Address>{truncateAddress(dydxAddress)}</Styled.Address>}
+      {!isTablet && <Styled.Address>{truncateAddress(evmAddress, '0x')}</Styled.Address>}
     </Styled.DropdownMenu>
   );
 };

@@ -61,7 +61,7 @@ const useMigrateTokenContext = () => {
   );
 
   useEffect(() => {
-    setDestinationAddress(dydxAddress);
+    setDestinationAddress("");
   }, [dydxAddress]);
 
   useEffect(() => {
