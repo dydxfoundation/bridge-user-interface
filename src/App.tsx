@@ -21,6 +21,7 @@ import { layoutMixins } from '@/styles/layoutMixins';
 import breakpoints from '@/styles/breakpoints';
 
 import { Tabs } from '@/components/Tabs';
+import NotificationBanner from '@/components/NotificationBanner';
 
 import { Banner } from '@/views/Banner';
 import { Header } from '@/views/Header';
@@ -47,6 +48,7 @@ const Content = () => {
 
   return (
     <Styled.Content>
+      <NotificationBanner />
       <Banner />
       <Header />
 
