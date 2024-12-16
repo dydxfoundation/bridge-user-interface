@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@cosmjs/encoding':
     specifier: ^0.31.1
@@ -11,8 +15,8 @@ dependencies:
     specifier: ^0.40.2
     version: 0.40.2
   '@dydxprotocol/v4-localization':
-    specifier: ^1.0.2
-    version: 1.0.2
+    specifier: ^1.1.258
+    version: 1.1.258
   '@ethersproject/providers':
     specifier: ^5.7.2
     version: 5.7.2
@@ -728,8 +732,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@dydxprotocol/v4-localization@1.0.2:
-    resolution: {integrity: sha512-xQJ/hOvhGBmhkUjTrsWlJy3FUMqthgB37/7qPgC+KLM6GdmkJMUAqjvncsH8wV0gD8qAZshfQLautCRWYyZ0Fg==}
+  /@dydxprotocol/v4-localization@1.1.258:
+    resolution: {integrity: sha512-ir1zlIqpugHqQ0H83bqekmbBNjQTQvv1uDqlK+bc+XGL2IebHyfoL5SekiFEyheKtEundMaQmQZOYrtHPRsrRQ==}
     dev: false
 
   /@dydxprotocol/v4-proto@0.4.1:
