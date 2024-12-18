@@ -1,44 +1,41 @@
-import { layoutMixins } from '@/styles/layoutMixins';
 import styled, { AnyStyledComponent } from 'styled-components';
 
-import { ButtonSize, ButtonType } from '@/constants/buttons';
 import { STRING_KEYS } from '@/constants/localization';
 import breakpoints from '@/styles/breakpoints';
 import { useStringGetter } from '@/hooks';
 
 import { Button } from '@/components/Button';
+import { Link } from '@/components/Link';
 
 export const Banner = () => {
   const stringGetter = useStringGetter();
-  const stakingLearnMoreLink = import.meta.env.VITE_STAKING_LEARN_MORE_LINK;
-  const launchBlogPostLink = import.meta.env.VITE_LAUNCH_BLOG_POST_LINK;
+  const voteLink = import.meta.env.VITE_PROPOSAL_189;
+  const smartContractInfo = import.meta.env.VITE_WETH_DYDX_SMART_CONTRACT;
+  const cessationBlogPost = import.meta.env.VITE_CESSATION_OF_WETH_DYDX_SMART_CONTRACT_SUPPORT;
 
-  return !(stakingLearnMoreLink || launchBlogPostLink) ? null : (
+  return voteLink && smartContractInfo && cessationBlogPost ? (
     <Styled.Banner>
-      {stakingLearnMoreLink && (
-        <Styled.Button size={ButtonSize.XSmall} href={stakingLearnMoreLink} type={ButtonType.Link}>
-          {stringGetter({ key: STRING_KEYS.HOW_TO_STAKE })}
-        </Styled.Button>
-      )}
-      {launchBlogPostLink && (
-        <Styled.Button size={ButtonSize.XSmall} href={launchBlogPostLink} type={ButtonType.Link}>
-          {stringGetter({ key: STRING_KEYS.READ_LAUNCH_BLOG_POST })}
-        </Styled.Button>
-      )}
+      {stringGetter({
+        key: STRING_KEYS.BANNER_CEASE_SUPPORT_WETHDYDX,
+        params: {
+          VOTE: <Link href={voteLink}>{stringGetter({ key: STRING_KEYS.VOTE })}</Link>,
+          SMART_CONTRACT: (
+            <Link href={smartContractInfo}>
+              {stringGetter({ key: STRING_KEYS.WETHDYDX_SMART_CONTRACT })}
+            </Link>
+          ),
+          BLOG_POST: <Link href={cessationBlogPost}>→</Link>,
+        },
+      })}
     </Styled.Banner>
-  );
+  ) : null;
 };
 
 const Styled: Record<string, AnyStyledComponent> = {};
 
 Styled.Banner = styled.div`
-  ${layoutMixins.row}
   align-items: baseline;
-  gap: 0.5rem;
-
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
   text-align: center;
 
   @media ${breakpoints.tablet} {
@@ -47,6 +44,15 @@ Styled.Banner = styled.div`
 
   background-color: var(--color-layer-4);
   font: var(--font-small-book);
+
+  a {
+    color: var(--color-accent);
+    display: inline;
+  }
+
+  a:visited {
+    color: var(--color-accent);
+  }
 `;
 
 Styled.Button = styled(Button)`
