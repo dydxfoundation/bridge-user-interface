@@ -103,7 +103,7 @@ export const GenerateKeys = ({
       try {
         const subaccounts = await getSubaccounts({ dydxAddress });
 
-        if (!subaccounts.length) {
+        if (!subaccounts?.length) {
           setStatus(EvmDerivedAccountStatus.EnsuringDeterminism);
           const additionalSignature = await signTypedDataAsync();
           if (signature !== additionalSignature) {
